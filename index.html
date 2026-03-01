@@ -521,6 +521,102 @@
                     </div>
                 </div>
             </a>
+            
+            <!-- 高级课程 -->
+            <a href="lessons/lesson5.html" class="course-card" id="card5">
+                <div class="course-header" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <span class="course-number">04</span>
+                    <h3 class="course-title">策略实验室</h3>
+                    <p class="course-desc">期权策略：备兑、保险、价差组合</p>
+                </div>
+                <div class="course-body">
+                    <ul class="course-features">
+                        <li>备兑开仓策略详解</li>
+                        <li>保险策略实战</li>
+                        <li>牛市/熊市价差组合</li>
+                    </ul>
+                    <div class="course-progress">
+                        <span class="progress-text" id="text5">未开始</span>
+                        <span class="btn-start" id="btn5">开始学习</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="lessons/lesson6.html" class="course-card" id="card6">
+                <div class="course-header" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                    <span class="course-number">05</span>
+                    <h3 class="course-title">隐含波动率</h3>
+                    <p class="course-desc">波动率：期权定价的核心密码</p>
+                </div>
+                <div class="course-body">
+                    <ul class="course-features">
+                        <li>隐含波动率vs历史波动率</li>
+                        <li>波动率微笑与偏斜</li>
+                        <li>波动率交易策略</li>
+                    </ul>
+                    <div class="course-progress">
+                        <span class="progress-text" id="text6">未开始</span>
+                        <span class="btn-start" id="btn6">开始学习</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="lessons/lesson-bs.html" class="course-card" id="card-bs">
+                <div class="course-header" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                    <span class="course-number">06</span>
+                    <h3 class="course-title">BS定价公式</h3>
+                    <p class="course-desc">Black-Scholes：期权定价的数学之美</p>
+                </div>
+                <div class="course-body">
+                    <ul class="course-features">
+                        <li>BS公式原理与参数</li>
+                        <li>期权计算器使用</li>
+                        <li>理论价格vs市场价格</li>
+                    </ul>
+                    <div class="course-progress">
+                        <span class="progress-text" id="text-bs">未开始</span>
+                        <span class="btn-start" id="btn-bs">开始学习</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="lessons/lesson-greeks.html" class="course-card" id="card-greeks">
+                <div class="course-header" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                    <span class="course-number">07</span>
+                    <h3 class="course-title">希腊字母</h3>
+                    <p class="course-desc">Delta/Gamma/Theta/Vega：风险管理工具</p>
+                </div>
+                <div class="course-body">
+                    <ul class="course-features">
+                        <li>Delta：方向敏感度</li>
+                        <li>Gamma/Theta/Vega详解</li>
+                        <li>Greeks在交易中的应用</li>
+                    </ul>
+                    <div class="course-progress">
+                        <span class="progress-text" id="text-greeks">未开始</span>
+                        <span class="btn-start" id="btn-greeks">开始学习</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="lessons/exam-zone.html" class="course-card" id="card-exam">
+                <div class="course-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <span class="course-number">📝</span>
+                    <h3 class="course-title">开户考试专区</h3>
+                    <p class="course-desc">真题模拟测试 · 错题本 · 考试通关</p>
+                </div>
+                <div class="course-body">
+                    <ul class="course-features">
+                        <li>200+真题题库</li>
+                        <li>30分钟限时模拟</li>
+                        <li>智能错题本复习</li>
+                    </ul>
+                    <div class="course-progress">
+                        <span class="progress-text">随时考试</span>
+                        <span class="btn-start">开始考试</span>
+                    </div>
+                </div>
+            </a>
         </div>
     </section>
     
@@ -562,30 +658,33 @@
         // 加载学习进度
         function loadProgress() {
             let completed = 0;
-            const lessons = ['lesson1', 'lesson2', 'lesson3'];
+            const lessons = ['lesson1', 'lesson2', 'lesson3', 'lesson5', 'lesson6', 'lesson-bs', 'lesson-greeks'];
             
-            lessons.forEach((lesson, index) => {
+            lessons.forEach((lesson) => {
                 const progress = localStorage.getItem(`${lesson}_progress`) || 0;
-                const card = document.getElementById(`card${index+1}`);
-                const text = document.getElementById(`text${index+1}`);
-                const btn = document.getElementById(`btn${index+1}`);
+                let cardId, textId, btnId;
                 
-                if (parseInt(progress) >= 100) {
-                    completed++;
-                    text.textContent = '已完成';
-                    btn.textContent = '复习';
-                    btn.classList.add('completed');
-                    
-                    // 解锁下一课
-                    if (index < 2) {
-                        const nextCard = document.getElementById(`card${index+2}`);
-                        if (nextCard) {
-                            nextCard.classList.remove('locked');
-                            document.getElementById(`text${index+2}`).textContent = '未开始';
-                        }
+                // 映射课程到卡片ID
+                if (lesson === 'lesson1') { cardId = 'card1'; textId = 'text1'; btnId = 'btn1'; }
+                else if (lesson === 'lesson2') { cardId = 'card2'; textId = 'text2'; btnId = 'btn2'; }
+                else if (lesson === 'lesson3') { cardId = 'card3'; textId = 'text3'; btnId = 'btn3'; }
+                else if (lesson === 'lesson5') { cardId = 'card5'; textId = 'text5'; btnId = 'btn5'; }
+                else if (lesson === 'lesson6') { cardId = 'card6'; textId = 'text6'; btnId = 'btn6'; }
+                else if (lesson === 'lesson-bs') { cardId = 'card-bs'; textId = 'text-bs'; btnId = 'btn-bs'; }
+                else if (lesson === 'lesson-greeks') { cardId = 'card-greeks'; textId = 'text-greeks'; btnId = 'btn-greeks'; }
+                
+                const text = document.getElementById(textId);
+                const btn = document.getElementById(btnId);
+                
+                if (text && btn) {
+                    if (parseInt(progress) >= 100) {
+                        completed++;
+                        text.textContent = '已完成';
+                        btn.textContent = '复习';
+                        btn.classList.add('completed');
+                    } else if (parseInt(progress) > 0) {
+                        text.textContent = `已学 ${progress}%`;
                     }
-                } else if (parseInt(progress) > 0) {
-                    text.textContent = `已学 ${progress}%`;
                 }
             });
             
