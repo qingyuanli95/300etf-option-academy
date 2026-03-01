@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <title>模拟考试 - 300ETF期权学院</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 1000;
+        }
+        
+        .nav-back {
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .timer {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        
+        .timer.warning {
+            background: #ef4444;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* 主内容 */
+        .container {
+            padding: 72px 16px 120px;
+            max-width: 100%;
+        }
+        
+        /* 进度条 */
+        .progress-section {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #10b981);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        /* 题目卡片 */
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: #6366f1;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .question-text {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        
+        .question-type {
+            display: inline-block;
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 8px;
+        }
+        
+        /* 选项 */
+        .options-list {
+            list-style: none;
+        }
+        
+        .option-item {
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option-item:active {
+            transform: scale(0.98);
+        }
+        
+        .option-item.selected {
+            border-color: #6366f1;
+            background: rgba(99,102,241,0.1);
+        }
+        
+        .option-item.correct {
+            border-color: #10b981;
+            background: rgba(16,185,129,0.1);
+        }
+        
+        .option-item.wrong {
+            border-color: #ef4444;
+            background: rgba(239,68,68,0.1);
+        }
+        
+        .option-label {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .option-item.selected .option-label {
+            background: #6366f1;
+            color: white;
+        }
+        
+        .option-item.correct .option-label {
+            background: #10b981;
+            color: white;
+        }
+        
+        .option-item.wrong .option-label {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .option-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        
+        /* 解析 */
+        .explanation {
+            margin-top: 16px;
+            padding: 16px;
+            background: #f0fdf4;
+            border-radius: 12px;
+            border-left: 4px solid #10b981;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+        }
+        
+        .explanation-title {
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 8px;
+        }
+        
+        .explanation-text {
+            color: #166534;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        
+        /* 底部操作栏 */
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+            display: flex;
+            gap: 12px;
+            z-index: 999;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn-prev {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        .btn-prev:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        /* 题号导航 */
+        .question-nav {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 998;
+        }
+        
+        .question-nav.show {
+            display: block;
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 8px;
+        }
+        
+        .nav-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        .nav-item.answered {
+            background: #6366f1;
+            color: white;
+        }
+        
+        .nav-item.current {
+            border: 2px solid #6366f1;
+        }
+        
+        /* 结果页面 */
+        .result-container {
+            display: none;
+            padding: 72px 16px;
+        }
+        
+        .result-container.show {
+            display: block;
+        }
+        
+        .score-card {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .score-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        
+        .score-value {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .score-result {
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .score-result.pass {
+            background: rgba(16,185,129,0.3);
+        }
+        
+        .score-result.fail {
+            background: rgba(239,68,68,0.3);
+        }
+        
+        .stats-detail {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .stats-row:last-child {
+            border-bottom: none;
+        }
+        
+        /* 桌面端 */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .action-bar {
+                max-width: 800px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .question-nav {
+                max-width: 600px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="exam-zone.html" class="nav-back">←</a>
+        <span class="nav-title">模拟考试</span>
+        <span class="timer" id="timer">30:00</span>
+    </nav>
+    
+    <!-- 考试界面 -->
+    <div class="container" id="examContainer">
+        <!-- 进度 -->
+        <div class="progress-section">
+            <div class="progress-info">
+                <span>答题进度</span>
+                <span id="progressText">1/30</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 3.3%"></div>
+            </div>
+        </div>
+        
+        <!-- 题目区域 -->
+        <div id="questionArea"></div>
+    </div>
+    
+    <!-- 结果页面 -->
+    <div class="result-container" id="resultContainer">
+        <div class="score-card">
+            <div class="score-label">考试得分</div>
+            <div class="score-value" id="scoreValue">0</div>
+            <div class="score-result" id="scoreResult">未通过</div>
+        </div>
+        
+        <div class="stats-detail">
+            <div class="stats-row">
+                <span>答题用时</span>
+                <span id="timeUsed">0分钟</span>
+            </div>
+            <div class="stats-row">
+                <span>答对题数</span>
+                <span id="correctCount">0/30</span>
+            </div>
+            <div class="stats-row">
+                <span>正确率</span>
+                <span id="accuracy">0%</span>
+            </div>
+        </div>
+        
+        <button class="btn btn-next" onclick="reviewExam()">查看解析</button>
+        <button class="btn btn-prev" onclick="location.href='exam-zone.html'" style="margin-top: 12px;">返回考试专区</button>
+    </div>
+    
+    <!-- 题号导航 -->
+    <div class="question-nav" id="questionNav">
+        <div class="nav-grid" id="navGrid"></div>
+    </div>
+    
+    <!-- 底部操作栏 -->
+    <div class="action-bar" id="actionBar">
+        <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()">上一题</button>
+        <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">下一题</button>
+        <button class="btn btn-submit" id="submitBtn" onclick="submitExam()" style="display: none;">提交试卷</button>
+    </div>
+    
+    <script>
+        // 考试题库（30题）
+        const questions = [
+            {
+                id: 1,
+                type: '单选',
+                question: '期权是一种（），它赋予买方在约定时间以约定价格买入或卖出标的资产的权利。',
+                options: ['权利', '义务', '合约', '承诺'],
+                answer: 2,
+                explanation: '期权是一种合约，它赋予买方在约定时间以约定价格买入或卖出标的资产的权利，但买方不承担必须买入或卖出的义务。'
+            },
+            {
+                id: 2,
+                type: '单选',
+                question: '认购期权（Call Option）赋予买方（）。',
+                options: ['以约定价格卖出标的资产的权利', '以约定价格买入标的资产的权利', '必须买入标的资产的义务', '必须卖出标的资产的义务'],
+                answer: 1,
+                explanation: '认购期权（Call Option）赋予买方以约定价格买入标的资产的权利，买方有权选择是否行权。'
+            },
+            {
+                id: 3,
+                type: '单选',
+                question: '认沽期权（Put Option）赋予买方（）。',
+                options: ['以约定价格买入标的资产的权利', '以约定价格卖出标的资产的权利', '必须买入标的资产的义务', '必须卖出标的资产的义务'],
+                answer: 1,
+                explanation: '认沽期权（Put Option）赋予买方以约定价格卖出标的资产的权利。'
+            },
+            {
+                id: 4,
+                type: '单选',
+                question: '期权买方支付（）给卖方以获得期权合约赋予的权利。',
+                options: ['保证金', '权利金', '手续费', '印花税'],
+                answer: 1,
+                explanation: '期权买方支付权利金（Premium）给卖方，以获得期权合约赋予的权利。权利金是买方为获得权利而支付的对价。'
+            },
+            {
+                id: 5,
+                type: '单选',
+                question: '期权卖方收取权利金后，（）。',
+                options: ['没有任何义务', '承担履行合约的义务', '可以随时反悔', '只承担部分义务'],
+                answer: 1,
+                explanation: '期权卖方收取权利金后，承担履行合约的义务。当买方选择行权时，卖方必须履行合约。'
+            },
+            {
+                id: 6,
+                type: '单选',
+                question: '沪深300ETF期权的标的是（）。',
+                options: ['沪深300指数', '华泰柏瑞沪深300ETF（510300）', '嘉实沪深300ETF（159919）', '以上都是'],
+                answer: 3,
+                explanation: '沪深300ETF期权有两个品种：上交所的华泰柏瑞沪深300ETF期权（标的510300）和深交所的嘉实沪深300ETF期权（标的159919）。'
+            },
+            {
+                id: 7,
+                type: '单选',
+                question: '期权合约要素不包括（）。',
+                options: ['标的资产', '行权价格', '交易价格', '到期日'],
+                answer: 2,
+                explanation: '期权合约要素包括：标的资产、行权价格、到期日、合约单位、权利金等。交易价格（权利金）是市场交易形成的，不是合约固定要素。'
+            },
+            {
+                id: 8,
+                type: '单选',
+                question: '欧式期权只能在（）行权。',
+                options: ['到期日当天', '到期日前任何交易日', '到期日后10天内', '任何时间'],
+                answer: 0,
+                explanation: '欧式期权只能在到期日当天行权，而美式期权可以在到期日前任何交易日行权。沪深300ETF期权是欧式期权。'
+            },
+            {
+                id: 9,
+                type: '单选',
+                question: '当标的资产价格 > 行权价格时，认购期权处于（）。',
+                options: ['实值状态', '平值状态', '虚值状态', '无效状态'],
+                answer: 0,
+                explanation: '对于认购期权：标的价格 > 行权价为实值；标的价格 = 行权价为平值；标的价格 < 行权价为虚值。'
+            },
+            {
+                id: 10,
+                type: '单选',
+                question: '当标的资产价格 < 行权价格时，认沽期权处于（）。',
+                options: ['实值状态', '平值状态', '虚值状态', '无效状态'],
+                answer: 0,
+                explanation: '对于认沽期权：标的价格 < 行权价为实值；标的价格 = 行权价为平值；标的价格 > 行权价为虚值。'
+            },
+            {
+                id: 11,
+                type: '单选',
+                question: '期权的内在价值（）。',
+                options: ['总是大于零', '总是小于零', '可以为零', '等于权利金'],
+                answer: 2,
+                explanation: '期权的内在价值可以为正（实值期权）、为零（平值或虚值期权），但不会为负。内在价值+时间价值=权利金。'
+            },
+            {
+                id: 12,
+                type: '单选',
+                question: '期权的时间价值随着到期日临近（）。',
+                options: ['增加', '减少', '不变', '先增后减'],
+                answer: 1,
+                explanation: '期权的时间价值随着到期日临近而衰减，这种现象称为时间价值的衰减或"时间损耗"。到期日当天时间价值归零。'
+            },
+            {
+                id: 13,
+                type: '单选',
+                question: '期权交易的四种基本操作是（）。',
+                options: ['买入开仓、买入平仓、卖出开仓、卖出平仓', '买入看涨、买入看跌、卖出看涨、卖出看跌', '开仓、平仓、行权、放弃', '认购、认沽、实值、虚值'],
+                answer: 0,
+                explanation: '期权交易的四种基本操作：买入开仓（建立买方头寸）、买入平仓（了结卖方头寸）、卖出开仓（建立卖方头寸）、卖出平仓（了结买方头寸）。'
+            },
+            {
+                id: 14,
+                type: '单选',
+                question: '期权卖方需要缴纳（）。',
+                options: ['权利金', '保证金', '手续费', '以上都要'],
+                answer: 1,
+                explanation: '期权卖方需要缴纳保证金作为履约担保。买方支付权利金，不需要缴纳保证金。'
+            },
+            {
+                id: 15,
+                type: '单选',
+                question: '沪深300ETF期权合约单位是（）。',
+                options: ['100份', '1000份', '10000份', '由交易所规定'],
+                answer: 2,
+                explanation: '沪深300ETF期权合约单位是10000份，即每张期权合约对应10000份ETF基金份额。'
+            },
+            {
+                id: 16,
+                type: '单选',
+                question: '期权买方最大损失为（）。',
+                options: ['无限大', '权利金', '保证金', '标的资产价值'],
+                answer: 1,
+                explanation: '期权买方的最大损失是已支付的权利金。买方的风险有限，收益潜力（认购）无限或（认沽）较大。'
+            },
+            {
+                id: 17,
+                type: '单选',
+                question: '认购期权卖方最大损失为（）。',
+                options: ['权利金', '无限大', '行权价', '零'],
+                answer: 1,
+                explanation: '认购期权卖方最大损失理论上是无限的，因为标的资产价格上涨没有上限。卖方收取有限权利金，承担无限风险。'
+            },
+            {
+                id: 18,
+                type: '单选',
+                question: '认沽期权卖方最大损失为（）。',
+                options: ['权利金', '无限大', '行权价-标的资产价格', '行权价'],
+                answer: 3,
+                explanation: '认沽期权卖方最大损失为行权价（当标的资产价格跌至零时）。虽然有限，但可能很大。'
+            },
+            {
+                id: 19,
+                type: '单选',
+                question: '备兑开仓策略是指（）。',
+                options: ['持有标的资产并卖出认购期权', '持有标的资产并买入认沽期权', '卖出认购期权并买入认沽期权', '买入认购期权并卖出认沽期权'],
+                answer: 0,
+                explanation: '备兑开仓策略是指持有标的资产（如ETF）的同时，卖出该标的的认购期权，通过收取权利金增强收益。'
+            },
+            {
+                id: 20,
+                type: '单选',
+                question: '保险策略是指（）。',
+                options: ['持有标的资产并卖出认购期权', '持有标的资产并买入认沽期权', '卖出认购期权并买入认沽期权', '买入认购期权并卖出认沽期权'],
+                answer: 1,
+                explanation: '保险策略是指持有标的资产的同时，买入该标的的认沽期权，为标的资产价格下跌提供保护，类似购买保险。'
+            },
+            {
+                id: 21,
+                type: '单选',
+                question: '期权的杠杆效应体现在（）。',
+                options: ['用少量资金控制较大价值的标的', '没有杠杆', '杠杆比期货小', '只存在于买方'],
+                answer: 0,
+                explanation: '期权具有杠杆效应，买方只需支付少量权利金，就能控制较大价值的标的资产，放大收益和风险。'
+            },
+            {
+                id: 22,
+                type: '单选',
+                question: '波动率上升时，期权价格（）。',
+                options: ['上升', '下降', '不变', '不确定'],
+                answer: 0,
+                explanation: '波动率是影响期权价格的重要因素。波动率上升意味着标的资产价格变动幅度可能增大，期权买方获利机会增加，因此期权价格上升。'
+            },
+            {
+                id: 23,
+                type: '单选',
+                question: '认购期权的盈亏平衡点为（）。',
+                options: ['行权价', '行权价+权利金', '行权价-权利金', '权利金'],
+                answer: 1,
+                explanation: '认购期权的盈亏平衡点 = 行权价 + 权利金。当标的价格超过此价格时，买方开始盈利。'
+            },
+            {
+                id: 24,
+                type: '单选',
+                question: '认沽期权的盈亏平衡点为（）。',
+                options: ['行权价', '行权价+权利金', '行权价-权利金', '权利金'],
+                answer: 2,
+                explanation: '认沽期权的盈亏平衡点 = 行权价 - 权利金。当标的价格低于此价格时，买方开始盈利。'
+            },
+            {
+                id: 25,
+                type: '单选',
+                question: '期权合约到期日为到期月份的（）。',
+                options: ['第一个星期三', '第二个星期三', '第三个星期三', '第四个星期三'],
+                answer: 3,
+                explanation: '沪深300ETF期权合约到期日为到期月份的第四个星期三（遇法定节假日顺延）。'
+            },
+            {
+                id: 26,
+                type: '单选',
+                question: '期权买方行权后，（）。',
+                options: ['立即获得收益', '需要缴纳保证金', '获得标的资产头寸', '自动平仓'],
+                answer: 2,
+                explanation: '期权买方行权后，获得相应的标的资产头寸（认购行权获得标的资产多头，认沽行权获得标的资产空头）。'
+            },
+            {
+                id: 27,
+                type: '单选',
+                question: '深度实值期权的时间价值（）。',
+                options: ['很大', '很小或为零', '等于平值期权', '不确定'],
+                answer: 1,
+                explanation: '深度实值期权的时间价值通常很小或接近零，因为内在价值占主导，时间价值占比很小。'
+            },
+            {
+                id: 28,
+                type: '单选',
+                question: '平值期权的时间价值（）。',
+                options: ['最小', '最大', '为零', '不确定'],
+                answer: 1,
+                explanation: '平值期权的时间价值通常最大，因为标的价格接近行权价时，未来变为实值或虚值的不确定性最大。'
+            },
+            {
+                id: 29,
+                type: '单选',
+                question: '期权的Delta表示（）。',
+                options: ['期权价格对标的资产价格的敏感度', '期权价格对时间的敏感度', '期权价格对波动率的敏感度', '期权价格对利率的敏感度'],
+                answer: 0,
+                explanation: 'Delta表示期权价格对标的资产价格变动的敏感度，即标的价格变动1元时期权价格变动的金额。'
+            },
+            {
+                id: 30,
+                type: '单选',
+                question: '个人投资者参与期权交易，需要满足的条件不包括（）。',
+                options: ['开户满6个月', '具备期权基础知识', '具有相应的风险承受能力', '必须具有期货实盘交易经验'],
+                answer: 3,
+                explanation: '个人投资者参与期权交易需要满足：开户满6个月、具备期权基础知识、通过交易所认可的知识测试、具有相应的风险承受能力等。但不要求必须有期货实盘交易经验。'
+            }
+        ];
+        
+        let currentQuestion = 0;
+        let answers = new Array(30).fill(-1);
+        let timeLeft = 1800; // 30分钟
+        let timerInterval;
+        let examSubmitted = false;
+        
+        // 初始化
+        function init() {
+            renderQuestion();
+            renderNavGrid();
+            startTimer();
+            updateButtons();
+        }
+        
+        // 渲染题目
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            const area = document.getElementById('questionArea');
+            
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                const selected = answers[currentQuestion] === idx ? 'selected' : '';
+                const label = String.fromCharCode(65 + idx);
+                optionsHtml += `
+                    <li class="option-item ${selected}" onclick="selectOption(${idx})">
+                        <span class="option-label">${label}</span>
+                        <span class="option-text">${opt}</span>
+                    </li>
+                `;
+            });
+            
+            area.innerHTML = `
+                <div class="question-card">
+                    <span class="question-number">第${currentQuestion + 1}题</span>
+                    <span class="question-type">${q.type}</span>
+                    <div class="question-text">${q.question}</div>
+                    <ul class="options-list">${optionsHtml}</ul>
+                    <div class="explanation ${examSubmitted ? 'show' : ''}" id="explanation">
+                        <div class="explanation-title">✓ 正确答案：${String.fromCharCode(65 + q.answer)}</div>
+                        <div class="explanation-text">${q.explanation}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('progressText').textContent = `${currentQuestion + 1}/30`;
+            document.getElementById('progressBar').style.width = `${((currentQuestion + 1) / 30) * 100}%`;
+            
+            updateNavGrid();
+        }
+        
+        // 选择选项
+        function selectOption(idx) {
+            if (examSubmitted) return;
+            answers[currentQuestion] = idx;
+            renderQuestion();
+            updateNavGrid();
+        }
+        
+        // 上一题
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+                updateButtons();
+            }
+        }
+        
+        // 下一题
+        function nextQuestion() {
+            if (currentQuestion < 29) {
+                currentQuestion++;
+                renderQuestion();
+                updateButtons();
+            }
+        }
+        
+        // 更新按钮状态
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            
+            if (currentQuestion === 29) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+        }
+        
+        // 渲染导航网格
+        function renderNavGrid() {
+            let html = '';
+            for (let i = 0; i < 30; i++) {
+                const answered = answers[i] !== -1 ? 'answered' : '';
+                html += `<div class="nav-item ${answered}" onclick="goToQuestion(${i})">${i + 1}</div>`;
+            }
+            document.getElementById('navGrid').innerHTML = html;
+        }
+        
+        // 更新导航网格
+        function updateNavGrid() {
+            const items = document.querySelectorAll('.nav-item');
+            items.forEach((item, idx) => {
+                item.classList.toggle('answered', answers[idx] !== -1);
+                item.classList.toggle('current', idx === currentQuestion);
+            });
+        }
+        
+        // 跳转到指定题目
+        function goToQuestion(idx) {
+            currentQuestion = idx;
+            renderQuestion();
+            updateButtons();
+            document.getElementById('questionNav').classList.remove('show');
+        }
+        
+        // 计时器
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 300) { // 最后5分钟
+                    document.getElementById('timer').classList.add('warning');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+            }, 1000);
+        }
+        
+        // 提交试卷
+        function submitExam() {
+            if (examSubmitted) return;
+            
+            const answeredCount = answers.filter(a => a !== -1).length;
+            if (answeredCount < 30) {
+                if (!confirm(`您还有${30 - answeredCount}题未答，确定要提交吗？`)) {
+                    return;
+                }
+            }
+            
+            clearInterval(timerInterval);
+            examSubmitted = true;
+            
+            // 计算得分
+            let correctCount = 0;
+            answers.forEach((ans, idx) => {
+                if (ans === questions[idx].answer) correctCount++;
+            });
+            
+            const score = Math.round((correctCount / 30) * 100);
+            const timeUsed = 1800 - timeLeft;
+            
+            // 保存结果
+            localStorage.setItem('lastExamScore', score);
+            localStorage.setItem('lastExamTime', new Date().toISOString());
+            localStorage.setItem('correctRate', score + '%');
+            
+            let examCount = parseInt(localStorage.getItem('examCount') || '0');
+            localStorage.setItem('examCount', examCount + 1);
+            
+            // 保存错题
+            let mistakes = JSON.parse(localStorage.getItem('mistakes') || '[]');
+            answers.forEach((ans, idx) => {
+                if (ans !== questions[idx].answer) {
+                    const q = questions[idx];
+                    if (!mistakes.find(m => m.id === q.id)) {
+                        mistakes.push({
+                            id: q.id,
+                            question: q.question,
+                            correctAnswer: q.answer,
+                            userAnswer: ans,
+                            explanation: q.explanation,
+                            timestamp: new Date().toISOString()
+                        });
+                    }
+                }
+            });
+            localStorage.setItem('mistakes', JSON.stringify(mistakes));
+            
+            // 显示结果
+            showResult(score, correctCount, timeUsed);
+        }
+        
+        // 显示结果
+        function showResult(score, correctCount, timeUsed) {
+            document.getElementById('examContainer').style.display = 'none';
+            document.getElementById('actionBar').style.display = 'none';
+            document.getElementById('timer').style.display = 'none';
+            
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.classList.add('show');
+            
+            document.getElementById('scoreValue').textContent = score;
+            
+            const resultEl = document.getElementById('scoreResult');
+            if (score >= 80) {
+                resultEl.textContent = '✓ 考试通过';
+                resultEl.className = 'score-result pass';
+            } else {
+                resultEl.textContent = '✗ 未通过';
+                resultEl.className = 'score-result fail';
+            }
+            
+            const minutes = Math.floor(timeUsed / 60);
+            document.getElementById('timeUsed').textContent = `${minutes}分${timeUsed % 60}秒`;
+            document.getElementById('correctCount').textContent = `${correctCount}/30`;
+            document.getElementById('accuracy').textContent = `${Math.round((correctCount/30)*100)}%`;
+        }
+        
+        // 查看解析
+        function reviewExam() {
+            currentQuestion = 0;
+            examSubmitted = true;
+            document.getElementById('examContainer').style.display = 'block';
+            document.getElementById('actionBar').style.display = 'flex';
+            document.getElementById('resultContainer').classList.remove('show');
+            document.querySelector('.navbar').style.display = 'flex';
+            document.getElementById('timer').textContent = '解析模式';
+            renderQuestion();
+        }
+        
+        // 长按显示导航
+        let pressTimer;
+        document.addEventListener('touchstart', (e) => {
+            pressTimer = setTimeout(() => {
+                document.getElementById('questionNav').classList.toggle('show');
+            }, 800);
+        });
+        
+        document.addEventListener('touchend', () => {
+            clearTimeout(pressTimer);
+        });
+        
+        // 启动
+        init();
+    </script>
+</body>
+</html>

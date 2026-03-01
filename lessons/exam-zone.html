@@ -7,59 +7,188 @@
     <title>开户考试专区 - 300ETF期权学院</title>
     <link rel="stylesheet" href="../css/mobile.css">
     <style>
-        .exam-header {
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1f2937;
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
             background: linear-gradient(135deg, #6366f1, #4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 1000;
+        }
+        
+        .nav-back {
             color: white;
-            padding: 24px 16px;
-            margin: -72px -16px 24px;
+            font-size: 1.5rem;
+            text-decoration: none;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            flex: 1;
             text-align: center;
         }
         
-        .exam-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
+        .nav-placeholder { width: 40px; }
+        
+        /* 主内容区 */
+        .container {
+            padding: 72px 16px 24px;
+            max-width: 100%;
         }
         
-        .stat-card {
+        /* 考试要求卡片 */
+        .requirement-card {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .requirement-card h3 {
+            color: #92400e;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .requirement-list {
+            list-style: none;
+        }
+        
+        .requirement-list li {
+            color: #78350f;
+            font-size: 0.9rem;
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .requirement-list li::before {
+            content: '•';
+            color: #f59e0b;
+            font-weight: bold;
+        }
+        
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
             background: white;
-            padding: 16px;
             border-radius: 12px;
+            padding: 16px 8px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         
-        .stat-number {
-            font-size: 1.75rem;
+        .stat-value {
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary);
+            color: #6366f1;
         }
         
         .stat-label {
-            font-size: 0.8rem;
-            color: var(--gray);
+            font-size: 0.75rem;
+            color: #6b7280;
             margin-top: 4px;
+        }
+        
+        /* 主要按钮 */
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn-secondary {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: #6366f1;
+            border: 2px solid #6366f1;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        /* 模块卡片 */
+        .module-section {
+            margin-bottom: 20px;
+        }
+        
+        .module-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .module-card {
             background: white;
             border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         
         .module-header {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
         
         .module-icon {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -67,25 +196,38 @@
             font-size: 1.5rem;
         }
         
-        .module-title {
-            flex: 1;
+        .module-info h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
         }
         
-        .module-title h3 {
-            font-size: 1.1rem;
-            margin-bottom: 4px;
+        .module-info p {
+            font-size: 0.8rem;
+            color: #6b7280;
         }
         
-        .module-title p {
-            font-size: 0.85rem;
-            color: var(--gray);
+        .progress-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #10b981);
+            border-radius: 3px;
+            transition: width 0.3s;
         }
         
         .progress-text {
-            font-size: 0.85rem;
-            color: var(--gray);
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-bottom: 12px;
         }
         
+        /* 题目列表 */
         .topic-list {
             list-style: none;
         }
@@ -93,8 +235,9 @@
         .topic-item {
             display: flex;
             align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--light);
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
         }
         
         .topic-item:last-child {
@@ -102,370 +245,312 @@
         }
         
         .topic-status {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            flex-shrink: 0;
         }
         
         .topic-status.pending {
-            background: var(--light);
-            color: var(--gray);
+            background: #f3f4f6;
+            color: #9ca3af;
         }
         
         .topic-status.done {
-            background: var(--success);
+            background: #10b981;
             color: white;
         }
         
         .topic-name {
             flex: 1;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         
         .topic-arrow {
-            color: var(--gray);
+            color: #9ca3af;
+            font-size: 1.2rem;
         }
         
-        .mock-exam-card {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-        
-        .mock-exam-header {
+        /* 底部导航 */
+        .tabbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
             display: flex;
+            justify-content: space-around;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            z-index: 999;
         }
         
-        .mock-exam-icon {
-            width: 56px;
-            height: 56px;
-            background: rgba(245, 158, 11, 0.2);
-            border-radius: 16px;
+        .tabbar-item {
+            flex: 1;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            padding: 8px;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.7rem;
+            gap: 4px;
         }
         
-        .exam-info h3 {
-            font-size: 1.1rem;
-            margin-bottom: 4px;
+        .tabbar-item.active {
+            color: #6366f1;
         }
         
-        .exam-info p {
-            font-size: 0.85rem;
-            color: #92400e;
+        .tabbar-icon {
+            font-size: 1.4rem;
         }
         
-        .exam-features {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-        
-        .exam-feature {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
-            color: #78350f;
-        }
-        
-        .btn-start-exam {
-            background: #f59e0b;
-            color: white;
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .pass-requirement {
-            background: #fee2e2;
-            border-left: 4px solid #ef4444;
-            padding: 16px;
-            border-radius: 0 12px 12px 0;
-            margin-bottom: 24px;
-        }
-        
-        .pass-requirement h4 {
-            color: #991b1b;
-            margin-bottom: 8px;
-        }
-        
-        .pass-requirement ul {
-            list-style: none;
-            font-size: 0.9rem;
-            color: #7f1d1d;
-        }
-        
-        .pass-requirement li {
-            padding: 4px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-        
-        .pass-requirement li::before {
-            content: '•';
-            position: absolute;
-            left: 8px;
+        /* 桌面端适配 */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 80px 24px 24px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .tabbar {
+                display: none;
+            }
+            
+            body {
+                padding-bottom: 24px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 导航栏 -->
     <nav class="navbar">
-        <div class="logo">📈 300ETF期权学院</div>
-        <button class="nav-menu-btn" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        <a href="../index.html" class="nav-back">←</a>
+        <span class="nav-title">开户考试专区</span>
+        <span class="nav-placeholder"></span>
     </nav>
     
-    <div class="nav-overlay" onclick="toggleMenu()"></div>
-    <div class="nav-drawer">
-        <a href="../index.html">🏠 首页</a>
-        <a href="lesson1.html">🎯 第一课</a>
-        <a href="lesson2.html">📈 看涨期权</a>
-        <a href="lesson3.html">📉 看跌期权</a>
-        <a href="../games/trading-simulator.html">⚔️ 模拟交易</a>
-        <a href="exam-zone.html">📝 开户考试专区</a>
-        <a href="mistake-book.html">📚 错题本</a>
-    </div>
-
-    <div class="mobile-container">
-        <div class="exam-header">
-            <h1>📝 开户考试专区</h1>
-            <p style="opacity: 0.9; margin-top: 8px;">上交所/深交所期权知识测试备考</p>
-        </div>
-
+    <!-- 主内容 -->
+    <div class="container">
         <!-- 考试要求 -->
-        <div class="pass-requirement">
-            <h4>⚠️ 考试通过要求</h4>
-            <ul>
+        <div class="requirement-card">
+            <h3>⚠️ 考试通过要求</h3>
+            <ul class="requirement-list">
                 <li>满分100分，<strong>80分及格</strong></li>
                 <li>考试时长：<strong>30分钟</strong></li>
                 <li>题型：单选、多选、判断</li>
                 <li>每月可考<strong>3次</strong></li>
             </ul>
         </div>
-
-        <!-- 学习统计 -->
-        <div class="exam-stats">
-            <div class="stat-card">
-                <div class="stat-number" id="completedTopics">0</div>
-                <div class="stat-label">已完成章节</div>
+        
+        <!-- 统计 -->
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value" id="completedCount">0</div>
+                <div class="stat-label">已完成</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="correctRate">0%</div>
+            <div class="stat-item">
+                <div class="stat-value" id="correctRate">0%</div>
                 <div class="stat-label">正确率</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="mockExamCount">0</div>
-                <div class="stat-label">模拟考试</div>
+            <div class="stat-item">
+                <div class="stat-value" id="examCount">0</div>
+                <div class="stat-label">模拟考</div>
             </div>
         </div>
-
-        <!-- 模拟考试入口 -->
-        <div class="mock-exam-card">
-            <div class="mock-exam-header">
-                <div class="mock-exam-icon">🎯</div>
-                <div class="exam-info">
-                    <h3>模拟考试</h3>
-                    <p>100%真题模拟，30题/30分钟</p>
-                </div>
-            </div>
+        
+        <!-- 快速开始 -->
+        <a href="mock-exam.html" class="btn-primary">🎯 开始模拟考试 (30题)</a>
+        <a href="mistake-book.html" class="btn-secondary">📚 查看错题本</a>
+        
+        <!-- 模块一 -->
+        <div class="module-section">
+            <h3 class="module-title">📚 期权基础知识</h3>
             
-            <div class="exam-features">
-                <div class="exam-feature">
-                    <span>✓</span> 真题题库
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon" style="background: #e0e7ff;">📖</div>
+                    <div class="module-info">
+                        <h4>基础概念</h4>
+                        <p>必考概念，约占20%分值</p>
+                    </div>
                 </div>
-                <div class="exam-feature">
-                    <span>✓</span> 计时考试
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress1" style="width: 0%"></div>
                 </div>
-                <div class="exam-feature">
-                    <span>✓</span> 智能评分
-                </div>
+                <p class="progress-text" id="progressText1">0/5 完成</p>
+                
+                <ul class="topic-list">
+                    <li class="topic-item" onclick="startQuiz('basic', 1)">
+                        <span class="topic-status pending" id="s1-1">○</span>
+                        <span class="topic-name">期权定义与分类</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('basic', 2)">
+                        <span class="topic-status pending" id="s1-2">○</span>
+                        <span class="topic-name">买方与卖方权利义务</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('basic', 3)">
+                        <span class="topic-status pending" id="s1-3">○</span>
+                        <span class="topic-name">认购与认沽期权</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('basic', 4)">
+                        <span class="topic-status pending" id="s1-4">○</span>
+                        <span class="topic-name">实值、平值、虚值</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('basic', 5)">
+                        <span class="topic-status pending" id="s1-5">○</span>
+                        <span class="topic-name">欧式与美式期权</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                </ul>
             </div>
-            
-            <button class="btn-start-exam" onclick="startMockExam()">
-                开始模拟考试
-            </button>
         </div>
-
-        <!-- 学习模块 -->
-        <div class="module-card">
-            <div class="module-header">
-                <div class="module-icon" style="background: #e0e7ff;">📚</div>
-                <div class="module-title">
-                    <h3>模块一：期权基础</h3>
-                    <p>必考概念，约20%分值</p>
+        
+        <!-- 模块二 -->
+        <div class="module-section">
+            <h3 class="module-title">⚖️ 交易规则制度</h3>
+            
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon" style="background: #fef3c7;">📋</div>
+                    <div class="module-info">
+                        <h4>交易制度</h4>
+                        <p>交易规则，约占25%分值</p>
+                    </div>
                 </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress2" style="width: 0%"></div>
+                </div>
+                <p class="progress-text" id="progressText2">0/5 完成</p>
+                
+                <ul class="topic-list">
+                    <li class="topic-item" onclick="startQuiz('rules', 1)">
+                        <span class="topic-status pending" id="s2-1">○</span>
+                        <span class="topic-name">四种买卖类型</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('rules', 2)">
+                        <span class="topic-status pending" id="s2-2">○</span>
+                        <span class="topic-name">保证金制度</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('rules', 3)">
+                        <span class="topic-status pending" id="s2-3">○</span>
+                        <span class="topic-name">行权与到期日</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('rules', 4)">
+                        <span class="topic-status pending" id="s2-4">○</span>
+                        <span class="topic-name">涨跌幅与熔断</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('rules', 5)">
+                        <span class="topic-status pending" id="s2-5">○</span>
+                        <span class="topic-name">合约要素与代码</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                </ul>
             </div>
-            
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress1" style="width: 0%"></div>
-            </div>
-            <p class="progress-text" id="progressText1">0/5 完成</p>
-            
-            <ul class="topic-list">
-                <li class="topic-item" onclick="goToTopic('basic', 1)">
-                    <div class="topic-status pending" id="status-1-1">○</div>
-                    <span class="topic-name">期权定义与分类</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('basic', 2)">
-                    <div class="topic-status pending" id="status-1-2">○</div>
-                    <span class="topic-name">买方与卖方权利义务</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('basic', 3)">
-                    <div class="topic-status pending" id="status-1-3">○</div>
-                    <span class="topic-name">认购与认沽期权</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('basic', 4)">
-                    <div class="topic-status pending" id="status-1-4">○</div>
-                    <span class="topic-name">实值、平值、虚值</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('basic', 5)">
-                    <div class="topic-status pending" id="status-1-5">○</div>
-                    <span class="topic-name">欧式与美式期权</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-            </ul>
         </div>
-
-        <div class="module-card">
-            <div class="module-header">
-                <div class="module-icon" style="background: #fef3c7;">⚖️</div>
-                <div class="module-title">
-                    <h3>模块二：交易规则</h3>
-                    <p>交易制度，约25%分值</p>
+        
+        <!-- 模块三 -->
+        <div class="module-section">
+            <h3 class="module-title">📊 风险与盈亏</h3>
+            
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon" style="background: #d1fae5;">💰</div>
+                    <div class="module-info">
+                        <h4>损益计算</h4>
+                        <p>盈亏分析，约占25%分值</p>
+                    </div>
                 </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress3" style="width: 0%"></div>
+                </div>
+                <p class="progress-text" id="progressText3">0/4 完成</p>
+                
+                <ul class="topic-list">
+                    <li class="topic-item" onclick="startQuiz('risk', 1)">
+                        <span class="topic-status pending" id="s3-1">○</span>
+                        <span class="topic-name">买方损益特征</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('risk', 2)">
+                        <span class="topic-status pending" id="s3-2">○</span>
+                        <span class="topic-name">卖方损益特征</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('risk', 3)">
+                        <span class="topic-status pending" id="s3-3">○</span>
+                        <span class="topic-name">内在价值与时间价值</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('risk', 4)">
+                        <span class="topic-status pending" id="s3-4">○</span>
+                        <span class="topic-name">盈亏平衡点计算</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                </ul>
             </div>
-            
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress2" style="width: 0%"></div>
-            </div>
-            <p class="progress-text" id="progressText2">0/5 完成</p>
-            
-            <ul class="topic-list">
-                <li class="topic-item" onclick="goToTopic('rules', 1)">
-                    <div class="topic-status pending" id="status-2-1">○</div>
-                    <span class="topic-name">四种买卖类型</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('rules', 2)">
-                    <div class="topic-status pending" id="status-2-2">○</div>
-                    <span class="topic-name">保证金制度</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('rules', 3)">
-                    <div class="topic-status pending" id="status-2-3">○</div>
-                    <span class="topic-name">行权与到期日</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('rules', 4)">
-                    <div class="topic-status pending" id="status-2-4">○</div>
-                    <span class="topic-name">涨跌幅与熔断</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('rules', 5)">
-                    <div class="topic-status pending" id="status-2-5">○</div>
-                    <span class="topic-name">合约要素与代码</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-            </ul>
         </div>
-
-        <div class="module-card">
-            <div class="module-header">
-                <div class="module-icon" style="background: #d1fae5;">📊</div>
-                <div class="module-title">
-                    <h3>模块三：风险与盈亏</h3>
-                    <p>损益计算，约25%分值</p>
+        
+        <!-- 模块四 -->
+        <div class="module-section">
+            <h3 class="module-title">🎯 策略应用</h3>
+            
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon" style="background: #fee2e2;">🛡️</div>
+                    <div class="module-info">
+                        <h4>组合策略</h4>
+                        <p>策略应用，约占15%分值</p>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress3" style="width: 0%"></div>
-            </div>
-            <p class="progress-text" id="progressText3">0/4 完成</p>
-            
-            <ul class="topic-list">
-                <li class="topic-item" onclick="goToTopic('risk', 1)">
-                    <div class="topic-status pending" id="status-3-1">○</div>
-                    <span class="topic-name">买方损益特征</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('risk', 2)">
-                    <div class="topic-status pending" id="status-3-2">○</div>
-                    <span class="topic-name">卖方损益特征</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('risk', 3)">
-                    <div class="topic-status pending" id="status-3-3">○</div>
-                    <span class="topic-name">内在价值与时间价值</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('risk', 4)">
-                    <div class="topic-status pending" id="status-3-4">○</div>
-                    <span class="topic-name">盈亏平衡点计算</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-            </ul>
-        </div>
-
-        <div class="module-card">
-            <div class="module-header">
-                <div class="module-icon" style="background: #fee2e2;">🎯</div>
-                <div class="module-title">
-                    <h3>模块四：策略应用</h3>
-                    <p>组合策略，约15%分值</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress4" style="width: 0%"></div>
                 </div>
+                <p class="progress-text" id="progressText4">0/3 完成</p>
+                
+                <ul class="topic-list">
+                    <li class="topic-item" onclick="startQuiz('strategy', 1)">
+                        <span class="topic-status pending" id="s4-1">○</span>
+                        <span class="topic-name">保险策略</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('strategy', 2)">
+                        <span class="topic-status pending" id="s4-2">○</span>
+                        <span class="topic-name">备兑开仓</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                    <li class="topic-item" onclick="startQuiz('strategy', 3)">
+                        <span class="topic-status pending" id="s4-3">○</span>
+                        <span class="topic-name">策略对比与选择</span>
+                        <span class="topic-arrow">›</span>
+                    </li>
+                </ul>
             </div>
-            
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress4" style="width: 0%"></div>
-            </div>
-            <p class="progress-text" id="progressText4">0/3 完成</p>
-            
-            <ul class="topic-list">
-                <li class="topic-item" onclick="goToTopic('strategy', 1)">
-                    <div class="topic-status pending" id="status-4-1">○</div>
-                    <span class="topic-name">保险策略</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('strategy', 2)">
-                    <div class="topic-status pending" id="status-4-2">○</div>
-                    <span class="topic-name">备兑开仓</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-                <li class="topic-item" onclick="goToTopic('strategy', 3)">
-                    <div class="topic-status pending" id="status-4-3">○</div>
-                    <span class="topic-name">策略对比与选择</span>
-                    <span class="topic-arrow">→</span>
-                </li>
-            </ul>
         </div>
     </div>
-
+    
     <!-- 底部导航 -->
-    <div class="mobile-tabbar">
+    <div class="tabbar">
         <a href="../index.html" class="tabbar-item">
             <span class="tabbar-icon">🏠</span>
             <span>首页</span>
@@ -483,78 +568,55 @@
             <span>我的</span>
         </a>
     </div>
-
+    
     <script>
-        // 导航菜单切换
-        function toggleMenu() {
-            document.querySelector('.nav-menu-btn').classList.toggle('active');
-            document.querySelector('.nav-drawer').classList.toggle('open');
-            document.querySelector('.nav-overlay').classList.toggle('show');
-        }
-
-        // 加载学习进度
+        // 模块配置
+        const modules = {
+            basic: { total: 5, name: '期权基础' },
+            rules: { total: 5, name: '交易规则' },
+            risk: { total: 4, name: '风险盈亏' },
+            strategy: { total: 3, name: '策略应用' }
+        };
+        
+        // 加载进度
         function loadProgress() {
-            const modules = [
-                { id: 1, total: 5 },
-                { id: 2, total: 5 },
-                { id: 3, total: 4 },
-                { id: 4, total: 3 }
-            ];
-            
             let totalCompleted = 0;
-            let totalTopics = 0;
+            let totalQuestions = 0;
             
-            modules.forEach(module => {
+            Object.keys(modules).forEach((moduleKey, index) => {
+                const module = modules[moduleKey];
                 let completed = 0;
+                
                 for (let i = 1; i <= module.total; i++) {
-                    const key = `topic_${module.id}_${i}`;
+                    const key = `quiz_${moduleKey}_${i}`;
                     if (localStorage.getItem(key) === 'completed') {
                         completed++;
                         totalCompleted++;
-                        document.getElementById(`status-${module.id}-${i}`).textContent = '✓';
-                        document.getElementById(`status-${module.id}-${i}`).classList.remove('pending');
-                        document.getElementById(`status-${module.id}-${i}`).classList.add('done');
+                        document.getElementById(`s${index+1}-${i}`).textContent = '✓';
+                        document.getElementById(`s${index+1}-${i}`).classList.remove('pending');
+                        document.getElementById(`s${index+1}-${i}`).classList.add('done');
                     }
-                    totalTopics++;
+                    totalQuestions++;
                 }
                 
                 const progress = (completed / module.total) * 100;
-                document.getElementById(`progress${module.id}`).style.width = progress + '%';
-                document.getElementById(`progressText${module.id}`).textContent = `${completed}/${module.total} 完成`;
+                document.getElementById(`progress${index+1}`).style.width = progress + '%';
+                document.getElementById(`progressText${index+1}`).textContent = `${completed}/${module.total} 完成`;
             });
             
             // 更新统计
-            document.getElementById('completedTopics').textContent = totalCompleted;
+            document.getElementById('completedCount').textContent = totalCompleted;
             document.getElementById('correctRate').textContent = localStorage.getItem('correctRate') || '0%';
-            document.getElementById('mockExamCount').textContent = localStorage.getItem('mockExamCount') || '0';
+            document.getElementById('examCount').textContent = localStorage.getItem('examCount') || '0';
         }
-
-        // 跳转到具体题目
-        function goToTopic(module, topic) {
-            // 保存当前进度
-            localStorage.setItem('currentModule', module);
-            localStorage.setItem('currentTopic', topic);
-            // 跳转到题目页面
-            window.location.href = `exam-topic.html?module=${module}&topic=${topic}`;
+        
+        // 开始练习
+        function startQuiz(module, topic) {
+            window.location.href = `exam-practice.html?module=${module}&topic=${topic}`;
         }
-
-        // 开始模拟考试
-        function startMockExam() {
-            // 检查是否完成足够学习
-            const completed = parseInt(document.getElementById('completedTopics').textContent);
-            if (completed < 5) {
-                if (!confirm('您还未完成足够的学习内容，确定要开始模拟考试吗？')) {
-                    return;
-                }
-            }
-            window.location.href = 'mock-exam.html';
-        }
-
-        // 页面加载时读取进度
+        
+        // 页面加载
         loadProgress();
-
-        // 监听存储变化（跨页面同步）
-        window.addEventListener('storage', loadProgress);
     </script>
 </body>
 </html>

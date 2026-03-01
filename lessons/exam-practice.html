@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <title>练习模式 - 300ETF期权学院</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 1000;
+        }
+        
+        .nav-back {
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .nav-placeholder { width: 40px; }
+        
+        .container {
+            padding: 72px 16px 100px;
+            max-width: 100%;
+        }
+        
+        .progress-section {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #10b981);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: #6366f1;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .question-text {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        
+        .options-list {
+            list-style: none;
+        }
+        
+        .option-item {
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option-item:active {
+            transform: scale(0.98);
+        }
+        
+        .option-item.selected {
+            border-color: #6366f1;
+            background: rgba(99,102,241,0.1);
+        }
+        
+        .option-item.correct {
+            border-color: #10b981;
+            background: rgba(16,185,129,0.1);
+        }
+        
+        .option-item.wrong {
+            border-color: #ef4444;
+            background: rgba(239,68,68,0.1);
+        }
+        
+        .option-label {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .option-item.selected .option-label {
+            background: #6366f1;
+            color: white;
+        }
+        
+        .option-item.correct .option-label {
+            background: #10b981;
+            color: white;
+        }
+        
+        .option-item.wrong .option-label {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .option-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        
+        .explanation {
+            margin-top: 16px;
+            padding: 16px;
+            background: #f0fdf4;
+            border-radius: 12px;
+            border-left: 4px solid #10b981;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+        }
+        
+        .explanation-title {
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 8px;
+        }
+        
+        .explanation-text {
+            color: #166534;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+            display: flex;
+            gap: 12px;
+            z-index: 999;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn-prev {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        .btn-prev:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+        }
+        
+        .result-card {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .result-card.show {
+            display: block;
+        }
+        
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+        
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .result-text {
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .action-bar {
+                max-width: 800px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="exam-zone.html" class="nav-back">←</a>
+        <span class="nav-title" id="pageTitle">练习模式</span>
+        <span class="nav-placeholder"></span>
+    </nav>
+    
+    <div class="container" id="container">
+        <div id="quizArea"></div>
+        
+        <div class="result-card" id="resultCard">
+            <div class="result-icon">🎉</div>
+            <div class="result-title">练习完成！</div>
+            <div class="result-text" id="resultText">你答对了 0/0 题</div>
+            <button class="btn btn-next" onclick="location.href='exam-zone.html'">返回考试专区</button>
+        </div>
+    </div>
+    
+    <div class="action-bar" id="actionBar">
+        <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()">上一题</button>
+        <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">下一题</button>
+    </div>
+    
+    <script>
+        // 练习题库
+        const questionBank = {
+            basic: {
+                1: {
+                    question: '期权是一种（），它赋予买方在约定时间以约定价格买入或卖出标的资产的权利。',
+                    options: ['权利', '义务', '合约', '承诺'],
+                    answer: 2,
+                    explanation: '期权是一种合约，它赋予买方在约定时间以约定价格买入或卖出标的资产的权利，但买方不承担必须买入或卖出的义务。'
+                },
+                2: {
+                    question: '认购期权（Call Option）赋予买方（）。',
+                    options: ['以约定价格卖出标的资产的权利', '以约定价格买入标的资产的权利', '必须买入标的资产的义务', '必须卖出标的资产的义务'],
+                    answer: 1,
+                    explanation: '认购期权（Call Option）赋予买方以约定价格买入标的资产的权利，买方有权选择是否行权。'
+                },
+                3: {
+                    question: '认沽期权（Put Option）赋予买方（）。',
+                    options: ['以约定价格买入标的资产的权利', '以约定价格卖出标的资产的权利', '必须买入标的资产的义务', '必须卖出标的资产的义务'],
+                    answer: 1,
+                    explanation: '认沽期权（Put Option）赋予买方以约定价格卖出标的资产的权利。'
+                },
+                4: {
+                    question: '期权买方支付（）给卖方以获得期权合约赋予的权利。',
+                    options: ['保证金', '权利金', '手续费', '印花税'],
+                    answer: 1,
+                    explanation: '期权买方支付权利金（Premium）给卖方，以获得期权合约赋予的权利。'
+                },
+                5: {
+                    question: '当标的资产价格 > 行权价格时，认购期权处于（）。',
+                    options: ['实值状态', '平值状态', '虚值状态', '无效状态'],
+                    answer: 0,
+                    explanation: '对于认购期权：标的价格 > 行权价为实值；标的价格 = 行权价为平值；标的价格 < 行权价为虚值。'
+                }
+            },
+            rules: {
+                1: {
+                    question: '期权交易的四种基本操作是（）。',
+                    options: ['买入开仓、买入平仓、卖出开仓、卖出平仓', '买入看涨、买入看跌、卖出看涨、卖出看跌', '开仓、平仓、行权、放弃', '认购、认沽、实值、虚值'],
+                    answer: 0,
+                    explanation: '期权交易的四种基本操作：买入开仓、买入平仓、卖出开仓、卖出平仓。'
+                },
+                2: {
+                    question: '期权卖方需要缴纳（）。',
+                    options: ['权利金', '保证金', '手续费', '以上都要'],
+                    answer: 1,
+                    explanation: '期权卖方需要缴纳保证金作为履约担保。买方支付权利金，不需要缴纳保证金。'
+                },
+                3: {
+                    question: '沪深300ETF期权合约单位是（）。',
+                    options: ['100份', '1000份', '10000份', '由交易所规定'],
+                    answer: 2,
+                    explanation: '沪深300ETF期权合约单位是10000份，即每张期权合约对应10000份ETF基金份额。'
+                },
+                4: {
+                    question: '期权合约到期日为到期月份的（）。',
+                    options: ['第一个星期三', '第二个星期三', '第三个星期三', '第四个星期三'],
+                    answer: 3,
+                    explanation: '沪深300ETF期权合约到期日为到期月份的第四个星期三（遇法定节假日顺延）。'
+                },
+                5: {
+                    question: '欧式期权只能在（）行权。',
+                    options: ['到期日当天', '到期日前任何交易日', '到期日后10天内', '任何时间'],
+                    answer: 0,
+                    explanation: '欧式期权只能在到期日当天行权，而美式期权可以在到期日前任何交易日行权。'
+                }
+            },
+            risk: {
+                1: {
+                    question: '期权买方最大损失为（）。',
+                    options: ['无限大', '权利金', '保证金', '标的资产价值'],
+                    answer: 1,
+                    explanation: '期权买方的最大损失是已支付的权利金。买方的风险有限，收益潜力（认购）无限或（认沽）较大。'
+                },
+                2: {
+                    question: '认购期权卖方最大损失为（）。',
+                    options: ['权利金', '无限大', '行权价', '零'],
+                    answer: 1,
+                    explanation: '认购期权卖方最大损失理论上是无限的，因为标的资产价格上涨没有上限。'
+                },
+                3: {
+                    question: '认购期权的盈亏平衡点为（）。',
+                    options: ['行权价', '行权价+权利金', '行权价-权利金', '权利金'],
+                    answer: 1,
+                    explanation: '认购期权的盈亏平衡点 = 行权价 + 权利金。当标的价格超过此价格时，买方开始盈利。'
+                },
+                4: {
+                    question: '认沽期权的盈亏平衡点为（）。',
+                    options: ['行权价', '行权价+权利金', '行权价-权利金', '权利金'],
+                    answer: 2,
+                    explanation: '认沽期权的盈亏平衡点 = 行权价 - 权利金。当标的价格低于此价格时，买方开始盈利。'
+                }
+            },
+            strategy: {
+                1: {
+                    question: '备兑开仓策略是指（）。',
+                    options: ['持有标的资产并卖出认购期权', '持有标的资产并买入认沽期权', '卖出认购期权并买入认沽期权', '买入认购期权并卖出认沽期权'],
+                    answer: 0,
+                    explanation: '备兑开仓策略是指持有标的资产（如ETF）的同时，卖出该标的的认购期权，通过收取权利金增强收益。'
+                },
+                2: {
+                    question: '保险策略是指（）。',
+                    options: ['持有标的资产并卖出认购期权', '持有标的资产并买入认沽期权', '卖出认购期权并买入认沽期权', '买入认购期权并卖出认沽期权'],
+                    answer: 1,
+                    explanation: '保险策略是指持有标的资产的同时，买入该标的的认沽期权，为标的资产价格下跌提供保护。'
+                },
+                3: {
+                    question: '期权的杠杆效应体现在（）。',
+                    options: ['用少量资金控制较大价值的标的', '没有杠杆', '杠杆比期货小', '只存在于买方'],
+                    answer: 0,
+                    explanation: '期权具有杠杆效应，买方只需支付少量权利金，就能控制较大价值的标的资产，放大收益和风险。'
+                }
+            }
+        };
+        
+        let currentModule, currentTopic;
+        let questions = [];
+        let currentIdx = 0;
+        let answers = [];
+        let answered = [];
+        
+        // 初始化
+        function init() {
+            const params = new URLSearchParams(location.search);
+            currentModule = params.get('module');
+            currentTopic = params.get('topic');
+            
+            const moduleNames = {
+                basic: '期权基础',
+                rules: '交易规则',
+                risk: '风险盈亏',
+                strategy: '策略应用'
+            };
+            
+            document.getElementById('pageTitle').textContent = 
+                `${moduleNames[currentModule]} - 练习`;
+            
+            // 加载题目
+            const topicData = questionBank[currentModule];
+            if (topicData) {
+                questions = Object.values(topicData);
+                answers = new Array(questions.length).fill(-1);
+                answered = new Array(questions.length).fill(false);
+            }
+            
+            renderQuestion();
+            updateButtons();
+        }
+        
+        // 渲染题目
+        function renderQuestion() {
+            if (currentIdx >= questions.length) {
+                showResult();
+                return;
+            }
+            
+            const q = questions[currentIdx];
+            const hasAnswered = answered[currentIdx];
+            const userAnswer = answers[currentIdx];
+            
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                let className = '';
+                if (hasAnswered) {
+                    if (idx === q.answer) className = 'correct';
+                    else if (idx === userAnswer && idx !== q.answer) className = 'wrong';
+                } else if (userAnswer === idx) {
+                    className = 'selected';
+                }
+                
+                const label = String.fromCharCode(65 + idx);
+                optionsHtml += `
+                    <li class="option-item ${className}" onclick="selectOption(${idx})">
+                        <span class="option-label">${label}</span>
+                        <span class="option-text">${opt}</span>
+                    </li>
+                `;
+            });
+            
+            const showExplanation = hasAnswered ? 'show' : '';
+            
+            document.getElementById('quizArea').innerHTML = `
+                <div class="progress-section">
+                    <div class="progress-info">
+                        <span>答题进度</span>
+                        <span>${currentIdx + 1}/${questions.length}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${((currentIdx + 1) / questions.length) * 100}%"></div>
+                    </div>
+                </div>
+                
+                <div class="question-card">
+                    <span class="question-number">第${currentIdx + 1}题</span>
+                    <div class="question-text">${q.question}</div>
+                    <ul class="options-list">${optionsHtml}</ul>
+                    <div class="explanation ${showExplanation}">
+                        <div class="explanation-title">✓ 正确答案：${String.fromCharCode(65 + q.answer)}</div>
+                        <div class="explanation-text">${q.explanation}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 选择选项
+        function selectOption(idx) {
+            if (answered[currentIdx]) return;
+            
+            answers[currentIdx] = idx;
+            answered[currentIdx] = true;
+            
+            // 保存进度
+            localStorage.setItem(`quiz_${currentModule}_${currentTopic}`, 'completed');
+            
+            renderQuestion();
+            
+            // 自动下一题
+            setTimeout(() => {
+                if (currentIdx < questions.length - 1) {
+                    nextQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1500);
+        }
+        
+        // 上一题
+        function prevQuestion() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                renderQuestion();
+                updateButtons();
+            }
+        }
+        
+        // 下一题
+        function nextQuestion() {
+            if (currentIdx < questions.length - 1) {
+                currentIdx++;
+                renderQuestion();
+                updateButtons();
+            } else {
+                showResult();
+            }
+        }
+        
+        // 更新按钮
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentIdx === 0;
+            
+            if (currentIdx === questions.length - 1) {
+                document.getElementById('nextBtn').textContent = '查看结果';
+            } else {
+                document.getElementById('nextBtn').textContent = '下一题';
+            }
+        }
+        
+        // 显示结果
+        function showResult() {
+            let correct = 0;
+            answers.forEach((ans, idx) => {
+                if (ans === questions[idx].answer) correct++;
+            });
+            
+            document.getElementById('quizArea').style.display = 'none';
+            document.getElementById('actionBar').style.display = 'none';
+            document.getElementById('resultCard').classList.add('show');
+            document.getElementById('resultText').textContent = 
+                `你答对了 ${correct}/${questions.length} 题`;
+        }
+        
+        // 启动
+        init();
+    </script>
+</body>
+</html>
