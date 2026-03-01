@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>错题本 - 300ETF期权学院</title>
+    <link rel="stylesheet" href="../css/mobile.css">
+    <style>
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        
+        .filter-tab {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid var(--light);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        
+        .filter-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .mistake-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--danger);
+        }
+        
+        .mistake-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+        
+        .mistake-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .mistake-tag.basic { background: #e0e7ff; color: #3730a3; }
+        .mistake-tag.rules { background: #fef3c7; color: #92400e; }
+        .mistake-tag.risk { background: #d1fae5; color: #065f46; }
+        .mistake-tag.strategy { background: #fee2e2; color: #991b1b; }
+        
+        .mistake-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .mistake-question {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        
+        .mistake-options {
+            margin-bottom: 16px;
+        }
+        
+        .option-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-item.wrong {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+        
+        .option-item.correct {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+        
+        .option-item.other {
+            background: var(--light);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .mistake-analysis {
+            background: #fef3c7;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .mistake-analysis h4 {
+            color: #92400e;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .mistake-analysis p {
+            color: #78350f;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .mistake-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn-sm {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-review {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-remove {
+            background: var(--light);
+            color: var(--gray);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-box {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-box-number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--danger);
+        }
+        
+        .stat-box-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .empty-state p {
+            color: var(--gray);
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">📈 300ETF期权学院</div>
+        <button class="nav-menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+    
+    <div class="nav-overlay" onclick="toggleMenu()"></div>
+    <div class="nav-drawer">
+        <a href="../index.html">🏠 首页</a>
+        <a href="lesson1.html">🎯 第一课</a>
+        <a href="exam-zone.html">📝 开户考试专区</a>
+        <a href="mistake-book.html">📚 错题本</a>
+        <a href="profile.html">👤 个人中心</a>
+    </div>
+
+    <div class="mobile-container">
+        <h1 style="margin-bottom: 8px;">📚 错题本</h1>
+        <p style="color: var(--gray); margin-bottom: 24px;">温故而知新，针对性提升</p>
+
+        <!-- 统计 -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-box-number" id="totalMistakes">0</div>
+                <div class="stat-box-label">总错题数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-number" id="reviewedMistakes">0</div>
+                <div class="stat-box-label">已复习</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-number" id="mistakeRate">0%</div>
+                <div class="stat-box-label">错误率</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-number" id="masteredCount">0</div>
+                <div class="stat-box-label">已掌握</div>
+            </div>
+        </div>
+
+        <!-- 筛选标签 -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterMistakes('all')">全部</button>
+            <button class="filter-tab" onclick="filterMistakes('basic')">基础</button>
+            <button class="filter-tab" onclick="filterMistakes('rules')">规则</button>
+            <button class="filter-tab" onclick="filterMistakes('risk')">风险</button>
+            <button class="filter-tab" onclick="filterMistakes('strategy')">策略</button>
+        </div>
+
+        <!-- 错题列表 -->
+        <div id="mistakeList">
+            <!-- 动态生成 -->
+        </div>
+
+        <!-- 空状态 -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-state-icon">🎉</div>
+            <h3>太棒了！还没有错题</h3>
+            <p>继续保持，你已经掌握得很好了</p>
+            <a href="exam-zone.html" class="btn btn-primary btn-block">去练习</a>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="mobile-tabbar">
+        <a href="../index.html" class="tabbar-item">
+            <span class="tabbar-icon">🏠</span>
+            <span>首页</span>
+        </a>
+        <a href="lesson1.html" class="tabbar-item">
+            <span class="tabbar-icon">📖</span>
+            <span>课程</span>
+        </a>
+        <a href="exam-zone.html" class="tabbar-item">
+            <span class="tabbar-icon">📝</span>
+            <span>考试</span>
+        </a>
+        <a href="mistake-book.html" class="tabbar-item active">
+            <span class="tabbar-icon">📚</span>
+            <span>错题</span>
+        </a>
+    </div>
+
+    <script>
+        // 示例错题数据（实际应从localStorage读取）
+        let mistakes = JSON.parse(localStorage.getItem('mistakes')) || [];
+
+        // 如果为空，添加示例数据
+        if (mistakes.length === 0) {
+            mistakes = [
+                {
+                    id: 1,
+                    module: 'basic',
+                    moduleName: '期权基础',
+                    question: '期权合约买方拥有的是____，卖方承担的是____。',
+                    options: [
+                        { text: '权利；义务', correct: true },
+                        { text: '义务；权利', correct: false },
+                        { text: '权利；权利', correct: false },
+                        { text: '义务；义务', correct: false }
+                    ],
+                    userAnswer: 1,
+                    analysis: '期权买方支付权利金获得选择权，卖方收取权利金承担履约义务。这是期权最基本的特征。',
+                    date: '2026-02-28',
+                    reviewed: false
+                },
+                {
+                    id: 2,
+                    module: 'rules',
+                    moduleName: '交易规则',
+                    question: 'ETF期权的行权日是____。',
+                    options: [
+                        { text: '每月第一个周五', correct: false },
+                        { text: '每月15日', correct: false },
+                        { text: '到期月份第四个周三', correct: true },
+                        { text: '每月最后一个交易日', correct: false }
+                    ],
+                    userAnswer: 3,
+                    analysis: 'ETF期权行权日为到期月份的第四个周三，遇法定节假日顺延。',
+                    date: '2026-02-28',
+                    reviewed: false
+                }
+            ];
+            localStorage.setItem('mistakes', JSON.stringify(mistakes));
+        }
+
+        let currentFilter = 'all';
+
+        function toggleMenu() {
+            document.querySelector('.nav-menu-btn').classList.toggle('active');
+            document.querySelector('.nav-drawer').classList.toggle('open');
+            document.querySelector('.nav-overlay').classList.toggle('show');
+        }
+
+        function renderMistakes() {
+            const listEl = document.getElementById('mistakeList');
+            const emptyEl = document.getElementById('emptyState');
+            
+            // 筛选
+            let filtered = mistakes;
+            if (currentFilter !== 'all') {
+                filtered = mistakes.filter(m => m.module === currentFilter);
+            }
+
+            // 更新统计
+            updateStats();
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = '';
+                emptyEl.style.display = 'block';
+                return;
+            }
+
+            emptyEl.style.display = 'none';
+            
+            listEl.innerHTML = filtered.map(mistake => `
+                <div class="mistake-card" data-id="${mistake.id}">
+                    <div class="mistake-header">
+                        <span class="mistake-tag ${mistake.module}">${mistake.moduleName}</span>
+                        <span class="mistake-date">${mistake.date}</span>
+                    </div>
+                    
+                    <div class="mistake-question">${mistake.question}</div>
+                    
+                    <div class="mistake-options">
+                        ${mistake.options.map((opt, idx) => {
+                            let className = 'other';
+                            if (idx === mistake.userAnswer) className = 'wrong';
+                            if (opt.correct) className = 'correct';
+                            return `
+                                <div class="option-item ${className}">
+                                    ${idx === mistake.userAnswer ? '❌' : opt.correct ? '✓' : '○'} 
+                                    ${opt.text}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <div class="mistake-analysis">
+                        <h4>💡 解析</h4>
+                        <p>${mistake.analysis}</p>
+                    </div>
+                    
+                    <div class="mistake-actions">
+                        <button class="btn-sm btn-review" onclick="reviewMistake(${mistake.id})">
+                            ${mistake.reviewed ? '✓ 已复习' : '标记已复习'}
+                        </button>
+                        <button class="btn-sm btn-remove" onclick="removeMistake(${mistake.id})">
+                            移除
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const total = mistakes.length;
+            const reviewed = mistakes.filter(m => m.reviewed).length;
+            const mastered = mistakes.filter(m => m.reviewCount >= 3).length;
+            
+            // 计算错误率（从localStorage读取总答题数）
+            const totalAnswered = parseInt(localStorage.getItem('totalAnswered')) || 0;
+            const rate = totalAnswered > 0 ? Math.round((total / totalAnswered) * 100) : 0;
+
+            document.getElementById('totalMistakes').textContent = total;
+            document.getElementById('reviewedMistakes').textContent = reviewed;
+            document.getElementById('mistakeRate').textContent = rate + '%';
+            document.getElementById('masteredCount').textContent = mastered;
+        }
+
+        function filterMistakes(module) {
+            currentFilter = module;
+            
+            // 更新标签样式
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderMistakes();
+        }
+
+        function reviewMistake(id) {
+            const mistake = mistakes.find(m => m.id === id);
+            if (mistake) {
+                mistake.reviewed = true;
+                mistake.reviewCount = (mistake.reviewCount || 0) + 1;
+                mistake.lastReviewDate = new Date().toISOString().split('T')[0];
+                
+                // 复习3次后标记为已掌握
+                if (mistake.reviewCount >= 3) {
+                    alert('🎉 恭喜！这道题你已经完全掌握了，将从错题本移除。');
+                    removeMistake(id);
+                    return;
+                }
+                
+                localStorage.setItem('mistakes', JSON.stringify(mistakes));
+                renderMistakes();
+            }
+        }
+
+        function removeMistake(id) {
+            if (confirm('确定要移除这道错题吗？')) {
+                mistakes = mistakes.filter(m => m.id !== id);
+                localStorage.setItem('mistakes', JSON.stringify(mistakes));
+                renderMistakes();
+            }
+        }
+
+        // 初始化
+        renderMistakes();
+    </script>
+</body>
+</html>

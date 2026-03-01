@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>希腊字母入门 - 300ETF期权学院</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .greek-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary);
+        }
+        .greek-card.delta { border-left-color: #3b82f6; }
+        .greek-card.gamma { border-left-color: #8b5cf6; }
+        .greek-card.theta { border-left-color: #f59e0b; }
+        .greek-card.vega { border-left-color: #10b981; }
+        .greek-symbol {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-right: 1rem;
+            font-family: 'Times New Roman', serif;
+        }
+        .greek-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .greek-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        .greek-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .impact-visual {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        .impact-bar {
+            height: 30px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #f59e0b, #10b981);
+            border-radius: 15px;
+            margin: 0.5rem 0;
+            position: relative;
+        }
+        .impact-marker {
+            position: absolute;
+            top: -5px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: left 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" style="text-decoration: none;"><div class="logo">📈 300ETF期权学院</div>
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <span class="lesson-badge">进阶课</span>
+            <h1>希腊字母入门（Greeks）</h1>
+            <p class="lesson-meta">预计学习时间：20分钟 | 期权定价的 sensitivity 指标</p>
+        </header>
+
+        <div class="lesson-content">
+            <!-- 简介 -->
+            <div class="concept-box">
+                <h3>🎯 什么是希腊字母？</h3>
+                
+                <p><strong>希腊字母（Greeks）</strong>是衡量期权价格对各种因素敏感度的指标。它们帮助交易者理解：</p>
+                
+                <ul>
+                    <li>标的价格变动对期权价格的影响（Delta, Gamma）</li>
+                    <li>时间流逝对期权价格的影响（Theta）</li>
+                    <li>波动率变化对期权价格的影响（Vega）</li>
+                </ul>
+                
+                <p>掌握希腊字母，可以更科学地管理期权头寸风险。</p>
+            </div>
+
+            <!-- Delta -->
+            <div class="greek-card delta">
+                <div class="greek-header">
+                    <span class="greek-symbol" style="color: #3b82f6;">Δ</span>
+                    <div>
+                        <div class="greek-name">Delta（德尔塔）</div>
+                        <div class="greek-desc">标的价格变动1元，期权价格变动多少</div>
+                    </div>
+                </div>
+
+                <div class="concept-box">
+                    <h4>📌 核心要点</h4>
+                    
+                    <ul>
+                        <li><strong>认购期权 Delta：0 ~ 1</strong>（平值约0.5，深度实值接近1，深度虚值接近0）</li>
+                        <li><strong>认沽期权 Delta：-1 ~ 0</strong>（平值约-0.5，深度实值接近-1，深度虚值接近0）</li>
+                        <li><strong>含义</strong>：Delta=0.5表示标的价格涨1元，期权价格涨0.5元</li>
+                    </ul>
+                </div>
+
+                <div class="story-box">
+                    <h4>💡 实战理解</h4>
+                    
+                    <p>你买了1手510300购4月4000，Delta=0.6：</p>
+                    
+                    <ul>
+                        <li>510300从4.000涨到4.100（+0.100元）</li>
+                        <li>期权理论上涨 = 0.100 × 0.6 × 10000 = <strong>600元</strong></li>
+                    </ul>
+                    
+                    <p><strong>Delta就是期权的"股票 equivalents"</strong>：Delta=0.6相当于持有6000份ETF的敏感度。</p>
+                </div>
+            </div>
+
+            <!-- Gamma -->
+            <div class="greek-card gamma">
+                <div class="greek-header">
+                    <span class="greek-symbol" style="color: #8b5cf6;">Γ</span>
+                    <div>
+                        <div class="greek-name">Gamma（伽马）</div>
+                        <div class="greek-desc">标的价格变动1元，Delta变动多少</div>
+                    </div>
+                </div>
+
+                <div class="concept-box">
+                    <h4>📌 核心要点</h4>
+                    
+                    <ul>
+                        <li><strong>买方 Gamma > 0</strong>，卖方 Gamma < 0</li>
+                        <li><strong>平值期权 Gamma 最大</strong>（标的价格微小变动，Delta变化最剧烈）</li>
+                        <li><strong>临近到期</strong>，平值期权 Gamma 急剧增大</li>
+                    </ul>
+                </div>
+
+                <div class="story-box">
+                    <h4>💡 实战理解</h4>
+                    
+                    <p>你买了平值期权，Gamma很大：</p>
+                    
+                    <ul>
+                        <li>ETF小涨 → Delta增大 → 期权涨得更快（加速上涨）</li>
+                        <li>ETF小跌 → Delta减小 → 期权跌得更慢（减速下跌）</li>
+                    </ul>
+                    
+                    <p><strong>Gamma是买方的朋友</strong>，让盈利加速、亏损减速。</p>
+                </div>
+            </div>
+
+            <!-- Theta -->
+            <div class="greek-card theta">
+                <div class="greek-header">
+                    <span class="greek-symbol" style="color: #f59e0b;">Θ</span>
+                    <div>
+                        <div class="greek-name">Theta（西塔）</div>
+                        <div class="greek-desc">每过1天，期权价格损失多少（时间衰减）</div>
+                    </div>
+                </div>
+
+                <div class="concept-box">
+                    <h4>📌 核心要点</h4>
+                    
+                    <ul>
+                        <li><strong>买方 Theta < 0</strong>（每天损失时间价值）</li>
+                        <li><strong>卖方 Theta > 0</strong>（每天赚取时间价值）</li>
+                        <li><strong>临近到期</strong>，Theta 绝对值增大（时间价值衰减加速）</li>
+                        <li><strong>平值期权</strong> Theta 绝对值最大</li>
+                    </ul>
+                </div>
+
+                <div class="story-box">
+                    <h4>💡 实战理解</h4>
+                    
+                    <p>你买了期权，Theta = -50：</p>
+                    
+                    <ul>
+                        <li>每过1天，期权价值减少约50元（无论涨跌）</li>
+                        <li>到期前一周，可能每天损失200元（加速衰减）</li>
+                    </ul>
+                    
+                    <p><strong>时间是买方最大的敌人</strong>，买期权要尽快盈利。</p>
+                </div>
+            </div>
+
+            <!-- Vega -->
+            <div class="greek-card vega">
+                <div class="greek-header">
+                    <span class="greek-symbol" style="color: #10b981;">V</span>
+                    <div>
+                        <div class="greek-name">Vega（维加）</div>
+                        <div class="greek-desc">IV变动1%，期权价格变动多少</div>
+                    </div>
+                </div>
+
+                <div class="concept-box">
+                    <h4>📌 核心要点</h4>
+                    
+                    <ul>
+                        <li><strong>买方 Vega > 0</strong>（喜欢波动率上升）</li>
+                        <li><strong>卖方 Vega < 0</strong>（喜欢波动率下降）</li>
+                        <li><strong>平值期权 Vega 最大</strong></li>
+                        <li><strong>长期期权</strong> Vega 更大（对波动率更敏感）</li>
+                    </ul>
+                </div>
+
+                <div class="story-box">
+                    <h4>💡 实战理解</h4>
+                    
+                    <p>你买了期权，Vega = 80，IV从20%涨到25%（+5%）：</p>
+                    
+                    <ul>
+                        <li>期权理论增值 = 5 × 80 = <strong>400元</strong></li>
+                    </ul>
+                    
+                    <p><strong>高Vega时，赌对波动率方向比赌对价格方向更赚钱</strong>。</p>
+                </div>
+            </div>
+
+            <!-- 对比总结 -->
+            <div class="lesson-section">
+                <h2>📊 希腊字母速查表</h2>
+                
+                <table class="compare-table">
+                    <tr>
+                        <th>希腊字母</th>
+                        <th>含义</th>
+                        <th>买方</th>
+                        <th>卖方</th>
+                        <th>何时最大</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Delta</strong></td>
+                        <td>价格敏感度</td>
+                        <td style="color: #3b82f6;">+</td>
+                        <td style="color: #ef4444;">-</td>
+                        <td>深度实值</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gamma</strong></td>
+                        <td>Delta变化率</td>
+                        <td style="color: #3b82f6;">+</td>
+                        <td style="color: #ef4444;">-</td>
+                        <td>平值+临到期</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Theta</strong></td>
+                        <td>时间衰减</td>
+                        <td style="color: #ef4444;">-</td>
+                        <td style="color: #3b82f6;">+</td>
+                        <td>平值+临到期</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vega</strong></td>
+                        <td>波动率敏感度</td>
+                        <td style="color: #3b82f6;">+</td>
+                        <td style="color: #ef4444;">-</td>
+                        <td>平值+长期</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 测验 -->
+            <div class="quiz-section">
+                <h3>📝 知识测验</h3>
+                
+                <div id="quiz-container">
+                    <p class="quiz-question">1. Delta表示什么？</p>
+                    
+                    <div class="quiz-options" id="q1">
+                        <div class="quiz-option" data-answer="correct">A. 标的价格变动1元，期权价格变动多少</div>
+                        <div class="quiz-option" data-answer="wrong">B. 时间流逝对期权价格的影响</div>
+                        <div class="quiz-option" data-answer="wrong">C. 波动率变化对期权价格的影响</div>
+                        <div class="quiz-option" data-answer="wrong">D. 利率变化对期权价格的影响</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">2. 买方和卖方，谁喜欢Theta？</p>
+                    
+                    <div class="quiz-options" id="q2">
+                        <div class="quiz-option" data-answer="wrong">A. 买方（Theta > 0）</div>
+                        <div class="quiz-option" data-answer="correct">B. 卖方（Theta > 0）</div>
+                        <div class="quiz-option" data-answer="wrong">C. 都不喜欢</div>
+                        <div class="quiz-option" data-answer="wrong">D. 都喜欢</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">3. 平值期权临近到期时，哪个希腊字母变化最剧烈？</p>
+                    
+                    <div class="quiz-options" id="q3">
+                        <div class="quiz-option" data-answer="wrong">A. Delta</div>
+                        <div class="quiz-option" data-answer="correct">B. Gamma</div>
+                        <div class="quiz-option" data-answer="wrong">C. Vega</div>
+                        <div class="quiz-option" data-answer="wrong">D. Rho</div>
+                    </div>
+                </div>
+
+                <div id="quiz-result" style="display: none; margin-top: 1.5rem; text-align: center;">
+                    <p id="quiz-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-nav">
+            <a href="lesson-bs.html" class="nav-btn">← 上一课</a>
+            <a href="../index.html" class="nav-btn">🏠 返回主页</a>
+            <span style="flex: 1; text-align: center; padding: 0.75rem; color: var(--success); font-weight: 600;">🎉 已完成全部课程</span>
+        </div>
+    </div>
+
+    <script>
+        // 测验逻辑
+        let correctCount = 0;
+        let answeredCount = 0;
+        const totalQuestions = 3;
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                if (parent.dataset.answered) return;
+                parent.dataset.answered = 'true';
+                
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    } else if (opt === this && !isCorrect) {
+                        opt.classList.add('wrong');
+                    }
+                });
+
+                if (isCorrect) correctCount++;
+                answeredCount++;
+
+                if (answeredCount === totalQuestions) {
+                    const resultDiv = document.getElementById('quiz-result');
+                    const message = document.getElementById('quiz-message');
+                    resultDiv.style.display = 'block';
+                    
+                    if (correctCount === totalQuestions) {
+                        message.innerHTML = '🎉 太棒了！你已掌握希腊字母基础！';
+                        message.style.color = 'var(--success)';
+                    } else {
+                        message.innerHTML = `答对了 ${correctCount}/${totalQuestions} 题。建议再复习一下。`;
+                        message.style.color = 'var(--warning)';
+                    }
+                }
+            });
+        });
+    </script>
+    <div style="background: linear-gradient(135deg, #1e3a8a, #3730a3); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem;">
+        <p style="font-weight: 600;">💡 让天下没有难做的期权</p>
+        <p style="font-size: 0.85rem; opacity: 0.8;">关注公众号「300ETF期权实践」获取更多实战策略</p>
+    </div>
+</body>
+</html>

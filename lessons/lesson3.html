@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三课：看跌期权实战 - 300ETF期权学院</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" style="text-decoration: none;"><div class="logo">📈 300ETF期权学院</div></a>
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+        </div></a>
+    </nav>
+
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <span class="lesson-badge">第三课</span>
+            <h1>看跌期权实战：买PUT赌下跌</h1>
+            <p class="lesson-meta">预计学习时间：20分钟 | 实战模拟 + 图表分析</p>
+        </header>
+
+        <div class="lesson-content">
+            <!-- 故事引入 -->
+            <div class="story-box">
+                <h3>📖 老李的看跌故事</h3>
+                <p>老李持有10万份510300（价值约39万元），现在价格是 <strong>3.900元</strong>。</p>
+                <p>但他担心下周大盘会大跌。他有三个选择：</p>
+                <ul>
+                    <li><strong>选择A：直接卖出ETF</strong> - 如果真跌了，他躲过了亏损，但如果涨了，他就踏空了</li>
+                    <li><strong>选择B：买入看跌期权</strong> - 花520元买"3.800沽"，给持仓上个"保险"</li>
+                    <li><strong>选择C：硬抗</strong> - 什么都不做，赌不会跌</li>
+                </ul>
+                <p>老李选择了B。一周后，大盘真的大跌，510300跌到了3.600元！</p>
+                <blockquote>
+                    "ETF持仓亏了3万元，但是我的看跌期权赚了！(3.800-3.600)×10000 - 520 = 1480元<br>
+                    相当于我只亏了28520元，而不是3万元。这份'保险'值了！"
+                </blockquote>
+            </div></a>
+
+            <!-- 概念解释 -->
+            <div class="lesson-section">
+                <h2>🎯 看跌期权（Put Option）是什么？</h2>
+                
+                <div class="concept-box">
+                    <h3>定义</h3>
+                    <p><strong>看跌期权 = 认沽期权 = Put</strong></p>
+                    <p>买方支付权利金，获得在未来以约定价格<strong>卖出</strong>标的资产的权利。</p>                    
+                    
+                    <ul>
+                        <li><strong>你认为</strong>：标的价格会跌</li>
+                        <li><strong>你买入</strong>：看跌期权（Put）</li>
+                        <li><strong>如果跌了</strong>：行权获利（以高价卖出便宜的ETF）</li>
+                        <li><strong>如果涨了</strong>：放弃行权，损失权利金</li>
+                    </ul>
+                </div></a>
+
+                <h3>📊 510300认沽合约解读</h3>
+                <div class="concept-box">
+                    <p>以 <strong>"510300沽4月3800"</strong> 为例：</p>
+                    <table class="compare-table">
+                        <tr>
+                            <th>组成部分</th>
+                            <th>含义</th>
+                        </tr>
+                        <tr>
+                            <td>510300</td>
+                            <td>标的：华泰柏瑞沪深300ETF</td>
+                        </tr>
+                        <tr>
+                            <td>沽</td>
+                            <td>看跌期权（Put）</td>
+                        </tr>
+                        <tr>
+                            <td>4月</td>
+                            <td>到期月份：4月份第四个周三</td>
+                        </tr>
+                        <tr>
+                            <td>3800</td>
+                            <td>行权价：3.800元（合约单位×10000份）</td>
+                        </tr>
+                    </table>
+                    <p style="margin-top: 1rem;"><strong>含义</strong>：到期时，你有权以3.800元的价格卖出10000份510300</p>
+                </div></a>
+            </div></a>
+
+            <!-- 看涨vs看跌对比 -->
+            <div class="lesson-section">
+                <h2>⚖️ Call vs Put 对比</h2>
+                
+                <table class="compare-table">
+                    <tr>
+                        <th>对比项</th>
+                        <th class="call-col">看涨期权（Call/购）</th>
+                        <th class="put-col">看跌期权（Put/沽）</th>
+                    </tr>
+                    <tr>
+                        <td>方向</td>
+                        <td class="call-col">看多/赌涨</td>
+                        <td class="put-col">看空/赌跌</td>
+                    </tr>
+                    <tr>
+                        <td>权利</td>
+                        <td class="call-col">以行权价<strong>买入</strong>标的</td>
+                        <td class="put-col">以行权价<strong>卖出</strong>标的</td>
+                    </tr>
+                    <tr>
+                        <td>赚钱场景</td>
+                        <td class="call-col">标的价格 > 行权价 + 权利金</td>
+                        <td class="put-col">标的价格 < 行权价 - 权利金</td>
+                    </tr>
+                    <tr>
+                        <td>最大损失</td>
+                        <td colspan="2" style="text-align: center;">权利金</td>
+                    </tr>
+                    <tr>
+                        <td>最大收益</td>
+                        <td class="call-col">理论上无限（价格可一直涨）</td>
+                        <td class="put-col">有限（最多跌到0）</td>
+                    </tr>
+                    <tr>
+                        <td>常用场景</td>
+                        <td class="call-col">杠杆做多、追涨</td>
+                        <td class="put-col">对冲持仓、做空、买保险</td>
+                    </tr>
+                </table>
+            </div></a>
+
+            <!-- 盈亏计算 -->
+            <div class="lesson-section">
+                <h2>💰 看跌期权盈亏怎么算？</h2>
+                
+                <div class="concept-box">
+                    >h3>看跌期权盈亏公式</h3>
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: center; font-family: monospace; font-size: 1.1rem;">
+                        盈亏 = (行权价 - 标的价格) × 合约单位 - 权利金
+                    </div></a>
+                    
+                    <p><strong>老李的案例计算：</strong></p>
+                    <ul>
+                        <li>行权价：3.800元</li>
+                        <li>到期时510300价格：3.600元</li>
+                        <li>合约单位：10000份</li>
+                        <li>权利金：520元</li>
+                    </ul>
+                    
+                    <div style="background: #d1fae5; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <strong>盈亏 = (3.800 - 3.600) × 10000 - 520 = 2000 - 520 = +1480元</strong>
+                    </div></a>
+                </div></a>
+            </div></a>
+
+            <!-- 互动演示 -->
+            <div class="interactive-demo">
+                <h3>🎮 实战演练：510300看跌期权盈亏计算器</h3>
+                
+                <div class="demo-controls">
+                    <div class="control-group">
+                        <label>行权价（元）</label>
+                        <input type="range" id="strikePrice" min="3.500" max="4.500" step="0.05" value="3.800">
+                        <span class="value-display" id="strikeDisplay">3.800</span>
+                    </div></a>
+                    
+                    <div class="control-group">
+                        <label>权利金（元/张）</label>
+                        <input type="range" id="premium" min="100" max="2000" step="10" value="520">
+                        <span class="value-display" id="premiumDisplay">520</span>
+                    </div></a>
+                    
+                    <div class="control-group">
+                        <label>到期时510300价格（元）</label>
+                        <input type="range" id="etfPrice" min="3.500" max="4.500" step="0.01" value="3.600">
+                        <span class="value-display" id="priceDisplay">3.600</span>
+                    </div></a>
+                </div></a>
+
+                <div class="demo-result">
+                    <p>盈亏结果（每手10000份）：</p>
+                    <div class="result-value positive" id="profitDisplay">+1,480元</div></a>
+                    
+                    <div class="result-detail" id="calcDetail">
+                        内在价值：(3.800 - 3.600) × 10000 = 2000元<br>
+                        扣除权利金：2000 - 520 = 1480元
+                    </div></a>
+                    
+                    <div id="decisionText" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--light); color: var(--success); font-weight: bold;">
+                        ✅ 建议行权：标的价格低于行权价，行权有利可图
+                    </div></a>
+                </div></a>
+
+                <div class="chart-container">
+                    <canvas id="profitChart"></canvas>
+                </div></a>
+            </div></a>
+
+            <!-- 核心要点 -->
+            <div class="lesson-section">
+                <h2>💡 看跌期权核心要点</h2>
+                
+                <div class="concept-box">
+                    <ol>
+                        <li><strong>买入看跌期权（Long Put）</strong> = 看空 = 赌跌 = 给持仓买保险</li>
+                        <li><strong>最大损失</strong> = 支付的权利金</li>
+                        <li><strong>最大收益</strong> = 行权价 × 合约单位 - 权利金（最多跌到0）</li>
+                        <li><strong>盈亏平衡点</strong> = 行权价 - (权利金/合约单位)</li>
+                        <li><strong>保险功能</strong>：持有ETF + 买入Put = 保护性看跌策略</li>
+                    </ol>
+                </div></a>
+
+                <h3>🎯 什么时候买Put？</h3>
+                <div class="concept-box">
+                    <ul>
+                        <li>✅ 强烈看跌，想做空但不想融券</li>
+                        <li>✅ 持有ETF/股票，担心下跌，买Put对冲</li>
+                        <li>✅ 市场恐慌，想赌黑天鹅下跌</li>
+                        <li>❌ 横盘或看涨时买Put = 大概率亏光权利金</li>
+                    </ul>
+                </div></a>
+            </div></a>
+
+            <!-- 测验 -->
+            <div class="quiz-section">
+                <h3>📝 知识测验</h3>
+                
+                <div id="quiz-container">
+                    <p class="quiz-question">1. 持有510300，担心下跌，应该买什么期权对冲？</p>
+                    
+                    <div class="quiz-options" id="quiz1">
+                        <div class="quiz-option" data-answer="wrong">
+                            A. 买入看涨期权（Call）
+                        </div></a>
+                        <div class="quiz-option" data-answer="correct">
+                            B. 买入看跌期权（Put）
+                        </div></a>
+                        <div class="quiz-option" data-answer="wrong">
+                            C. 卖出看跌期权（Put）
+                        </div></a>
+                    </div></a>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">2. 买入"510300沽4月3800"，权利金520元。到期时510300=3.850元，你会？</p>
+                    
+                    <div class="quiz-options" id="quiz2">
+                        <div class="quiz-option" data-answer="correct">
+                            A. 放弃行权，损失520元权利金
+                        </div></a>
+                        <div class="quiz-option" data-answer="wrong">
+                            B. 行权，以3.800元卖出ETF
+                        </div></a>
+                        <div class="quiz-option" data-answer="wrong">
+                            C. 行权，以3.800元买入ETF
+                        </div></a>
+                    </div></a>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">3. 看跌期权买方最大收益是多少？</p>
+                    
+                    <div class="quiz-options" id="quiz3">
+                        <div class="quiz-option" data-answer="wrong">
+                            A. 无限大
+                        </div></a>
+                        <div class="quiz-option" data-answer="correct">
+                            B. 行权价×合约单位 - 权利金（标的价格跌到0时）
+                        </div></a>
+                        <div class="quiz-option" data-answer="wrong">
+                            C. 权利金
+                        </div></a>
+                    </div></a>
+                </div></a>
+
+                <div id="quiz-result" style="display: none; margin-top: 1.5rem; text-align: center;">
+                    <p id="quiz-message"></p>
+                </div></a>
+            </div></a>
+        </div></a>
+
+        <div class="lesson-nav">
+            <a href="lesson2.html" class="nav-btn">← 上一课</a>
+            <a href="../index.html" class="nav-btn">🏠 返回主页</a>
+            <a href="../games/trading-simulator.html" class="nav-btn" id="nextBtn">下一课 →</a>
+        </div>
+    </div></a>
+
+    <script>
+        // 盈亏计算和图表绘制
+        const strikeInput = document.getElementById('strikePrice');
+        const premiumInput = document.getElementById('premium');
+        const priceInput = document.getElementById('etfPrice');
+        const strikeDisplay = document.getElementById('strikeDisplay');
+        const premiumDisplay = document.getElementById('premiumDisplay');
+        const priceDisplay = document.getElementById('priceDisplay');
+        const profitDisplay = document.getElementById('profitDisplay');
+        const calcDetail = document.getElementById('calcDetail');
+        const decisionText = document.getElementById('decisionText');
+
+        function calculateProfit() {
+            const strike = parseFloat(strikeInput.value);
+            const premium = parseInt(premiumInput.value);
+            const price = parseFloat(priceInput.value);
+            const contractSize = 10000;
+
+            strikeDisplay.textContent = strike.toFixed(3);
+            premiumDisplay.textContent = premium;
+            priceDisplay.textContent = price.toFixed(3);
+
+            const intrinsicValue = Math.max(0, strike - price) * contractSize;
+            const profit = intrinsicValue - premium;
+            
+            if (profit > 0) {
+                profitDisplay.textContent = '+' + profit.toLocaleString() + '元';
+                profitDisplay.className = 'result-value positive';
+                decisionText.innerHTML = '✅ 建议行权：标的价格低于行权价，行权有利可图';
+                decisionText.style.color = 'var(--success)';
+            } else if (intrinsicValue > 0) {
+                profitDisplay.textContent = profit.toLocaleString() + '元';
+                profitDisplay.className = 'result-value negative';
+                decisionText.innerHTML = '⚠️ 建议放弃行权：虽然内在价值为正，但不足以覆盖权利金';
+                decisionText.style.color = 'var(--warning)';
+            } else {
+                profitDisplay.textContent = '-' + premium.toLocaleString() + '元';
+                profitDisplay.className = 'result-value negative';
+                decisionText.innerHTML = '❌ 放弃行权：标的价格高于行权价，行权会亏更多';
+                decisionText.style.color = 'var(--danger)';
+            }
+
+            calcDetail.innerHTML = `
+                内在价值：(${strike.toFixed(3)} - ${price.toFixed(3)}) × ${contractSize} = ${intrinsicValue.toLocaleString()}元<br>
+                扣除权利金：${intrinsicValue.toLocaleString()} - ${premium} = ${profit.toLocaleString()}元
+            `;
+
+            drawChart(strike, premium, contractSize);
+        }
+
+        function drawChart(strike, premium, contractSize) {
+            const canvas = document.getElementById('profitChart');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 50;
+            
+            ctx.clearRect(0, 0, width, height);
+            
+            const minPrice = strike - 0.5;
+            const maxPrice = strike + 0.5;
+            const priceRange = maxPrice - minPrice;
+            
+            const maxProfit = (strike - minPrice) * contractSize - premium;
+            const minProfit = -premium;
+            const profitRange = maxProfit - minProfit;
+            
+            // X轴（盈亏为0的线）
+            const zeroY = height - padding - (0 - minProfit) / profitRange * (height - 2 * padding);
+            ctx.beginPath();
+            ctx.moveTo(padding, zeroY);
+            ctx.lineTo(width - padding, zeroY);
+            ctx.strokeStyle = '#999';
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // 绘制盈亏曲线（Put是向下倾斜的）
+            ctx.beginPath();
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 3;
+            
+            for (let x = 0; x <= width - 2 * padding; x += 2) {
+                const price = minPrice + (x / (width - 2 * padding)) * priceRange;
+                const intrinsic = Math.max(0, strike - price) * contractSize;
+                const profit = intrinsic - premium;
+                
+                const y = height - padding - (profit - minProfit) / profitRange * (height - 2 * padding);
+                
+                if (x === 0) {
+                    ctx.moveTo(padding + x, y);
+                } else {
+                    ctx.lineTo(padding + x, y);
+                }
+            }
+            ctx.stroke();
+            
+            // 标注盈亏平衡点
+            const breakeven = strike - premium / contractSize;
+            const breakevenX = padding + (breakeven - minPrice) / priceRange * (width - 2 * padding);
+            ctx.fillStyle = '#10b981';
+            ctx.beginPath();
+            ctx.arc(breakevenX, zeroY, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#10b981';
+            ctx.font = '12px sans-serif';
+            ctx.fillText('盈亏平衡点', breakevenX - 30, zeroY - 15);
+            
+            // 标注行权价
+            const strikeX = padding + (strike - minPrice) / priceRange * (width - 2 * padding);
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(strikeX, height - padding - (-premium - minProfit) / profitRange * (height - 2 * padding), 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ef4444';
+            ctx.fillText('行权价', strikeX - 20, height - 20);
+            
+            // 标签
+            ctx.fillStyle = '#666';
+            ctx.font = '12px sans-serif';
+            ctx.fillText('510300价格', width / 2, height - 10);
+            ctx.save();
+            ctx.translate(15, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('盈亏（元）', 0, 0);
+            ctx.restore();
+        }
+
+        strikeInput.addEventListener('input', calculateProfit);
+        premiumInput.addEventListener('input', calculateProfit);
+        priceInput.addEventListener('input', calculateProfit);
+        window.addEventListener('resize', calculateProfit);
+
+        calculateProfit();
+
+        // 测验逻辑
+        let correctCount = 0;
+        let answeredCount = 0;
+        const totalQuestions = 3;
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                if (parent.dataset.answered) return;
+                parent.dataset.answered = 'true';
+                
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    } else if (opt === this && !isCorrect) {
+                        opt.classList.add('wrong');
+                    }
+                });
+
+                if (isCorrect) correctCount++;
+                answeredCount++;
+
+                if (answeredCount === totalQuestions) {
+                    const resultDiv = document.getElementById('quiz-result');
+                    const message = document.getElementById('quiz-message');
+                    resultDiv.style.display = 'block';
+                    
+                    if (correctCount === totalQuestions) {
+                        message.innerHTML = '🎉 太棒了！你已经掌握了看跌期权！<br><strong>解锁模拟交易！</strong>';
+                        message.style.color = 'var(--success)';
+                    } else {
+                        message.innerHTML = `答对了 ${correctCount}/${totalQuestions} 题。建议复习一下看跌期权的定义和盈亏计算。`;
+                        message.style.color = 'var(--warning)';
+                    }
+                }
+            });
+        });
+    </script>
+
+    <div style="background: linear-gradient(135deg, #1e3a8a, #3730a3); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem;">
+        <p style="font-weight: 600;">💡 让天下没有难做的期权</p>
+        <p style="font-size: 0.85rem; opacity: 0.8;">关注公众号「300ETF期权实践」获取更多实战策略</p>
+    </div>
+</body>
+</html>

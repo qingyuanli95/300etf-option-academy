@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BS公式揭秘 - 300ETF期权学院</title>
+    <link rel="stylesheet" href="../css/mobile.css">
+    <style>
+        .formula-hero {
+            background: linear-gradient(135deg, #1e3a8a, #3730a3);
+            color: white;
+            padding: 40px 20px;
+            margin: -72px -16px 24px;
+            text-align: center;
+        }
+        
+        .formula-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .formula-main {
+            font-size: 1.5rem;
+            font-family: 'Times New Roman', serif;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+        
+        .formula-sub {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin: 8px 0;
+        }
+        
+        .parameter-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 4px solid;
+            transition: all 0.3s;
+        }
+        
+        .parameter-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .parameter-card.s { border-left-color: #3b82f6; }
+        .parameter-card.k { border-left-color: #8b5cf6; }
+        .parameter-card.t { border-left-color: #f59e0b; }
+        .parameter-card.r { border-left-color: #10b981; }
+        .parameter-card.sigma { border-left-color: #ef4444; }
+        
+        .param-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .param-symbol {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: 'Times New Roman', serif;
+            color: white;
+        }
+        
+        .param-symbol.s { background: #3b82f6; }
+        .param-symbol.k { background: #8b5cf6; }
+        .param-symbol.t { background: #f59e0b; }
+        .param-symbol.r { background: #10b981; }
+        .param-symbol.sigma { background: #ef4444; }
+        
+        .param-name {
+            flex: 1;
+        }
+        
+        .param-name h3 {
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+        
+        .param-name p {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .analogy-box {
+            background: #fef3c7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .analogy-box h4 {
+            color: #92400e;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .analogy-box p {
+            color: #78350f;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            margin: 24px 0;
+        }
+        
+        .price-display {
+            text-align: center;
+            padding: 24px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .price-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+        
+        .price-value {
+            font-size: 3rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .param-slider {
+            margin-bottom: 20px;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .slider-value {
+            font-weight: bold;
+            color: #f093fb;
+        }
+        
+        input[type="range"].dark-slider {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"].dark-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(240,147,251,0.5);
+        }
+        
+        .visualization {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .chart-container {
+            height: 200px;
+            position: relative;
+            margin-top: 16px;
+        }
+        
+        .step-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+        }
+        
+        .simple-explanation {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+        
+        .simple-explanation h3 {
+            color: #065f46;
+            margin-bottom: 12px;
+        }
+        
+        .simple-explanation p {
+            color: #047857;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" style="text-decoration: none;"><div class="logo">📈 300ETF期权学院</div>
+        <button class="nav-menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+    
+    <div class="nav-overlay" onclick="toggleMenu()"></div>
+    <div class="nav-drawer">
+        <a href="../index.html">🏠 首页</a>
+        <a href="lesson1.html">🎯 第一课</a>
+        <a href="exam-zone.html">📝 考试专区</a>
+        <a href="lesson-bs.html">🔢 BS公式</a>
+        <a href="profile.html">👤 个人中心</a>
+    </div>
+
+    <div class="mobile-container">
+        <!-- 头部展示 -->
+        <div class="formula-hero">
+            <div class="badge" style="display: inline-block; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 20px; font-size: 0.9rem; margin-bottom: 16px;">
+                🧮 期权定价的神器
+            </div>
+            
+            <h1 style="font-size: 2rem; margin-bottom: 8px;">BS公式揭秘</h1>
+            <p style="opacity: 0.8;">不用懂高数，5分钟看懂期权定价</p>
+            
+            <div class="formula-box">
+                <div class="formula-main">C = S·N(d₁) - K·e⁻ʳᵀ·N(d₂)</div>
+                <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 16px;">Black-Scholes期权定价模型 (1973)</div>            </div>
+        </div>
+
+        <!-- 一句话解释 -->
+        <div class="simple-explanation">
+            <h3>💡 一句话理解</h3>
+            <p><strong>BS公式就是一台"期权价格计算器"</strong>——输入5个参数（标的价格、行权价、时间、利率、波动率），它就能告诉你这个期权"应该值多少钱"。</p>
+            <p style="margin-top: 12px;">就像买菜看秤，BS公式就是期权市场的"公平秤"。</p>
+        </div>
+
+        <!-- 五个参数详解 -->
+        <h2 style="margin-bottom: 20px;">🔧 五个参数（原料）</h2>
+        
+        <div class="parameter-card s">
+            <div class="param-header">
+                <div class="param-symbol s">S</div>
+                <div class="param-name">
+                    <h3>标的价格（当前股价）</h3>
+                    <p>现在510300多少钱</p>
+                </div>
+            </div>
+            
+            <p>标的越贵，认购期权越值钱（因为更容易赚钱），认沽期权越不值钱。</p>
+            
+            <div class="analogy-box">
+                <h4>🛒 买菜比喻</h4>
+                <p>房子越贵，"买房的权利"就越值钱。现在房价100万，你手里"100万买房"的权利，比房价50万时更值钱。</p>
+            </div>
+        </div>
+
+        <div class="parameter-card k">
+            <div class="param-header">
+                <div class="param-symbol k">K</div>
+                <div class="param-name">
+                    <h3>行权价（约定价格）</h3>
+                    <p>合约约定的买卖价格</p>
+                </div>
+            </div>
+            
+            <p>行权价越高，认购期权越便宜（因为更难赚钱），认沽期权越贵。</p>
+            
+            <div class="analogy-box">
+                <h4>🛒 买菜比喻</h4>
+                <p>约定"90万买房"的权利，比"100万买房"的权利更值钱——因为更便宜，更容易赚差价。</p>
+            </div>
+        </div>
+
+        <div class="parameter-card t">
+            <div class="param-header">
+                <div class="param-symbol t">T</div>
+                <div class="param-name">
+                    <h3>剩余时间（到期还有多久）</h3>
+                    <p>时间越长，越值钱</p>
+                </div>
+            </div>
+            
+            <p>时间越久，标的价格变动的可能性越大，期权越有可能赚钱，所以越贵。</p>            
+            
+            <div class="analogy-box">
+                <h4>🛒 买菜比喻</h4>
+                <p>"一年内可以按100万买房"的权利，比"一周内可以按100万买房"更值钱——因为时间多，房价上涨的机会大。</p>
+            </div>
+        </div>
+
+        <div class="parameter-card r">
+            <div class="param-header">
+                <div class="param-symbol r">r</div>
+                <div class="param-name">
+                    <h3>无风险利率（钱的时间价值）</h3>
+                    <p>银行存款利率</p>
+                </div>
+            </div>
+            
+            <p>利率越高，行权价折现到现在越便宜，认购期权越值钱。</p>
+            
+            <div class="analogy-box">
+                <h4>🛒 买菜比喻</h4>
+                <p>如果银行利息很高，你把钱存银行也能赚很多，那"现在锁定低价买房"的权利就更值钱了。</p>
+            </div>
+        </div>
+
+        <div class="parameter-card sigma">
+            <div class="param-header">
+                <div class="param-symbol sigma">σ</div>
+                <div class="param-name">
+                    <h3>波动率（价格跳不跳）</h3>
+                    <p>波动越大，期权越贵</p>
+                </div>
+            </div>
+            
+            <p><strong>这是最重要的参数！</strong>股价波动越大，期权越有可能赚大钱，所以越贵。</p>            
+            
+            <div class="analogy-box">
+                <h4>🛒 买菜比喻</h4>
+                <p>如果房价很稳定（波动小），"买房权利"就不值钱；如果房价忽上忽下（波动大），这个权利就超级值钱——因为可能暴涨赚大钱！</p>
+            </div>
+        </div>
+
+        <!-- 互动演示 -->
+        <div class="interactive-demo">
+            <h3 style="text-align: center; margin-bottom: 20px;">🎮 互动演示：调参数看价格变化</h3>
+            
+            <div class="price-display">
+                <div class="price-label">认购期权理论价格</div>
+                <div class="price-value" id="optionPrice">¥680</div>
+            </div>
+
+            <div class="param-slider">
+                <div class="slider-header">
+                    <span>🎯 标的价格 (S)</span>
+                    <span class="slider-value" id="sValue">3.900</span>
+                </div>
+                <input type="range" class="dark-slider" id="sSlider" min="3.000" max="5.000" step="0.010" value="3.900">
+            </div>
+
+            <div class="param-slider">
+                <div class="slider-header">
+                    <span>💰 行权价 (K)</span>
+                    <span class="slider-value" id="kValue">4.000</span>
+                </div>
+                <input type="range" class="dark-slider" id="kSlider" min="3.500" max="4.500" step="0.050" value="4.000">
+            </div>
+
+            <div class="param-slider">
+                <div class="slider-header">
+                    <span>📅 剩余时间 (T)</span>
+                    <span class="slider-value" id="tValue">30天</span>
+                </div>
+                <input type="range" class="dark-slider" id="tSlider" min="1" max="90" step="1" value="30">
+            </div>
+
+            <div class="param-slider">
+                <div class="slider-header">
+                    <span>📊 波动率 (σ)</span>
+                    <span class="slider-value" id="sigmaValue">25%</span>
+                </div>
+                <input type="range" class="dark-slider" id="sigmaSlider" min="5" max="80" step="1" value="25">
+            </div>
+
+            <div class="param-slider">
+                <div class="slider-header">
+                    <span>🏦 无风险利率 (r)</span>
+                    <span class="slider-value" id="rValue">3%</span>
+                </div>
+                <input type="range" class="dark-slider" id="rSlider" min="0" max="10" step="0.1" value="3">
+            </div>
+        </div>
+
+        <!-- 公式的本质 -->
+        <div class="step-card">
+            <div class="step-number">1</div>            
+            <h3>公式的左边 = 期权价格</h3>            
+            <p>这就是我们要算的：这个期权<strong>应该值多少钱</strong>。</p>        </div>
+
+        <div class="step-card">
+            <div class="step-number">2</div>
+            
+            <h3>S·N(d₁) = 如果赚钱，能赚多少</h3>
+            
+            <p>S是标的价格，N(d₁)是一个概率（0~1之间），表示期权到期时赚钱的可能性。</p>            
+            
+            <p style="margin-top: 12px; color: var(--gray);">👉 标的价格 × 赚钱概率 = 预期收益</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">3</div>
+            
+            <h3>K·e⁻ʳᵀ·N(d₂) = 行权成本</h3>
+            
+            <p>K是行权价，e⁻ʳᵀ是折现（把未来的钱换算成现在的钱），N(d₂)是实际行权的概率。</p>
+            
+            
+            <p style="margin-top: 12px; color: var(--gray);">👉 行权价 × 时间价值 × 行权概率 = 预期成本</p>        </div>
+
+        <div class="step-card">
+            <div class="step-number">4</div>
+            
+            <h3>期权价格 = 预期收益 - 预期成本</h3>
+            
+            <p>这就是BS公式的核心：</p>            
+            
+            <div style="background: #e0e7ff; padding: 16px; border-radius: 12px; margin-top: 12px; text-align: center; font-size: 1.1rem;">
+                期权值多少钱 = <br>
+                <strong></strong>（可能赚的钱）-（可能花的成本）</strong>
+            </div>
+        </div>
+
+        <!-- 核心要点 -->
+        <div class="simple-explanation" style="background: linear-gradient(135deg, #fee2e2, #fecaca);">
+            <h3 style="color: #991b1b;">⚠️ 核心要点（记住这三条）</h3>
+            
+            <ol style="color: #7f1d1d; line-height: 2;">
+                <li><strong>BS公式算的是"理论价格"</strong>——市场实际价格会围绕这个上下波动</li>
+                <li><strong>波动率σ是最重要的参数</strong>——同样的股票，波动大的期权贵很多</li>                
+                <li><strong>时间价值会衰减</strong>——越临近到期，期权价格越贴近内在价值</li>
+            </ol>
+        </div>
+
+        <!-- 测验 -->
+        <div class="quiz-section" style="background: white; padding: 24px; border-radius: 16px; margin-top: 24px;">
+            <h3>📝 知识测验</h3>
+            
+            <p class="quiz-question">1. BS公式中，哪个参数对期权价格影响最大？</p>
+            
+            <div class="quiz-options" id="q1">
+                <div class="quiz-option-mobile" data-answer="wrong">A. 无风险利率</div>
+                <div class="quiz-option-mobile" data-answer="correct">B. 波动率</div>
+                <div class="quiz-option-mobile" data-answer="wrong">C. 行权价</div>
+                <div class="quiz-option-mobile" data-answer="wrong">D. 剩余时间</div>
+            </div>
+
+            <p class="quiz-question" style="margin-top: 24px;">2. 股价波动越大，期权价格会？</p>
+            
+            <div class="quiz-options" id="q2">
+                <div class="quiz-option-mobile" data-answer="correct">A. 越贵</div>
+                <div class="quiz-option-mobile" data-answer="wrong">B. 越便宜</div>
+                <div class="quiz-option-mobile" data-answer="wrong">C. 不变</div>
+                <div class="quiz-option-mobile" data-answer="wrong">D. 不确定</div>
+            </div>
+        </div>
+
+        <!-- 页面导航 -->
+        <div style="display: flex; gap: 12px; margin: 24px 0; padding-bottom: 80px; flex-wrap: wrap;">
+            <a href="lesson6.html" class="nav-btn" style="flex: 1; min-width: 120px; text-align: center;">← 上一课</a>
+            <a href="../index.html" class="nav-btn" style="flex: 1; min-width: 120px; text-align: center; background: var(--success);">🏠 返回主页</a>
+            <a href="lesson-greeks.html" class="nav-btn" style="flex: 1; min-width: 120px; text-align: center;">下一课 →</a>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="mobile-tabbar">
+        <a href="../index.html" class="tabbar-item">🏠 首页</a>
+        <a href="lesson1.html" class="tabbar-item">📖 课程</a>
+        <a href="exam-zone.html" class="tabbar-item">📝 考试</a>
+        <a href="profile.html" class="tabbar-item">👤 我的</a>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-menu-btn').classList.toggle('active');
+            document.querySelector('.nav-drawer').classList.toggle('open');
+            document.querySelector('.nav-overlay').classList.toggle('show');
+        }
+
+        // BS公式简化计算（用于演示）
+        function calculateBS() {
+            const S = parseFloat(document.getElementById('sSlider').value);
+            const K = parseFloat(document.getElementById('kSlider').value);
+            const T = parseInt(document.getElementById('tSlider').value) / 365;
+            const sigma = parseInt(document.getElementById('sigmaSlider').value) / 100;
+            const r = parseFloat(document.getElementById('rSlider').value) / 100;
+
+            // 简化版BS（仅用于演示）
+            const d1 = (Math.log(S/K) + (r + 0.5 * sigma * sigma) * T) / (sigma * Math.sqrt(T));
+            const d2 = d1 - sigma * Math.sqrt(T);
+            
+            // 简化正态分布近似
+            const Nd1 = 0.5 * (1 + Math.tanh(d1 * 0.8));
+            const Nd2 = 0.5 * (1 + Math.tanh(d2 * 0.8));
+            
+            const price = (S * Nd1 - K * Math.exp(-r * T) * Nd2) * 10000;
+            
+            return Math.max(0, Math.round(price));
+        }
+
+        function updateCalculation() {
+            const price = calculateBS();
+            document.getElementById('optionPrice').textContent = '¥' + price.toLocaleString();
+            
+            // 更新显示值
+            document.getElementById('sValue').textContent = parseFloat(document.getElementById('sSlider').value).toFixed(3);
+            document.getElementById('kValue').textContent = parseFloat(document.getElementById('kSlider').value).toFixed(3);
+            document.getElementById('tValue').textContent = document.getElementById('tSlider').value + '天';
+            document.getElementById('sigmaValue').textContent = document.getElementById('sigmaSlider').value + '%';
+            document.getElementById('rValue').textContent = document.getElementById('rSlider').value + '%';
+        }
+
+        // 绑定滑块事件
+        ['sSlider', 'kSlider', 'tSlider', 'sigmaSlider', 'rSlider'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateCalculation);
+        });
+
+        // 测验逻辑
+        document.querySelectorAll('.quiz-option-mobile').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                if (parent.dataset.answered) return;
+                
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                this.style.pointerEvents = 'none';
+                if (isCorrect) {
+                    this.style.background = '#d1fae5';
+                    this.style.borderColor = '#10b981';
+                } else {
+                    this.style.background = '#fee2e2';
+                    this.style.borderColor = '#ef4444';
+                }
+                
+                parent.querySelectorAll('.quiz-option-mobile').forEach(opt => {
+                    if (opt.dataset.answer === 'correct') {
+                        opt.style.background = '#d1fae5';
+                        opt.style.borderColor = '#10b981';
+                    }
+                });
+                
+                parent.dataset.answered = 'true';
+            });
+        });
+
+        // 初始化
+        updateCalculation();
+    </script>
+
+    <!-- 页面导航 -->
+    <div class="lesson-nav" style="margin: 24px 16px;">
+        <a href="lesson6.html" class="nav-btn">← 上一课</a>
+        <a href="../index.html" class="nav-btn">🏠 返回主页</a>
+        <a href="lesson-greeks.html" class="nav-btn">下一课 →</a>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="mobile-tabbar">
+        <a href="../index.html" class="tabbar-item">
+            <span class="tabbar-icon">🏠</span>
+            <span>首页</span>
+        </a>
+        <a href="lesson1.html" class="tabbar-item">
+            <span class="tabbar-icon">📖</span>
+            <span>课程</span>
+        </a>
+        <a href="exam-zone.html" class="tabbar-item">
+            <span class="tabbar-icon">📝</span>
+            <span>考试</span>
+        </a>
+        <a href="profile.html" class="tabbar-item">
+            <span class="tabbar-icon">👤</span>
+            <span>我的</span>
+        </a>
+    </div>
+    <div style="background: linear-gradient(135deg, #1e3a8a, #3730a3); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem;">
+        <p style="font-weight: 600;">💡 让天下没有难做的期权</p>
+        <p style="font-size: 0.85rem; opacity: 0.8;">关注公众号「300ETF期权实践」获取更多实战策略</p>
+    </div>
+</body>
+</html>

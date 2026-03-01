@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 300ETF期权学院</title>
+    <link rel="stylesheet" href="../css/mobile.css">
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 32px 20px;
+            margin: -72px -16px 24px;
+            text-align: center;
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .username {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-level {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 16px 8px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .course-progress {
+            margin-bottom: 16px;
+        }
+
+        .course-progress:last-child {
+            margin-bottom: 0;
+        }
+
+        .course-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .course-percent {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .achievement-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+        }
+
+        .achievement-card.locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .achievement-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .achievement-desc {
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        .settings-list {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item:active {
+            background: var(--light);
+        }
+
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-right: 16px;
+        }
+
+        .settings-content {
+            flex: 1;
+        }
+
+        .settings-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .settings-desc {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 2px;
+        }
+
+        .settings-arrow {
+            color: var(--gray);
+        }
+
+        .toggle-switch {
+            width: 48px;
+            height: 28px;
+            background: var(--light);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active::after {
+            left: 22px;
+        }
+
+        .streak-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-top: 16px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .calendar-day.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.today {
+            border: 2px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">📈 300ETF期权学院</div>
+        <button class="nav-menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+    
+    <div class="nav-overlay" onclick="toggleMenu()"></div>
+    <div class="nav-drawer">
+        <a href="../index.html">🏠 首页</a>
+        <a href="lesson1.html">🎯 课程</a>
+        <a href="exam-zone.html">📝 考试专区</a>
+        <a href="mistake-book.html">📚 错题本</a>
+        <a href="profile.html">👤 个人中心</a>
+    </div>
+
+    <div class="mobile-container">
+        <!-- 个人信息 -->
+        <div class="profile-header">
+            <div class="avatar">👤</div>
+            <div class="username">期权学习者</div>
+            <div class="user-level">🏅 Lv.3 进阶学员</div>
+        </div>
+
+        <!-- 数据统计 -->
+        <div class="stats-overview">
+            <div class="stat-item">
+                <div class="stat-value" id="learnDays">7</div>
+                <div class="stat-label">学习天数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="learnHours">12</div>
+                <div class="stat-label">学习小时</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="completedCourses">5</div>
+                <div class="stat-label">完成课程</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="examScore">85</div>
+                <div class="stat-label">考试平均分</div>
+            </div>
+        </div>
+
+        <!-- 连续打卡 -->
+        <div class="progress-section">
+            <div class="section-title">
+                🔥 连续打卡
+                <span style="margin-left: auto; font-size: 0.9rem; color: var(--primary);">3天</span>
+            </div>
+            <div class="streak-calendar" id="calendar">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 学习进度 -->
+        <div class="progress-section">
+            <div class="section-title">📊 学习进度</div>
+            
+            <div class="course-progress">
+                <div class="course-name">
+                    <span>期权基础</span>
+                    <span class="course-percent">100%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <div class="course-progress">
+                <div class="course-name">
+                    <span>看涨期权</span>
+                    <span class="course-percent">80%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%"></div>
+                </div>
+            </div>
+
+            <div class="course-progress">
+                <div class="course-name">
+                    <span>看跌期权</span>
+                    <span class="course-percent">60%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 60%"></div>
+                </div>
+            </div>
+
+            <div class="course-progress">
+                <div class="course-name">
+                    <span>策略实验室</span>
+                    <span class="course-percent">30%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 30%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 成就徽章 -->
+        <div class="section-title">🏆 成就徽章</div>
+        
+        <div class="achievements-grid">
+            <div class="achievement-card">
+                <div class="achievement-icon">🌟</div>
+                <div class="achievement-name">初出茅庐</div>
+                <div class="achievement-desc">完成首课</div>
+            </div>
+
+            <div class="achievement-card">
+                <div class="achievement-icon">📈</div>
+                <div class="achievement-name">看涨高手</div>
+                <div class="achievement-desc">看涨课程满分</div>
+            </div>
+
+            <div class="achievement-card">
+                <div class="achievement-icon">📝</div>
+                <div class="achievement-name">考试达人</div>
+                <div class="achievement-desc">模拟考85+</div>
+            </div>
+
+            <div class="achievement-card locked">
+                <div class="achievement-icon">🔥</div>
+                <div class="achievement-name">连续7天</div>
+                <div class="achievement-desc">连续打卡7天</div>
+            </div>
+
+            <div class="achievement-card locked">
+                <div class="achievement-icon">🎯</div>
+                <div class="achievement-name">策略大师</div>
+                <div class="achievement-desc">完成策略课</div>
+            </div>
+
+            <div class="achievement-card locked">
+                <div class="achievement-icon">👑</div>
+                <div class="achievement-name">满分王者</div>
+                <div class="achievement-desc">模拟考100</div>
+            </div>
+        </div>
+
+        <!-- 设置 -->
+        <div class="section-title">⚙️ 设置</div>
+        
+        <div class="settings-list">
+            <div class="settings-item">
+                <div class="settings-icon" style="background: #e0e7ff;">🔔</div>
+                <div class="settings-content">
+                    <div class="settings-title">学习提醒</div>
+                    <div class="settings-desc">每日推送学习提醒</div>
+                </div>
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-icon" style="background: #fef3c7;">🌙</div>
+                <div class="settings-content">
+                    <div class="settings-title">深色模式</div>
+                    <div class="settings-desc">切换夜间模式</div>
+                </div>
+                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+            </div>
+
+            <div class="settings-item" onclick="clearData()">
+                <div class="settings-icon" style="background: #fee2e2;">🗑️</div>
+                <div class="settings-content">
+                    <div class="settings-title">清除数据</div>
+                    <div class="settings-desc">重置所有学习记录</div>
+                </div>
+                <span class="settings-arrow">→</span>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-icon" style="background: #d1fae5;">ℹ️</div>
+                <div class="settings-content">
+                    <div class="settings-title">关于我们</div>
+                    <div class="settings-desc">版本 v2.0</div>
+                </div>
+                <span class="settings-arrow">→</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="mobile-tabbar">
+        <a href="../index.html" class="tabbar-item">
+            <span class="tabbar-icon">🏠</span>
+            <span>首页</span>
+        </a>
+        <a href="lesson1.html" class="tabbar-item">
+            <span class="tabbar-icon">📖</span>
+            <span>课程</span>
+        </a>
+        <a href="exam-zone.html" class="tabbar-item">
+            <span class="tabbar-icon">📝</span>
+            <span>考试</span>
+        </a>
+        <a href="profile.html" class="tabbar-item active">
+            <span class="tabbar-icon">👤</span>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-menu-btn').classList.toggle('active');
+            document.querySelector('.nav-drawer').classList.toggle('open');
+            document.querySelector('.nav-overlay').classList.toggle('show');
+        }
+
+        function toggleSwitch(el) {
+            el.classList.toggle('active');
+            
+            // 深色模式切换
+            if (el.parentElement.querySelector('.settings-title').textContent === '深色模式') {
+                document.body.classList.toggle('dark-mode');
+            }
+        }
+
+        function clearData() {
+            if (confirm('确定要清除所有学习数据吗？此操作不可恢复。')) {
+                localStorage.clear();
+                alert('数据已清除');
+                location.reload();
+            }
+        }
+
+        // 生成日历
+        function generateCalendar() {
+            const calendar = document.getElementById('calendar');
+            const days = ['一', '二', '三', '四', '五', '六', '日'];
+            
+            // 星期标题
+            days.forEach(day => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.style.background = 'transparent';
+                dayEl.style.fontWeight = 'bold';
+                dayEl.textContent = day;
+                calendar.appendChild(dayEl);
+            });
+
+            // 获取学习记录
+            const learnHistory = JSON.parse(localStorage.getItem('learnHistory')) || {};
+            
+            // 生成最近28天
+            for (let i = 27; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.textContent = date.getDate();
+                
+                if (learnHistory[dateStr]) {
+                    dayEl.classList.add('active');
+                }
+                
+                if (i === 0) {
+                    dayEl.classList.add('today');
+                }
+                
+                calendar.appendChild(dayEl);
+            }
+        }
+
+        // 加载统计数据
+        function loadStats() {
+            const stats = JSON.parse(localStorage.getItem('userStats')) || {
+                learnDays: 7,
+                learnHours: 12,
+                completedCourses: 5,
+                examScore: 85
+            };
+
+            document.getElementById('learnDays').textContent = stats.learnDays;
+            document.getElementById('learnHours').textContent = stats.learnHours;
+            document.getElementById('completedCourses').textContent = stats.completedCourses;
+            document.getElementById('examScore').textContent = stats.examScore;
+        }
+
+        // 初始化
+        generateCalendar();
+        loadStats();
+    </script>
+</body>
+</html>

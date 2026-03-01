@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第一课：权利的秘密 - 300ETF期权学院</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" style="text-decoration: none;">
+            <div class="logo">📈 300ETF期权学院</div>
+        </a>
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <span class="lesson-badge">第一课</span>
+            <h1>权利的秘密：什么是期权？</h1>
+            <p class="lesson-meta">预计学习时间：15分钟 | 以510300沪深300ETF期权为例</p>
+        </header>
+
+        <div class="lesson-content">
+            <!-- 故事引入 -->
+            <div class="story-box">
+                <h3>📖 小王买房的故事（先热身）</h3>
+                <p>小王看中了一套房子，现价100万。但他有个顾虑：</p>
+                <ul>
+                    <li>如果现在就买，怕明年房价跌了亏</li>
+                    <li>如果不买，怕明年房价涨了买不起</li>
+                </ul>
+                <p>于是他和开发商商量：</p>
+                <blockquote>
+                    "我给你2万元定金，你给我一个权利：明年这时候，我可以按100万买这套房，也可以不买。"
+                </blockquote>
+                <p>开发商同意了。一年后，房价涨到了120万。小王欢呼：</p>
+                <blockquote>
+                    "太好了！我用100万买到了价值120万的房子，减去2万定金，净赚18万！"
+                </blockquote>
+            </div>
+
+            <!-- 联系到510300 -->
+            <div class="lesson-section">
+                <h2>🎯 这个故事，就是期权的本质</h2>
+                
+                <div class="concept-box">
+                    <h3>什么是期权？</h3>
+                    <p><strong>期权 = 一种"权利"</strong></p>
+                    <p>你付一笔小钱（权利金），买到一个<strong>选择权</strong>：在未来某个时间，以一个约定好的价格，买（或卖）某个东西。</p>                    
+                    
+                    <ul>
+                        <li><strong>权利金</strong>：就像定金，付了就是买了这个权利</li>
+                        <li><strong>行权价</strong>：约定好的买卖价格（例子中的100万）</li>
+                        <li><strong>到期日</strong>：权利失效的时间（例子中的一年后）</li>
+                    </ul>
+                </div>
+
+                <h3>📈 把这个概念移到510300期权上</h3>
+                
+                <div class="concept-box">
+                    <p><strong>假设现在510300价格是3.900元</strong></p>
+                    <p>你认为下个月它会涨，于是你花了680元买了这么一张"权利"：</p>
+                    
+                    <blockquote style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong>"510300购4月4000"</strong><br>
+                        含义：你有权在4月到期时，以4.000元的价格买入10000份510300<br>
+                        成本：680元权利金
+                    </blockquote>
+                    
+                    <p>一个月后，510300真的涨到了4.200元！这时你的权利值多少钱？</p>
+                    
+                    <div style="background: #d1fae5; padding: 1rem; border-radius: 8px;">
+                        <strong>计算：</strong><br>
+                        你可以用4.000元买入价值4.200元的ETF<br>
+                        每份赚 4.200 - 4.000 = 0.200元<br>
+                        10000份共赚 2000元<br>
+                        减去680元权利金，<strong>净赚1320元！</strong>
+                    </div>
+                </div>
+
+                <p>小王花2万定金控制了100万的房子，你花680元控制了价值39000元的ETF。这就是期权的<strong>杠杆魔力</strong>！</p>
+            </div>
+
+            <!-- 互动演示 -->
+            <div class="interactive-demo">
+                <h3>🎮 互动时间：510300期权盈亏计算器</h3>
+                
+                <div class="demo-controls">
+                    <div class="control-group">
+                        <label>合约类型</label>
+                        <select id="contractType" style="flex:1; padding: 0.5rem;">
+                            <option value="call">看涨期权（购）- 赌涨</option>
+                            <option value="put">看跌期权（沽）- 赌跌</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>行权价（元）</label>
+                        <input type="range" id="strikePrice" min="3.500" max="4.300" step="0.05" value="4.000">
+                        <span class="value-display" id="strikeDisplay">4.000</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>权利金（元）</label>
+                        <input type="range" id="premium" min="100" max="1500" step="10" value="680">
+                        <span class="value-display" id="premiumDisplay">680</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>到期时510300价格（元）</label>
+                        <input type="range" id="etfPrice" min="3.500" max="4.500" step="0.01" value="4.200">
+                        <span class="value-display" id="priceDisplay">4.200</span>
+                    </div>
+                </div>
+
+                <div class="demo-result">
+                    <p>盈亏结果（每手10000份）：</p>
+                    <div class="result-value positive" id="profitDisplay">+1,320元</div>
+                    
+                    <div class="result-detail" id="calcDetail">
+                        内在价值：(4.200 - 4.000) × 10000 = 2000元<br>
+                        扣除权利金：2000 - 680 = 1320元
+                    </div>
+                    
+                    <div id="decisionText" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--light); color: var(--success); font-weight: bold;">
+                        ✅ 建议行权：标的价格高于行权价，行权有利可图
+                    </div>
+                </div>
+            </div>
+
+            <!-- 核心要点 -->
+            <div class="lesson-section">
+                <h2>💡 核心要点</h2>
+                
+                <div class="concept-box">
+                    <h3>期权的本质是：花钱买选择权</h3>
+                    
+                    <ol>
+                        <li><strong>买方</strong>（小王/你）：支付权利金，获得选择权</li>
+                        <li><strong>卖方</strong>（开发商/期权卖方）：收取权利金，承担履约义务</li>
+                        <li><strong>最大损失</strong>：买方最多损失权利金（定金），卖方理论上可能损失很大</li>
+                        <li><strong>盈亏不对称</strong>：买方"小亏大赚"，卖方"小赚大亏"</li>
+                    </ol>
+                </div>
+
+                <h3>🎯 510300期权的基本要素</h3>
+                
+                <div class="concept-box">
+                    <table class="compare-table">
+                        <tr>
+                            <th>要素</th>
+                            <th>说明</th>
+                            <th>例子</th>
+                        </tr>
+                        <tr>
+                            <td>标的</td>
+                            <td>510300 沪深300ETF</td>
+                            <td>每份约4元</td>
+                        </tr>
+                        <tr>
+                            <td>合约单位</td>
+                            <td>每张期权对应10000份ETF</td>
+                            <td>名义价值约4万元</td>
+                        </tr>
+                        <tr>
+                            <td>权利金</td>
+                            <td>买入期权时支付的价格</td>
+                            <td>几百到几千元不等</td>
+                        </tr>
+                        <tr>
+                            <td>行权价</td>
+                            <td>约定的买卖价格</td>
+                            <td>3.800、3.900、4.000...等</td>
+                        </tr>
+                        <tr>
+                            <td>到期日</td>
+                            <td>每月第四个周三</td>
+                            <td>4月、5月、6月合约...</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 测验 -->
+            <div class="quiz-section">
+                <h3>📝 知识测验</h3>
+                
+                <div id="quiz-container">
+                    <p class="quiz-question">1. 买入"510300购4月4000"花了680元，到期时510300=3.950元，你会？</p>
+                    
+                    <div class="quiz-options" id="quiz1">
+                        <div class="quiz-option" data-answer="wrong">
+                            A. 行权，以4.000元买入ETF
+                        </div>
+                        <div class="quiz-option" data-answer="correct">
+                            B. 放弃行权，损失680元权利金
+                        </div>
+                        <div class="quiz-option" data-answer="wrong">
+                            C. 要求退回部分权利金
+                        </div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">2. 期权的买方最大损失是多少？</p>
+                    
+                    <div class="quiz-options" id="quiz2">
+                        <div class="quiz-option" data-answer="correct">
+                            A. 已支付的权利金
+                        </div>
+                        <div class="quiz-option" data-answer="wrong">
+                            B. 行权价的全部金额
+                        </div>
+                        <div class="quiz-option" data-answer="wrong">
+                            C. 理论上无上限
+                        </div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">3. 为什么期权有杠杆效应？</p>
+                    
+                    <div class="quiz-options" id="quiz3">
+                        <div class="quiz-option" data-answer="wrong">
+                            A. 因为期权价格涨得比ETF快
+                        </div>
+                        <div class="quiz-option" data-answer="correct">
+                            B. 因为用少量权利金控制了名义价值更大的资产
+                        </div>
+                        <div class="quiz-option" data-answer="wrong">
+                            C. 因为期权可以借钱买
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quiz-result" style="display: none; margin-top: 1.5rem; text-align: center;">
+                    <p id="quiz-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-nav">
+            <a href="../index.html" class="nav-btn">🏠 返回主页</a>
+            <a href="lesson2.html" class="nav-btn" id="nextBtn">下一课 →</a>
+        </div>
+    </div>
+
+    <script>
+        // 互动演示逻辑
+        const typeSelect = document.getElementById('contractType');
+        const strikeInput = document.getElementById('strikePrice');
+        const premiumInput = document.getElementById('premium');
+        const priceInput = document.getElementById('etfPrice');
+        const strikeDisplay = document.getElementById('strikeDisplay');
+        const premiumDisplay = document.getElementById('premiumDisplay');
+        const priceDisplay = document.getElementById('priceDisplay');
+        const profitDisplay = document.getElementById('profitDisplay');
+        const calcDetail = document.getElementById('calcDetail');
+        const decisionText = document.getElementById('decisionText');
+
+        function calculateProfit() {
+            const isCall = typeSelect.value === 'call';
+            const strike = parseFloat(strikeInput.value);
+            const premium = parseInt(premiumInput.value);
+            const price = parseFloat(priceInput.value);
+            const contractSize = 10000;
+
+            strikeDisplay.textContent = strike.toFixed(3);
+            premiumDisplay.textContent = premium;
+            priceDisplay.textContent = price.toFixed(3);
+
+            let intrinsic, profit, detailText;
+            
+            if (isCall) {
+                intrinsic = Math.max(0, price - strike) * contractSize;
+                profit = intrinsic - premium;
+                
+                if (profit > 0) {
+                    detailText = `内在价值：(${price.toFixed(3)} - ${strike.toFixed(3)}) × ${contractSize} = ${intrinsic}元<br>扣除权利金：${intrinsic} - ${premium} = ${profit}元`;
+                    decisionText.innerHTML = '✅ 建议行权：标的价格高于行权价，行权有利可图';
+                    decisionText.style.color = 'var(--success)';
+                } else if (intrinsic > 0) {
+                    detailText = `内在价值：(${price.toFixed(3)} - ${strike.toFixed(3)}) × ${contractSize} = ${intrinsic}元<br>扣除权利金：${intrinsic} - ${premium} = ${profit}元`;
+                    decisionText.innerHTML = '⚠️ 建议放弃行权：涨幅不足以覆盖权利金';
+                    decisionText.style.color = 'var(--warning)';
+                } else {
+                    detailText = `标的价格低于行权价，无内在价值<br>损失全部权利金：-${premium}元`;
+                    decisionText.innerHTML = '❌ 放弃行权：标的价格低于行权价';
+                    decisionText.style.color = 'var(--danger)';
+                }
+            } else {
+                // Put
+                intrinsic = Math.max(0, strike - price) * contractSize;
+                profit = intrinsic - premium;
+                
+                if (profit > 0) {
+                    detailText = `内在价值：(${strike.toFixed(3)} - ${price.toFixed(3)}) × ${contractSize} = ${intrinsic}元<br>扣除权利金：${intrinsic} - ${premium} = ${profit}元`;
+                    decisionText.innerHTML = '✅ 建议行权：标的价格低于行权价，行权有利可图';
+                    decisionText.style.color = 'var(--success)';
+                } else if (intrinsic > 0) {
+                    detailText = `内在价值：(${strike.toFixed(3)} - ${price.toFixed(3)}) × ${contractSize} = ${intrinsic}元<br>扣除权利金：${intrinsic} - ${premium} = ${profit}元`;
+                    decisionText.innerHTML = '⚠️ 建议放弃行权：跌幅不足以覆盖权利金';
+                    decisionText.style.color = 'var(--warning)';
+                } else {
+                    detailText = `标的价格高于行权价，无内在价值<br>损失全部权利金：-${premium}元`;
+                    decisionText.innerHTML = '❌ 放弃行权：标的价格高于行权价';
+                    decisionText.style.color = 'var(--danger)';
+                }
+            }
+            
+            if (profit > 0) {
+                profitDisplay.textContent = '+' + profit.toLocaleString() + '元';
+                profitDisplay.className = 'result-value positive';
+            } else {
+                profitDisplay.textContent = profit.toLocaleString() + '元';
+                profitDisplay.className = 'result-value negative';
+            }
+            
+            calcDetail.innerHTML = detailText;
+        }
+
+        typeSelect.addEventListener('change', calculateProfit);
+        strikeInput.addEventListener('input', calculateProfit);
+        premiumInput.addEventListener('input', calculateProfit);
+        priceInput.addEventListener('input', calculateProfit);
+
+        // 测验逻辑
+        let correctCount = 0;
+        let answeredCount = 0;
+        const totalQuestions = 3;
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                if (parent.dataset.answered) return;
+                parent.dataset.answered = 'true';
+                
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    } else if (opt === this && !isCorrect) {
+                        opt.classList.add('wrong');
+                    }
+                });
+
+                if (isCorrect) correctCount++;
+                answeredCount++;
+
+                if (answeredCount === totalQuestions) {
+                    const resultDiv = document.getElementById('quiz-result');
+                    const message = document.getElementById('quiz-message');
+                    resultDiv.style.display = 'block';
+                    
+                    if (correctCount === totalQuestions) {
+                        message.innerHTML = '🎉 太棒了！全部答对！你已经掌握了期权的基础概念。<br><strong>解锁了下一关！</strong>';
+                        message.style.color = 'var(--success)';
+                    } else {
+                        message.innerHTML = `答对了 ${correctCount}/${totalQuestions} 题。建议再看一遍"核心要点"部分。`;
+                        message.style.color = 'var(--warning)';
+                    }
+                }
+            });
+        });
+    </script>
+
+    <div style="background: linear-gradient(135deg, #1e3a8a, #3730a3); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem;">
+        <p style="font-weight: 600;">💡 让天下没有难做的期权</p>
+        <p style="font-size: 0.85rem; opacity: 0.8;">关注公众号「300ETF期权实践」获取更多实战策略</p>
+    </div>
+</body>
+</html>

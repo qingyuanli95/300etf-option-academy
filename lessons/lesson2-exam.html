@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二课：交易规则 - 开户考试必过</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">📈 300ETF期权学院</div>
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <span class="lesson-badge">第二课</span>
+            <h1>交易规则：买卖类型与行权</h1>
+            <p class="lesson-meta">预计学习时间：20分钟 | 覆盖考试25%分值</p>
+        </header>
+
+        <div class="lesson-content">
+            <!-- 考试重点提示 -->
+            <div class="concept-box" style="background: #fef3c7; border-left-color: #f59e0b;">
+                <h3>🎯 本课考试重点（必背！）</h3>
+                
+                <ol>
+                    <li><strong>四种买卖类型</strong>：买入开仓、卖出开仓、买入平仓、卖出平仓</li>
+                    <li><strong>买方不缴保证金</strong>，<strong>卖方必须缴纳</strong>保证金</li>
+                    <li>行权指令：<strong>行权</strong>或<strong>放弃行权</strong></li>
+                    <li>ETF期权<strong>无涨跌幅限制</strong>（但有限价申报规则）</li>
+                    <li>到期日<strong>15:30</strong>前可提交行权指令</li>
+                </ol>
+            </div>
+
+            <!-- 买卖类型 -->
+            <div class="lesson-section">
+                <h2>📚 考点一：四种买卖类型（必考！）</h2>
+                
+                <div class="concept-box">
+                    <h3>开仓 vs 平仓</h3>
+                    
+                    <ul>
+                        <li><strong>开仓</strong>：建立新头寸（买入或卖出期权）</li>
+                        <li><strong>平仓</strong>：了结已有头寸（反向操作）</li>
+                    </ul>
+                </div>
+
+                <table class="compare-table">
+                    <tr>
+                        <th>交易类型</th>
+                        <th>适用对象</th>
+                        <th>结果</th>
+                        <th>是否缴保证金</th>
+                    </tr>
+                    <tr style="background: #e0e7ff;">
+                        <td><strong>买入开仓</strong></td>
+                        <td>买方</td>
+                        <td>买入期权，成为权利方</td>
+                        <td style="color: #10b981; font-weight: bold;">不缴</td>
+                    </tr>
+                    <tr style="background: #fee2e2;">
+                        <td><strong>卖出开仓</strong></td>
+                        <td>卖方</td>
+                        <td>卖出期权，成为义务方</td>
+                        <td style="color: #ef4444; font-weight: bold;"><strong>必须缴纳</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>卖出平仓</strong></td>
+                        <td>原买方</td>
+                        <td>卖出持有的期权，了结头寸</td>
+                        <td>不缴</td>
+                    </tr>
+                    <tr>
+                        <td><strong>买入平仓</strong></td>
+                        <td>原卖方</td>
+                        <td>买入期权，对冲义务，了结头寸</td>
+                        <td>释放保证金</td>
+                    </tr>
+                </table>
+
+                <div class="story-box">
+                    <h3>💡 记忆技巧：买方vs卖方</h3>
+                    
+                    <p><strong>买方</strong>：先买后卖（买入开仓 → 卖出平仓）</p>
+                    <p><strong>卖方</strong>：先卖后买（卖出开仓 → 买入平仓）</p>
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <p><strong>买方小王</strong>：花680元买入开仓 → 到期前以950元卖出平仓 → 盈利270元</p>
+                        <p><strong>卖方老李</strong>：收取680元卖出开仓（缴保证金） → 到期前花950元买入平仓 → 亏损270元</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 保证金 -->
+            <div class="lesson-section">
+                <h2>📚 考点二：保证金制度（必考！）</h2>
+                
+                <div class="concept-box" style="background: #fee2e2; border-left-color: #ef4444;">
+                    <h3>⚠️ 核心考点</h3>
+                    
+                    <p style="font-size: 1.2rem;"><strong>买方不缴纳保证金，卖方必须缴纳保证金！</strong></p>
+                    
+                    <ul>
+                        <li><strong>买方</strong>：最大损失就是权利金，风险可控，<span style="color: #10b981;">无需保证金</span></li>
+                        <li><strong>卖方</strong>：潜在损失可能很大，必须缴纳<span style="color: #ef4444;">保证金</span>作为履约担保</li>
+                    </ul>
+                </div>
+
+                <div class="concept-box">
+                    <h3>保证金计算公式（了解即可）</h3>
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 8px; font-family: monospace;">
+                        <p><strong>认购期权义务方</strong>：</p>
+                        <p>{结算价 + Max(12%×标的收盘价 - 虚值, 7%×标的收盘价)} × 合约单位</p>
+                    </div>
+                    
+                    <p style="margin-top: 1rem; color: var(--gray);">※ 实际交易中，交易系统会自动计算，无需手工计算。</p>
+                </div>
+            </div>
+
+            <!-- 行权规则 -->
+            <div class="lesson-section">
+                <h2>📚 考点三：行权规则（必考！）</h2>
+                
+                <div class="concept-box">
+                    <h3>行权日</h3>
+                    
+                    <ul>
+                        <li><strong>行权日</strong>：到期月份的第四个周三</li>
+                        <li><strong>行权申报时间</strong>：行权日<span style="color: #ef4444; font-weight: bold;">9:15-9:25、9:30-11:30、13:00-15:30</span></li>
+                        <li><strong>交割日</strong>：行权日的次一交易日</li>
+                    </ul>
+                </div>
+
+                <div class="concept-box" style="background: #e0e7ff;">
+                    <h3>行权vs放弃行权</h3>
+                    
+                    <ul>
+                        <li><strong>行权</strong>：买方行使权利，按行权价买入（认购）或卖出（认沽）标的</li>
+                        <li><strong>放弃行权>：买方放弃权利，损失权利金</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1rem;"><strong>实值期权</strong>（有内在价值）：通常选择行权</p>
+                    <p><strong>虚值期权</strong>（无内在价值）：放弃行权，仅损失权利金</p>
+                </div>
+
+                <div class="concept-box">
+                    <h3>自动行权</h3>
+                    
+                    <p>到期日，对于实值期权（时间价值小于内在价值），交易所会自动行权，无需投资者手动操作。</p>
+                    
+                    <p>但投资者也可以在到期日15:30前提交"放弃行权"指令。</p>
+                </div>
+            </div>
+
+            <!-- 涨跌幅与熔断 -->
+            <div class="lesson-section">
+                <h2>📚 考点四：涨跌幅与熔断（高频考点）</h2>
+                
+                <div class="concept-box" style="background: #d1fae5;">
+                    <h3>🎯 重要结论（必背！）</h3>
+                    
+                    <p style="font-size: 1.2rem;"><strong>ETF期权</strong>：<span style="color: #ef4444;">无涨跌幅限制</span>，但实行<strong>熔断机制</strong>！</p>
+                </div>
+
+                <div class="concept-box">
+                    <h3>熔断机制（了解）</h3>
+                    
+                    <ul>
+                        <li>期权合约盘中交易价格较最近参考价格上涨、下跌达到或者超过<strong>50%</strong>，且价格涨跌绝对值达到或者超过<strong>5个最小报价单位</strong>时，暂停连续竞价，进入<strong>3分钟</strong>的集合竞价交易阶段</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1rem; color: var(--gray);">※ 考试中可能简化为：价格异常波动时暂停交易。</p>
+                </div>
+            </div>
+
+            <!-- 考试真题 -->
+            <div class="lesson-section">
+                <h2>📝 开户考试真题练习</h2>
+                
+                <div class="quiz-section">
+                    <p class="quiz-question">1. 【单选】期权交易中，____需要缴纳保证金，____不需要缴纳保证金。</p>
+                    
+                    <div class="quiz-options" id="q1">
+                        <div class="quiz-option" data-answer="correct">A. 卖方；买方</div>
+                        <div class="quiz-option" data-answer="wrong">B. 买方；卖方</div>
+                        <div class="quiz-option" data-answer="wrong">C. 买方和卖方；都不需要</div>
+                        <div class="quiz-option" data-answer="wrong">D. 都不需要；都不需要</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">2. 【单选】投资者买入期权后，想了结头寸，应该进行____操作。</p>
+                    
+                    <div class="quiz-options" id="q2">
+                        <div class="quiz-option" data-answer="wrong">A. 买入开仓</div>
+                        <div class="quiz-option" data-answer="correct">B. 卖出平仓</div>
+                        <div class="quiz-option" data-answer="wrong">C. 卖出开仓</div>
+                        <div class="quiz-option" data-answer="wrong">D. 买入平仓</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">3. 【判断】ETF期权有涨跌停板限制，涨跌幅为10%。（ ）</p>
+                    
+                    <div class="quiz-options" id="q3">
+                        <div class="quiz-option" data-answer="wrong">A. 正确</div>
+                        <div class="quiz-option" data-answer="correct">B. 错误</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">4. 【单选】期权买方在到期日可以选择____或____。</p>
+                    
+                    <div class="quiz-options" id="q4">
+                        <div class="quiz-option" data-answer="correct">A. 行权；放弃行权</div>
+                        <div class="quiz-option" data-answer="wrong">B. 买入；卖出</div>
+                        <div class="quiz-option" data-answer="wrong">C. 开仓；平仓</div>
+                        <div class="quiz-option" data-answer="wrong">D. 缴纳保证金；不缴纳保证金</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">5. 【单选】ETF期权的行权申报截止时间是到期日的____。</p>
+                    
+                    <div class="quiz-options" id="q5">
+                        <div class="quiz-option" data-answer="wrong">A. 11:30</div>
+                        <div class="quiz-option" data-answer="wrong">B. 14:57</div>
+                        <div class="quiz-option" data-answer="wrong">C. 15:00</div>
+                        <div class="quiz-option" data-answer="correct">D. 15:30</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">6. 【多选】下列关于期权保证金的说法，正确的是（ ）。</p>
+                    
+                    <div class="quiz-options" id="q6">
+                        <div class="quiz-option" data-answer="correct">A. 期权买方不需要缴纳保证金</div>
+                        <div class="quiz-option" data-answer="wrong">B. 期权买方需要缴纳保证金</div>
+                        <div class="quiz-option" data-answer="correct">C. 期权卖方需要缴纳保证金</div>
+                        <div class="quiz-option" data-answer="wrong">D. 期权卖方不需要缴纳保证金</div>
+                    </div>
+                </div>
+
+                <div id="quiz-result" style="display: none; margin-top: 1.5rem; padding: 1.5rem; background: #e0e7ff; border-radius: 12px; text-align: center;">
+                    <p id="quiz-score" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;"></p>
+                    <p id="quiz-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-nav">
+            <a href="lesson1-exam.html" class="nav-btn">← 上一课</a>
+            <a href="lesson3-exam.html" class="nav-btn">下一课：风险与盈亏 →</a>
+        </div>
+    </div>
+
+    <script>
+        // 测验逻辑
+        let correctCount = 0;
+        let answeredCount = 0;
+        const totalQuestions = 6;
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                if (parent.dataset.answered) return;
+                parent.dataset.answered = 'true';
+                
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    } else if (opt === this && !isCorrect) {
+                        opt.classList.add('wrong');
+                    }
+                });
+
+                if (isCorrect) correctCount++;
+                answeredCount++;
+
+                if (answeredCount === totalQuestions) {
+                    const resultDiv = document.getElementById('quiz-result');
+                    const scoreEl = document.getElementById('quiz-score');
+                    const message = document.getElementById('quiz-message');
+                    resultDiv.style.display = 'block';
+                    
+                    const score = Math.round(correctCount / totalQuestions * 100);
+                    scoreEl.textContent = `得分：${correctCount}/${totalQuestions}（${score}分）`;
+                    
+                    if (score >= 80) {
+                        message.innerHTML = '🎉 优秀！你已掌握第二课考点！<br><strong>继续下一课学习！</strong>';
+                        message.style.color = 'var(--success)';
+                    } else if (score >= 60) {
+                        message.innerHTML = '⚠️ 及格，但还有提升空间。<br>建议复习红色标记的必背考点。';
+                        message.style.color = 'var(--warning)'';
+                    } else {
+                        message.innerHTML = '❌ 需要加强！<br>请重新学习本课"考试重点"部分。';
+                        message.style.color = 'var(--danger)';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

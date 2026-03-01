@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第六课：隐含波动率 - 300ETF期权学院</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .iv-visualization {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            color: white;
+            margin: 1.5rem 0;
+        }
+        .volatility-meter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .meter-bar {
+            flex: 1;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        .meter-fill {
+            height: 100%;
+            border-radius: 15px;
+            transition: all 0.5s ease;
+        }
+        .meter-fill.low { background: linear-gradient(90deg, #10b981, #34d399); }
+        .meter-fill.medium { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .meter-fill.high { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .meter-label {
+            min-width: 80px;
+            font-weight: bold;
+        }
+        .meter-value {
+            min-width: 60px;
+            text-align: right;
+            font-family: monospace;
+            font-size: 1.2rem;
+        }
+        .price-comparison {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .price-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .price-card.highlight {
+            background: rgba(99, 102, 241, 0.3);
+            border: 2px solid #6366f1;
+        }
+        .iv-level {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+        .option-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .scenario-timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            position: relative;
+        }
+        .scenario-timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: var(--light);
+        }
+        .timeline-point {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-size: 1.2rem;
+        }
+        .timeline-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        @media (max-width: 600px) {
+            .strategy-grid { grid-template-columns: 1fr; }
+            .price-comparison { grid-template-columns: 1fr; }
+        }
+        .strategy-card-iv {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+        .strategy-card-iv.sell-side {
+            border-left-color: var(--success);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" style="text-decoration: none;"><div class="logo">📈 300ETF期权学院</div>
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <span class="lesson-badge">第六课</span>
+            <h1>隐含波动率：期权的"情绪指标"</h1>
+            <p class="lesson-meta">预计学习时间：25分钟 | 进阶概念 | 实战应用</p>
+        </header>
+
+        <div class="lesson-content">
+            <!-- 故事引入 -->
+            <div class="story-box">
+                <h3>📖 小陈的困惑</h3>
+                <p>小陈学会了看期权行情，但发现一个奇怪的现象：</p>
+                <ul>
+                    <li><strong>周一</strong>：510300价格3.900，"购4月4000"权利金<span style="color: #ef4444; font-weight: bold;">680元</span></li>
+                    <li><strong>周三</strong>：510300还是3.900，但权利金涨到了<span style="color: #ef4444; font-weight: bold;">950元</span></li>
+                </ul>
+                <p>价格没变，期权反而更贵了？小陈百思不得其解...</p>
+                <p><strong>答案就是：隐含波动率（IV）变化了！</strong></p>
+            </div>
+
+            <!-- 概念解释 -->
+            <div class="lesson-section">
+                <h2>🎯 什么是隐含波动率（IV）？</h2>
+                
+                <div class="concept-box">
+                    <h3>简单理解</h3>
+                    <p><strong>隐含波动率 = 市场预期的"波动程度"</strong></p>
+                    <ul>
+                        <li>IV越高 → 市场预期波动大 → 期权越贵</li>
+                        <li>IV越低 → 市场预期波动小 → 期权越便宜</li>
+                    </ul>
+                    <p>就像保险：台风季来临前，车险会变贵；风平浪静时，车险会降价。</p>
+                </div>
+
+                <h3>📊 510300期权IV的范围</h3>
+                <div class="iv-visualization">
+                    <div class="volatility-meter">
+                        <span class="meter-label">恐慌</span>
+                        <div class="meter-bar">
+                            <div class="meter-fill high" id="ivMeter" style="width: 50%"></div>
+                        </div>
+                        <span class="meter-value" id="ivValue">25%</span>
+                    </div>
+                    
+                    <div class="price-comparison" id="priceComparison">
+                        <div class="price-card" id="lowIV">
+                            <div class="iv-level">低IV (15%)</div>
+                            <div class="option-price">¥420</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">平静期</div>
+                        </div>
+                        <div class="price-card highlight" id="midIV">
+                            <div class="iv-level">中IV (25%)</div>
+                            <div class="option-price">¥680</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">正常水平</div>
+                        </div>
+                        <div class="price-card" id="highIV">
+                            <div class="iv-level">高IV (40%)</div>
+                            <div class="option-price">¥1,080</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">恐慌期</div>
+                        </div>
+                    </div>
+                    
+                    <p style="text-align: center; margin-top: 1rem; opacity: 0.9;">
+                        同一合约（510300购4月4000）在不同IV下的价格
+                    </p>
+                </div>
+
+                <div class="concept-box">
+                    <h3>🎢 波动率微笑</h3>
+                    <p>有趣的是，同一到期日的不同行权价，IV也不一样：</p>
+                    <ul>
+                        <li><strong>深度实值/虚值</strong>：IV通常较高（对冲需求大）</li>
+                        <li><strong>平值附近</strong>：IV通常较低</li>
+                    </ul>
+                    <p>这个形状像"微笑"，所以叫<strong>波动率微笑</strong>（Volatility Smile）。</p>
+                </div>
+            </div>
+
+            <!-- 互动演示 -->
+            <div class="interactive-demo">
+                <h3>🎮 互动演示：IV如何影响你的盈亏</h3>
+                
+                <div class="demo-controls">
+                    <div class="control-group">
+                        <label>510300当前价格</label>
+                        <input type="range" id="etfPrice" min="3.500" max="4.300" step="0.01" value="3.900">
+                        <span class="value-display" id="priceDisplay">3.900</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>隐含波动率 (IV)</label>
+                        <input type="range" id="ivSlider" min="10" max="50" step="1" value="25">
+                        <span class="value-display" id="ivDisplay">25%</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>到期天数</label>
+                        <input type="range" id="daysSlider" min="1" max="30" step="1" value="20">
+                        <span class="value-display" id="daysDisplay">20天</span>
+                    </div>
+                </div>
+
+                <div class="demo-result">
+                    <p>看涨期权（行权价4.000）理论价格：</p>
+                    <div class="result-value" id="optionPriceDisplay">¥680</div>
+                    <div class="result-detail" id="priceBreakdown">
+                        内在价值：0元 | 时间价值：680元
+                    </div>
+                </div>
+            </div>
+
+            <!-- IV crush 现象 -->
+            <div class="lesson-section">
+                <h2>💥 重要现象：IV Crush（波动率坍塌）</h2>
+                
+                <div class="concept-box">
+                    <h3>什么是IV Crush？</h3>
+                    <p>重大事件前IV飙升，事件落地后IV快速下降，导致期权价格暴跌。</p>
+                </div>
+
+                <h3>📅 典型场景：美联储决议前后</h3>
+                <div class="scenario-timeline">
+                    <div class="timeline-point">
+                        <div class="timeline-dot">📅</div>
+                        <div class="timeline-label">决议前3天<br>IV: 20%→35%</div>
+                    </div>
+                    <div class="timeline-point">
+                        <div class="timeline-dot">📈</div>
+                        <div class="timeline-label">决议前1天<br>IV: 35%→45%</div>
+                    </div>
+                    <div class="timeline-point">
+                        <div class="timeline-dot">⚡</div>
+                        <div class="timeline-label">决议公布<br>标的大涨2%</div>
+                    </div>
+                    <div class="timeline-point">
+                        <div class="timeline-dot">💥</div>
+                        <div class="timeline-label">决议后1天<br>IV: 45%→22%</div>
+                    </div>
+                </div>
+
+                <div class="story-box">
+                    <h3>😱 老王的惨痛教训</h3>
+                    <p>美联储决议前，老王买了看涨期权：</p>
+                    <ul>
+                        <li><strong>买入时</strong>：IV=45%，权利金1200元</li>
+                        <li><strong>决议后</strong>：510300涨2%，但IV跌至22%</li>
+                        <li><strong>结果</strong>：权利金只剩400元，<span style="color: #ef4444; font-weight: bold;">亏损67%</span></li>
+                    </ul>
+                    <p><strong>教训</strong>：买期权时要考虑IV位置！高IV买入，即使方向对也可能亏钱。</p>
+                </div>
+            </div>
+
+            <!-- 实战策略 -->
+            <div class="lesson-section">
+                <h2>⚔️ IV实战策略</h2>
+                
+                <div class="strategy-grid">
+                    <div class="strategy-card-iv">
+                        <h3>📉 低IV时：做买方</h3>
+                        <p><strong>策略</strong>：买入期权</p>
+                        <ul>
+                            <li>期权"便宜"，性价比高</li>
+                            <li>等待IV上升带来额外收益</li>
+                            <li>适合：预期事件前建仓</li>
+                        </ul>
+                        <p style="color: var(--success); margin-top: 0.5rem;">💡 口诀：低买高卖</p>
+                    </div>
+                    
+                    <div class="strategy-card-iv sell-side">
+                        <h3>📈 高IV时：做卖方</h3>
+                        <p><strong>策略</strong>：卖出期权</p>
+                        <ul>
+                            <li>期权"贵"，权利金收入多</li>
+                            <li>等待IV下降，时间朋友</li>
+                            <li>适合：事件后收权利金</li>
+                        </ul>
+                        <p style="color: var(--success); margin-top: 0.5rem;">💡 口诀：贵卖贱买</p>
+                    </div>
+                </div>
+
+                <div class="concept-box">
+                    <h3>🎯 510300期权IV的观察技巧</h3>
+                    <ul>
+                        <li><strong>IV百分位</strong>：当前IV在过去一年中的位置（如80%分位=偏高）</li>
+                        <li><strong>IV与HV对比</strong>：隐含波动率 vs 历史波动率</li>
+                        <li><strong>事件日历</strong>：关注宏观经济数据发布日（PMI、GDP、美联储决议）</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 核心要点 -->
+            <div class="lesson-section">
+                <h2>💡 核心要点总结</h2>
+                
+                <div class="concept-box">
+                    <ol>
+                        <li><strong>IV是预期</strong>：反映市场对未来波动的预期，不是历史波动</li>
+                        <li><strong>IV影响价格</strong>：同一标的价格，IV越高期权越贵</li>
+                        <li><strong>IV mean reversion</strong>：IV有均值回归特性，极端后必回归</li>
+                        <li><strong>买方忌高IV</strong>：高IV买入，方向对也可能因IV下降而亏损</li>
+                        <li><strong>卖方喜高IV</strong>：高IV卖出，赚取时间价值+IV下降收益</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- 测验 -->
+            <div class="quiz-section">
+                <h3>📝 知识测验</h3>
+                
+                <div id="quiz-container">
+                    <p class="quiz-question">1. 隐含波动率（IV）升高时，期权价格会？</p>
+                    
+                    <div class="quiz-options" id="quiz1">
+                        <div class="quiz-option" data-answer="correct">
+                            A. 上涨（时间价值增加）
+                        </div>
+                        <div class="quiz-option" data-answer="wrong">
+                            B. 下跌（时间价值减少）
+                        </div>
+                        <div class="quiz-option" data-answer="wrong">
+                            C. 不变（只与标的价格有关）
+                        </div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">2. 重大事件前买入期权，事件后标的价格没怎么变但亏损了，最可能的原因是？</p>
+                    
+                    <div class="quiz-options" id="quiz2">
+                        <div class="quiz-option" data-answer="wrong">
+                            A. 行权价选错了
+                        </div>
+                        <div class="quiz-option" data-answer="correct">
+                            B. IV Crush（波动率坍塌）
+                        </div>
+                        <div class="quiz-option" data-answer="wrong">
+                            C. 到期日太近了
+                        </div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">3. 当前IV处于历史高位，应该采取什么策略？</p>
+                    
+                    <div class="quiz-options" id="quiz3">
+                        <div class="quiz-option" data-answer="wrong">
+                            A. 买入期权，等待IV继续上升
+                        </div>
+                        <div class="quiz-option" data-answer="correct">
+                            B. 卖出期权，赚取高权利金+IV下降收益
+                        </div>
+                        <div class="quiz-option" data-answer="wrong">
+                            C. 不操作，观望
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quiz-result" style="display: none; margin-top: 1.5rem; text-align: center;">
+                    <p id="quiz-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-nav">
+            <a href="lesson5.html" class="nav-btn">← 上一课</a>
+            <a href="../index.html" class="nav-btn">🏠 返回主页</a>
+            <a href="lesson-bs.html" class="nav-btn">下一课 →</a>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        // IV互动演示
+        const etfPriceInput = document.getElementById('etfPrice');
+        const ivSlider = document.getElementById('ivSlider');
+        const daysSlider = document.getElementById('daysSlider');
+        const priceDisplay = document.getElementById('priceDisplay');
+        const ivDisplay = document.getElementById('ivDisplay');
+        const daysDisplay = document.getElementById('daysDisplay');
+        const optionPriceDisplay = document.getElementById('optionPriceDisplay');
+        const priceBreakdown = document.getElementById('priceBreakdown');
+        const ivMeter = document.getElementById('ivMeter');
+
+        function calculateOptionPrice() {
+            const S = parseFloat(etfPriceInput.value); // 标的价格
+            const K = 4.000; // 行权价
+            const iv = parseInt(ivSlider.value) / 100; // 波动率
+            const T = parseInt(daysSlider.value) / 365; // 时间
+            const r = 0.03; // 无风险利率
+            
+            priceDisplay.textContent = S.toFixed(3);
+            ivDisplay.textContent = ivSlider.value + '%';
+            daysDisplay.textContent = daysSlider.value + '天';
+            
+            // 更新IV表
+            const ivPercent = (ivSlider.value - 10) / (50 - 10) * 100;
+            ivMeter.style.width = ivPercent + '%';
+            ivMeter.className = 'meter-fill ' + (ivSlider.value < 20 ? 'low' : ivSlider.value < 35 ? 'medium' : 'high');
+            
+            // 简化的期权定价模型
+            const intrinsic = Math.max(0, S - K);
+            const timeValue = K * iv * Math.sqrt(T) * 10000 * 0.4; // 简化公式
+            const totalPrice = Math.round((intrinsic * 10000 + timeValue) / 10) * 10;
+            
+            optionPriceDisplay.textContent = '¥' + totalPrice.toLocaleString();
+            priceBreakdown.innerHTML = `内在价值：${Math.round(intrinsic * 10000)}元 | 时间价值：${Math.round(timeValue)}元`;
+            
+            // 更新对比卡片
+            const lowPrice = Math.round((intrinsic * 10000 + K * 0.15 * Math.sqrt(T) * 10000 * 0.4) / 10) * 10;
+            const midPrice = totalPrice;
+            const highPrice = Math.round((intrinsic * 10000 + K * 0.40 * Math.sqrt(T) * 10000 * 0.4) / 10) * 10;
+            
+            document.querySelector('#lowIV .option-price').textContent = '¥' + lowPrice.toLocaleString();
+            document.querySelector('#midIV .option-price').textContent = '¥' + midPrice.toLocaleString();
+            document.querySelector('#highIV .option-price').textContent = '¥' + highPrice.toLocaleString();
+        }
+
+        etfPriceInput.addEventListener('input', calculateOptionPrice);
+        ivSlider.addEventListener('input', calculateOptionPrice);
+        daysSlider.addEventListener('input', calculateOptionPrice);
+
+        // 初始化
+        calculateOptionPrice();
+
+        // 测验逻辑
+        let correctCount = 0;
+        let answeredCount = 0;
+        const totalQuestions = 3;
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                if (parent.dataset.answered) return;
+                parent.dataset.answered = 'true';
+                
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    } else if (opt === this && !isCorrect) {
+                        opt.classList.add('wrong');
+                    }
+                });
+
+                if (isCorrect) correctCount++;
+                answeredCount++;
+
+                if (answeredCount === totalQuestions) {
+                    const resultDiv = document.getElementById('quiz-result');
+                    const message = document.getElementById('quiz-message');
+                    resultDiv.style.display = 'block';
+                    
+                    if (correctCount === totalQuestions) {
+                        message.innerHTML = '🎉 完美！你已经掌握了隐含波动率的核心概念！<br><strong>期权进阶之路，你已经走完了！</strong>';
+                        message.style.color = 'var(--success)';
+                    } else {
+                        message.innerHTML = `答对了 ${correctCount}/${totalQuestions} 题。建议再复习一下IV对期权价格的影响。`;
+                        message.style.color = 'var(--warning)';
+                    }
+                }
+            });
+        });
+    </script>
+    <div style="background: linear-gradient(135deg, #1e3a8a, #3730a3); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem;">
+        <p style="font-weight: 600;">💡 让天下没有难做的期权</p>
+        <p style="font-size: 0.85rem; opacity: 0.8;">关注公众号「300ETF期权实践」获取更多实战策略</p>
+    </div>
+</body>
+</html>

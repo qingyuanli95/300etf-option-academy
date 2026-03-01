@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模拟交易室 - 300ETF期权学院</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .next-day-btn {
+            display: block;
+            width: 100%;
+            padding: 1.5rem 2rem !important;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+            color: white;
+            border: none;
+            border-radius: 12px !important;
+            font-size: 1.4rem !important;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1.5rem !important;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .next-day-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
+        }
+
+        .next-day-btn:active {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" style="text-decoration: none;">
+            <div class="logo">📈 300ETF期权学院</div>
+        </a>
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <span class="lesson-badge">实战演练</span>
+            <h1>🎮 模拟交易室</h1>
+            <p class="lesson-meta">用虚拟资金体验真实的510300期权交易 | 初始资金：10万元</p>
+        </header>
+
+        <div class="game-stats">
+            <div class="game-stat">
+                <div class="game-stat-value" id="currentDay">1</div>
+                <div class="game-stat-label">当前天数</div>
+            </div>
+            <div class="game-stat">
+                <div class="game-stat-value" id="daysLeft">10</div>
+                <div class="game-stat-label">剩余天数</div>
+            </div>
+            <div class="game-stat">
+                <div class="game-stat-value" id="cash">¥10万</div>
+                <div class="game-stat-label">可用资金</div>
+            </div>
+            <div class="game-stat">
+                <div class="game-stat-value" id="totalAsset">¥10万</div>
+                <div class="game-stat-label">总资产</div>
+            </div>
+        </div>
+
+        <div class="trading-panel">
+            <div class="market-display">
+                <h3>📊 市场行情</h3>
+                <div class="current-price">
+                    <div class="price-label">510300 当前价格</div>
+                    <div class="price-value" id="etfPrice">3.900</div>
+                    <div class="price-change up" id="priceChange">+0.00%</div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
+
+                <div class="option-chain">
+                    <h4>期权合约</h4>
+                    <div id="optionChain"></div>
+                </div>
+            </div>
+
+            <div class="trading-actions">
+                <h3>💼 交易操作</h3>
+                
+                <div class="position-info" id="positionInfo">
+                    请选择期权合约进行交易
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn buy-call" id="buyCallBtn" onclick="buyOption('call')">
+                        买入看涨
+                    </button>
+                    <button class="action-btn buy-put" id="buyPutBtn" onclick="buyOption('put')">
+                        买入看跌
+                    </button>
+                </div>
+
+                <button class="next-day-btn" onclick="nextDay()">
+                    📅 下一天
+                </button>
+            </div>
+        </div>
+
+        <div class="portfolio">
+            <h3>📋 持仓列表</h3>
+            <div id="portfolioList">
+                <p style="color: var(--gray); text-align: center;">暂无持仓</p>
+            </div>
+        </div>
+
+        <!-- 课程导航 -->
+        <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 16px; box-shadow: var(--shadow);">
+            <h3 style="margin-bottom: 1rem; text-align: center;">继续学习</h3>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="../lessons/lesson3.html" class="nav-btn">← 上一课</a>
+                <a href="../index.html" class="nav-btn">🏠 返回主页</a>
+                <a href="../lessons/lesson5.html" class="nav-btn">下一课 →</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态
+        let gameState = {
+            day: 1,
+            maxDays: 10,
+            etfPrice: 3.900,
+            cash: 100000,
+            positions: [],
+            priceHistory: [3.900],
+            selectedStrike: 3.900
+        };
+
+        const strikes = [3.600, 3.700, 3.800, 3.900, 4.000, 4.100, 4.200];
+
+        // 初始化
+        function init() {
+            updateDisplay();
+            renderOptionChain();
+            drawChart();
+        }
+
+        // 计算期权价格（简化模型）
+        function calcOptionPrice(strike, isCall) {
+            const daysLeft = gameState.maxDays - gameState.day + 1;
+            const timeValue = Math.max(50, 500 * Math.sqrt(daysLeft / 30));
+            
+            let intrinsic = 0;
+            if (isCall) {
+                intrinsic = Math.max(0, gameState.etfPrice - strike) * 10000;
+            } else {
+                intrinsic = Math.max(0, strike - gameState.etfPrice) * 10000;
+            }
+            
+            return Math.round(intrinsic + timeValue);
+        }
+
+        // 渲染期权链
+        function renderOptionChain() {
+            const container = document.getElementById('optionChain');
+            let html = '<table class="option-chain-table"><tr><th>看涨(购)</th><th>行权价</th><th>看跌(沽)</th></tr>';
+            
+            strikes.forEach(strike => {
+                const callPrice = calcOptionPrice(strike, true);
+                const putPrice = calcOptionPrice(strike, false);
+                const selected = strike === gameState.selectedStrike ? 'selected' : '';
+                
+                html += `<tr class="option-row ${selected}" onclick="selectStrike(${strike})">
+                    <td class="call-price">¥${callPrice}</td>
+                    <td class="strike-price">${strike.toFixed(3)}</td>
+                    <td class="put-price">¥${putPrice}</td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        // 选择行权价
+        function selectStrike(strike) {
+            gameState.selectedStrike = strike;
+            renderOptionChain();
+            updatePositionInfo();
+        }
+
+        // 更新持仓信息
+        function updatePositionInfo() {
+            const callPrice = calcOptionPrice(gameState.selectedStrike, true);
+            const putPrice = calcOptionPrice(gameState.selectedStrike, false);
+            
+            document.getElementById('positionInfo').innerHTML = `
+                <strong>选中行权价：${gameState.selectedStrike.toFixed(3)}</strong><br>
+                购(看涨)权利金：¥${callPrice} | 
+                沽(看跌)权利金：¥${putPrice}<br>
+                <small>每手 = 10000份510300</small>
+            `;
+        }
+
+        // 买入期权
+        function buyOption(type) {
+            const price = calcOptionPrice(gameState.selectedStrike, type === 'call');
+            
+            if (gameState.cash < price) {
+                alert('资金不足！');
+                return;
+            }
+            
+            gameState.cash -= price;
+            
+            // 查找现有持仓
+            const existing = gameState.positions.find(p => 
+                p.type === type && p.strike === gameState.selectedStrike
+            );
+            
+            if (existing) {
+                existing.quantity++;
+                existing.avgCost = (existing.avgCost * (existing.quantity - 1) + price) / existing.quantity;
+            } else {
+                gameState.positions.push({
+                    type: type,
+                    strike: gameState.selectedStrike,
+                    quantity: 1,
+                    avgCost: price,
+                    openDay: gameState.day
+                });
+            }
+            
+            updateDisplay();
+            renderPortfolio();
+        }
+
+        // 渲染持仓
+        function renderPortfolio() {
+            const container = document.getElementById('portfolioList');
+            
+            if (gameState.positions.length === 0) {
+                container.innerHTML = '<p style="color: var(--gray); text-align: center;">暂无持仓</p>';
+                return;
+            }
+            
+            let html = '';
+            gameState.positions.forEach((pos, index) => {
+                const currentPrice = calcOptionPrice(pos.strike, pos.type === 'call');
+                const pnl = (currentPrice - pos.avgCost) * pos.quantity;
+                const pnlClass = pnl >= 0 ? 'positive' : 'negative';
+                const typeName = pos.type === 'call' ? '购' : '沽';
+                
+                html += `
+                    <div class="portfolio-item">
+                        <div>
+                            <span class="position-type ${pos.type}">${typeName}</span>
+                            ${pos.strike.toFixed(3)}元 x ${pos.quantity}手
+                        </div>
+                        <div>
+                            <div>成本¥${pos.avgCost} 现价¥${currentPrice}</div>
+                            <div class="result-value ${pnlClass}">${pnl >= 0 ? '+' : ''}¥${pnl}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // 下一天
+        function nextDay() {
+            if (gameState.day >= gameState.maxDays) {
+                endGame();
+                return;
+            }
+            
+            gameState.day++;
+            
+            // 随机价格变动 -2% 到 +2%
+            const change = (Math.random() - 0.5) * 0.04;
+            gameState.etfPrice = Math.max(3.500, Math.min(4.500, gameState.etfPrice * (1 + change)));
+            gameState.priceHistory.push(gameState.etfPrice);
+            
+            updateDisplay();
+            renderOptionChain();
+            renderPortfolio();
+            drawChart();
+        }
+
+        // 更新显示
+        function updateDisplay() {
+            document.getElementById('currentDay').textContent = gameState.day;
+            document.getElementById('daysLeft').textContent = gameState.maxDays - gameState.day + 1;
+            document.getElementById('etfPrice').textContent = gameState.etfPrice.toFixed(3);
+            
+            const change = gameState.priceHistory.length > 1 
+                ? ((gameState.etfPrice - gameState.priceHistory[gameState.priceHistory.length - 2]) / gameState.priceHistory[gameState.priceHistory.length - 2] * 100)
+                : 0;
+            
+            const changeEl = document.getElementById('priceChange');
+            changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+            changeEl.className = 'price-change ' + (change >= 0 ? 'up' : 'down');
+            
+            // 计算总资产
+            let positionValue = 0;
+            gameState.positions.forEach(pos => {
+                positionValue += calcOptionPrice(pos.strike, pos.type === 'call') * pos.quantity;
+            });
+            
+            document.getElementById('cash').textContent = '¥' + (gameState.cash / 10000).toFixed(1) + '万';
+            document.getElementById('totalAsset').textContent = '¥' + ((gameState.cash + positionValue) / 10000).toFixed(1) + '万';
+            
+            updatePositionInfo();
+        }
+
+        // 绘制价格图表
+        function drawChart() {
+            const canvas = document.getElementById('priceChart');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 200;
+            
+            const w = canvas.width;
+            const h = canvas.height;
+            const padding = 20;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            if (gameState.priceHistory.length < 2) return;
+            
+            const minPrice = Math.min(...gameState.priceHistory) * 0.995;
+            const maxPrice = Math.max(...gameState.priceHistory) * 1.005;
+            const range = maxPrice - minPrice;
+            
+            // 绘制线条
+            ctx.beginPath();
+            ctx.strokeStyle = '#6366f1';
+            ctx.lineWidth = 2;
+            
+            gameState.priceHistory.forEach((price, i) => {
+                const x = padding + (i / (gameState.maxDays - 1)) * (w - 2 * padding);
+                const y = h - padding - ((price - minPrice) / range) * (h - 2 * padding);
+                
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            
+            ctx.stroke();
+            
+            // 填充
+            ctx.lineTo(padding + ((gameState.priceHistory.length - 1) / (gameState.maxDays - 1)) * (w - 2 * padding), h - padding);
+            ctx.lineTo(padding, h - padding);
+            ctx.closePath();
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, h);
+            gradient.addColorStop(0, 'rgba(99, 102, 241, 0.3)');
+            gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fill();
+        }
+
+        // 游戏结束
+        function endGame() {
+            // 结算所有持仓
+            let finalValue = gameState.cash;
+            gameState.positions.forEach(pos => {
+                finalValue += calcOptionPrice(pos.strike, pos.type === 'call') * pos.quantity;
+            });
+            
+            const return_rate = ((finalValue - 100000) / 100000 * 100).toFixed(2);
+            let rank = '';
+            let rankColor = '';
+            if (finalValue >= 120000) {
+                rank = '🏆 期权大师！';
+                rankColor = '#f59e0b';
+            } else if (finalValue >= 110000) {
+                rank = '🥈 优秀交易者！';
+                rankColor = '#6366f1';
+            } else if (finalValue >= 100000) {
+                rank = '🥉 保本！';
+                rankColor = '#10b981';
+            } else {
+                rank = '📚 继续学习！';
+                rankColor = '#ef4444';
+            }
+            
+            // 显示结果弹窗
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                padding: 20px;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 20px;
+                    padding: 32px;
+                    max-width: 400px;
+                    width: 100%;
+                    text-align: center;
+                    animation: slideUp 0.3s ease;
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 16px;">🎉</div>
+                    <h2 style="margin-bottom: 8px;">模拟交易结束！</h2>
+                    <p style="color: var(--gray); margin-bottom: 24px;">10天交易挑战完成</p>
+                    
+                    <div style="
+                        background: ${rankColor}15;
+                        border: 2px solid ${rankColor};
+                        border-radius: 12px;
+                        padding: 20px;
+                        margin-bottom: 24px;
+                    ">
+                        <div style="font-size: 2rem; font-weight: bold; color: ${rankColor}; margin-bottom: 8px;">
+                            ${rank}
+                        </div>
+                        <div style="font-size: 1.5rem; font-weight: 600;">
+                            ¥${finalValue.toLocaleString()}
+                        </div>
+                        <div style="color: ${rankColor}; font-size: 0.9rem; margin-top: 4px;">
+                            收益率 ${return_rate}%
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <a href="../lessons/lesson5.html" style="
+                            display: block;
+                            padding: 14px;
+                            background: var(--primary);
+                            color: white;
+                            border-radius: 10px;
+                            text-decoration: none;
+                            font-weight: 600;
+                        ">🎓 学习下一课：策略实验室 →</a>
+                        
+                        <a href="../lessons/lesson3.html" style="
+                            display: block;
+                            padding: 14px;
+                            background: var(--light);
+                            color: var(--dark);
+                            border-radius: 10px;
+                            text-decoration: none;
+                            font-weight: 500;
+                        ">📖 复习第三课：看跌期权</a>
+                        
+                        <a href="../index.html" style="
+                            display: block;
+                            padding: 14px;
+                            color: var(--gray);
+                            text-decoration: none;
+                            font-size: 0.9rem;
+                        ">🏠 返回首页</a>
+                    </div>
+                    
+                    <button onclick="this.closest('.modal-overlay').remove(); location.reload();" style="
+                        margin-top: 16px;
+                        padding: 10px 24px;
+                        background: transparent;
+                        border: 1px solid var(--light);
+                        border-radius: 8px;
+                        color: var(--gray);
+                        cursor: pointer;
+                    ">↻ 再玩一次</button>
+                </div>
+            `;
+            
+            modal.className = 'modal-overlay';
+            document.body.appendChild(modal);
+        }
+
+        // 启动
+        init();
+    </script>
+
+    <!-- 公众号推广 -->
+    <div style="background: linear-gradient(135deg, #1e3a8a, #3730a3); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem;">
+        <p style="font-weight: 600;">💡 让天下没有难做的期权</p>
+        <p style="font-size: 0.85rem; opacity: 0.8;">关注公众号「300ETF期权实践」获取更多实战策略</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>300ETF期权学院 - 让天下没有难做的期权</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 新手引导样式 */
+        .onboarding-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .onboarding-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .onboarding-step {
+            display: none;
+        }
+        
+        .onboarding-step.active {
+            display: block;
+        }
+        
+        .onboarding-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .onboarding-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: var(--dark);
+        }
+        
+        .onboarding-desc {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+        
+        .onboarding-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .onboarding-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--light);
+            transition: all 0.3s;
+        }
+        
+        .onboarding-dot.active {
+            background: var(--primary);
+            width: 30px;
+            border-radius: 5px;
+        }
+        
+        .onboarding-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .onboarding-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .onboarding-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .onboarding-btn.secondary {
+            background: var(--light);
+            color: var(--gray);
+        }
+        
+        .onboarding-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* 继续学习按钮 */
+        .continue-learning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            display: none;
+        }
+        
+        .continue-learning.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .continue-learning h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .continue-learning p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .continue-btn {
+            background: white;
+            color: #d97706;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        /* 学习进度卡片 */
+        .progress-overview {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .progress-overview h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            text-align: center;
+        }
+        
+        .progress-stat {
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 12px;
+        }
+        
+        .progress-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .progress-stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+        
+        /* 骨架屏 */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* 加载状态 */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+        }
+        
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        @keyframes spin {
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 新手引导 -->
+    <div id="onboarding" class="onboarding-overlay" style="display: none;">
+        <div class="onboarding-card">
+            <!-- Step 1 -->
+            <div class="onboarding-step active" data-step="1">
+                <div class="onboarding-icon">🎯</div>
+                <div class="onboarding-title">欢迎来到期权学院</div>
+                <div class="onboarding-desc">
+                    这里是<strong>300ETF期权实战学院</strong>，专为零基础学员设计。<br>
+                    通过游戏化的方式，让你轻松掌握510300期权交易。
+                </div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="onboarding-step" data-step="2">
+                <div class="onboarding-icon">📚</div>
+                <div class="onboarding-title">你将学到什么？</div>
+                <div class="onboarding-desc">
+                    • 期权基础概念（权利金、行权价、到期日）<br>
+                    • 看涨/看跌期权实战<br>
+                    • 模拟交易零风险练习<br>
+                    • 策略实验室进阶技巧
+                </div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="onboarding-step" data-step="3">
+                <div class="onboarding-icon">🎮</div>
+                <div class="onboarding-title">怎么学习？</div>
+                <div class="onboarding-desc">
+                    1. 按顺序完成8个课程<br>
+                    2. 每个课程都有互动演示<br>
+                    3. 通过测验解锁下一课<br>
+                    4. 最后在模拟交易中实战
+                </div>
+            </div>
+            
+            <!-- 指示器 -->
+            <div class="onboarding-dots">
+                <div class="onboarding-dot active"></div>
+                <div class="onboarding-dot"></div>
+                <div class="onboarding-dot"></div>
+            </div>
+            
+            <!-- 按钮 -->
+            <div class="onboarding-buttons">
+                <button class="onboarding-btn secondary" onclick="skipOnboarding()">跳过</button>
+                <button class="onboarding-btn primary" onclick="nextStep()">下一步 →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" style="text-decoration: none;">
+            <div class="logo">📈 300ETF期权学院</div>
+        </a>
+        <div class="nav-links">
+            <a href="lessons/lesson1.html">第一课</a>
+            <a href="lessons/lesson2.html">看涨</a>
+            <a href="lessons/lesson3.html">看跌</a>
+            <a href="games/trading-simulator.html">模拟</a>
+            <a href="lessons/lesson5.html">策略</a>
+            <a href="lessons/lesson6.html">IV</a>
+            <a href="lessons/lesson-bs.html">BS</a>
+            <a href="lessons/lesson-greeks.html">希腊</a>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge">🎯 510300 沪深300ETF期权</div>
+            <h1>零基础学懂<br>300ETF期权</h1>
+            <p class="subtitle">不需要金融背景，用玩游戏的方式<br>掌握 510300 期权交易的实战技能</p>
+            
+            <!-- 继续学习提示 -->
+            <div id="continueLearning" class="continue-learning">
+                <h3>👋 欢迎回来！</h3>
+                <p>你上次学习到：<span id="lastLessonName">第一课</span></p>
+                <a href="lessons/lesson1.html" id="continueBtn" class="continue-btn">继续学习 →</a>
+            </div>
+            
+            <!-- 学习进度概览 -->
+            <div class="progress-overview">
+                <h3>📊 学习进度</h3>
+                <div class="progress-stats">
+                    <div class="progress-stat">
+                        <div class="progress-stat-value" id="completedCount">0</div>
+                        <div class="progress-stat-label">已完成</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="progress-stat-value" id="totalProgress">0%</div>
+                        <div class="progress-stat-label">总进度</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="progress-stat-value" id="studyDays">1</div>
+                        <div class="progress-stat-label">学习天数</div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="lessons/lesson1.html" class="cta-button">开始实战之旅 →</a>
+            
+            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 12px; border: 1px dashed var(--primary);">
+                <p style="font-size: 1.1rem; font-weight: 600; color: #312e81; margin-bottom: 0.5rem;">💡 让天下没有难做的期权</p>
+                <p style="font-size: 0.9rem; color: #1f2937;">零基础入门 → 实战演练 → 精通策略</p>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="etf-card">
+                <div class="etf-header">
+                    <span class="etf-code">510300</span>
+                    <span class="etf-name">沪深300ETF</span>
+                </div>
+                <div class="etf-price">
+                    <span class="price-label">当前价格</span>
+                    <span class="price-value">3.952</span>
+                    <span class="price-change">+1.23%</span>
+                </div>
+                <div class="option-preview">
+                    <div class="mini-option call">
+                        <span class="opt-type">CALL</span>
+                        <span class="opt-strike">4.000</span>
+                        <span class="opt-price">¥0.089</span>
+                    </div>
+                    <div class="mini-option put">
+                        <span class="opt-type">PUT</span>
+                        <span class="opt-strike">3.900</span>
+                        <span class="opt-price">¥0.052</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 快速入口 -->
+    <section class="quick-access" style="padding: 3rem 5%; background: #e0e7ff;">
+        <h2 style="text-align: center; margin-bottom: 1.5rem;">🚀 快速进入课程</h2>
+        <p style="text-align: center; color: var(--gray); margin-bottom: 2rem;">选择你想学习的课程，直接开始</p>
+        
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 1000px; margin: 0 auto;">
+            <a href="lessons/lesson1.html" class="nav-btn" style="min-width: 140px; text-align: center;">🎯 第一课</a>
+            <a href="lessons/lesson2.html" class="nav-btn" style="min-width: 140px; text-align: center;">📈 看涨期权</a>
+            <a href="lessons/lesson3.html" class="nav-btn" style="min-width: 140px; text-align: center;">📉 看跌期权</a>
+            <a href="games/trading-simulator.html" class="nav-btn" style="min-width: 140px; text-align: center; background: var(--success);">⚔️ 模拟交易</a>
+            <a href="lessons/lesson5.html" class="nav-btn" style="min-width: 140px; text-align: center;">🎓 策略实验室</a>
+            <a href="lessons/lesson6.html" class="nav-btn" style="min-width: 140px; text-align: center;">📊 隐含波动率</a>
+            <a href="lessons/lesson-bs.html" class="nav-btn" style="min-width: 140px; text-align: center;">🔢 BS公式</a>
+            <a href="lessons/lesson-greeks.html" class="nav-btn" style="min-width: 140px; text-align: center;">Δ 希腊字母</a>
+        </div>
+    </section>
+
+    <!-- 510300 介绍 -->
+    <section class="etf-intro">
+        <h2>📊 什么是 510300？</h2>
+        <div class="etf-grid">
+            <div class="etf-info-card">
+                <div class="info-icon">🏢</div>
+                <h3>华泰柏瑞沪深300ETF</h3>
+                <p>跟踪沪深300指数，包含A股最大的300家上市公司</p>
+            </div>
+            <div class="etf-info-card">
+                <div class="info-icon">💰</div>
+                <h3>1手 = 10000份</h3>
+                <p>每份约4元，1手名义价值约4万元</p>
+            </div>
+            <div class="etf-info-card">
+                <div class="info-icon">📅</div>
+                <h3>期权到期日</h3>
+                <p>每月第四个周三到期，到期前任意交易日可买卖</p>
+            </div>
+        </div>
+        <div class="formula-box">
+            <h4>💡 快速理解</h4>
+            <p>如果你买了1手 <strong>510300购4月4000</strong>：</p>
+            <ul>
+                <li>510300 = 跟踪沪深300指数的ETF</li>
+                <li>购 = 看涨期权（Call）</li>
+                <li>4月 = 4月份到期</li>
+                <li>4000 = 行权价4.000元</li>
+            </ul>
+            <p class="formula-result">= 你有权在4月到期前，以4.000元的价格买入10000份510300</p>
+        </div>
+    </section>
+
+    <!-- 学习路径 -->
+    <section id="journey" class="journey">
+        <h2>🎮 你的期权实战之路</h2>
+        <p class="section-desc">以510300为实战标的，一步步成为期权交易者</p>
+        
+        <div class="level-map">
+            <a href="index.html" class="level completed" style="text-decoration: none; color: inherit; display: flex;">
+                <div class="level-icon">🏠</div>
+                <div class="level-info">
+                    <h3>第零关：认识510300</h3>
+                    <p>了解标的、合约规则、交易时间</p>
+                    <span class="level-tag">5分钟</span>
+                </div>
+                <div class="level-status">✓</div>
+            </a>
+            
+            <div class="connector"></div>
+            
+            <a href="lessons/lesson1.html" class="level active" style="text-decoration: none; color: inherit; display: flex;">
+                <div class="level-icon">🎯</div>
+                <div class="level-info">
+                    <h3>第一关：权利的秘密</h3>
+                    <p>用510300期权理解"权利"的本质</p>
+                    <span class="level-tag">互动演示</span>
+                </div>
+                <div class="level-status">进行中</div>
+            </a>
+            
+            <div class="connector"></div>
+            
+            <a href="lessons/lesson2.html" class="level locked" style="text-decoration: none; color: inherit; display: flex;">
+                <div class="level-icon">📈</div>
+                <div class="level-info">
+                    <h3>第二关：看涨期权实战</h3>
+                    <p>510300购合约，赌涨实战演练</p>
+                    <span class="level-tag locked-tag">未解锁</span>
+                </div>
+                <div class="level-status">🔒</div>
+            </a>
+            
+            <div class="connector"></div>
+            
+            <a href="lessons/lesson3.html" class="level locked" style="text-decoration: none; color: inherit; display: flex;">
+                <div class="level-icon">📉</div>
+                <div class="level-info">
+                    <h3>第三关：看跌期权实战</h3>
+                    <p>510300沽合约，赌跌实战演练</p>
+                    <span class="level-tag locked-tag">未解锁</span>
+                </div>
+                <div class="level-status">🔒</div>
+            </a>
+            
+            <div class="connector"></div>
+            
+            <a href="games/trading-simulator.html" class="level locked" style="text-decoration: none; color: inherit; display: flex;">
+                <div class="level-icon">⚔️</div>
+                <div class="level-info">
+                    <h3>第四关：实战模拟器</h3>
+                    <p>用真实510300数据，模拟交易对决</p>
+                    <span class="level-tag locked-tag">未解锁</span>
+                </div>
+                <div class="level-status">🎮</div>
+            </a>
+            
+            <div class="connector"></div>
+            
+            <a href="lessons/lesson5.html" class="level locked" style="text-decoration: none; color: inherit; display: flex;">
+                <div class="level-icon">🎓</div>
+                <div class="level-info">
+                    <h3>第五关：策略实验室</h3>
+                    <p>跨式、价差、备兑等进阶策略</p>
+                    <span class="level-tag locked-tag">未解锁</span>
+                </div>
+                <div class="level-status">🔒</div>
+            </a>
+            
+            <div class="connector"></div>
+            
+            <a href="lessons/lesson6.html" class="level locked" style="text-decoration: none; color: inherit; display: flex;">
+                <div class="level-icon">📊</div>
+                <div class="level-info">
+                    <h3>第六关：隐含波动率</h3>
+                    <p>IV定价原理、IV Crush、实战策略</p>
+                    <span class="level-tag locked-tag">进阶</span>
+                </div>
+                <div class="level-status">🔒</div>
+            </a>
+            
+            <div class="connector"></div>
+            
+            <a href="lessons/lesson-bs.html" class="level locked" style="text-decoration: none; color: inherit; display: flex;">
+                <div class="level-icon">🔢</div>
+                <div class="level-info">
+                    <h3>第七关：BS公式</h3>
+                    <p>期权定价模型揭秘</p>
+                    <span class="level-tag locked-tag">进阶</span>
+                </div>
+                <div class="level-status">🔒</div>
+            </a>
+            
+            <div class="connector"></div>
+            
+            <a href="lessons/lesson-greeks.html" class="level locked" style="text-decoration: none; color: inherit; display: flex;">
+                <div class="level-icon">Δ</div>
+                <div class="level-info">
+                    <h3>第八关：希腊字母</h3>
+                    <p>Delta、Gamma、Theta、Vega 风险管理</p>
+                    <span class="level-tag locked-tag">高阶</span>
+                </div>
+                <div class="level-status">🔒</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- 公众号推广 -->
+    <section style="padding: 3rem 5%; background: linear-gradient(135deg, #1e3a8a, #3730a3); color: white; text-align: center;">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">📱 关注公众号「300ETF期权实践」</h2>
+            
+            <p style="opacity: 0.9; margin-bottom: 1.5rem;">获取更多510300期权实战策略、每日行情分析、 Greeks 解读</p>
+            
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">📊 每日复盘</span>
+                <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">🎯 策略分享</span>
+                <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">💬 答疑解惑</span>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 16px; border: 1px dashed rgba(255,255,255,0.3);">
+                <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">💡 让天下没有难做的期权</p>
+                <p style="font-size: 0.85rem; opacity: 0.8;">立即关注，开启你的期权学习之旅</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>📈 300ETF期权学院 - 让期权学习像玩游戏一样简单</p>
+        <p class="version">专注510300沪深300ETF期权实战 | v2.0 商业版 | 公众号：300ETF期权实践</p>
+    </footer>
+
+    <script>
+        // 新手引导
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        function showOnboarding() {
+            const hasSeenGuide = localStorage.getItem('hasSeenGuide');
+            if (!hasSeenGuide) {
+                document.getElementById('onboarding').style.display = 'flex';
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                document.querySelector(`.onboarding-step[data-step="${currentStep}"]`).classList.remove('active');
+                currentStep++;
+                document.querySelector(`.onboarding-step[data-step="${currentStep}"]`).classList.add('active');
+                
+                // 更新指示器
+                document.querySelectorAll('.onboarding-dot').forEach((dot, index) => {
+                    dot.classList.toggle('active', index < currentStep);
+                });
+                
+                // 最后一步改变按钮文字
+                if (currentStep === totalSteps) {
+                    document.querySelector('.onboarding-btn.primary').textContent = '开始学习 →';
+                }
+            } else {
+                finishOnboarding();
+            }
+        }
+
+        function skipOnboarding() {
+            finishOnboarding();
+        }
+
+        function finishOnboarding() {
+            localStorage.setItem('hasSeenGuide', 'true');
+            document.getElementById('onboarding').style.display = 'none';
+        }
+
+        // 学习进度管理
+        function loadProgress() {
+            const progress = JSON.parse(localStorage.getItem('learningProgress')) || {
+                completedLessons: [],
+                currentLesson: 'lesson1',
+                lastVisit: new Date().toISOString()
+            };
+
+            // 更新学习天数
+            const firstVisit = localStorage.getItem('firstVisit') || new Date().toISOString();
+            const days = Math.floor((new Date() - new Date(firstVisit)) / (1000 * 60 * 60 * 24)) + 1;
+            document.getElementById('studyDays').textContent = days;
+
+            // 显示继续学习提示
+            if (progress.currentLesson && progress.currentLesson !== 'lesson1') {
+                const lessonNames = {
+                    'lesson1': '第一课',
+                    'lesson2': '第二课',
+                    'lesson3': '第三课',
+                    'trading': '模拟交易',
+                    'lesson5': '策略实验室',
+                    'lesson6': '隐含波动率',
+                    'lesson-bs': 'BS公式',
+                    'lesson-greeks': '希腊字母'
+                };
+                
+                document.getElementById('lastLessonName').textContent = lessonNames[progress.currentLesson] || '第一课';
+                document.getElementById('continueBtn').href = `lessons/${progress.currentLesson}.html`;
+                document.getElementById('continueLearning').classList.add('show');
+            }
+
+            // 更新统计
+            const completed = progress.completedLessons.length;
+            const total = 8;
+            const percentage = Math.round((completed / total) * 100);
+            
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('totalProgress').textContent = percentage + '%';
+        }
+
+        // 页面加载时执行
+        document.addEventListener('DOMContentLoaded', function() {
+            showOnboarding();
+            loadProgress();
+            
+            // 首次访问记录
+            if (!localStorage.getItem('firstVisit')) {
+                localStorage.setItem('firstVisit', new Date().toISOString());
+            }
+        });
+
+        // 按钮加载状态示例
+        document.querySelectorAll('.nav-btn, .cta-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.add('btn-loading');
+                setTimeout(() => {
+                    this.classList.remove('btn-loading');
+                }, 500);
+            });
+        });
+    </script>
+
+</body>
+</html>

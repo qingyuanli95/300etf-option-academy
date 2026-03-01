@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>策略实验室 - 300ETF期权学院</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .strategy-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .strategy-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 2px solid var(--light);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .strategy-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        .strategy-card.active {
+            border-color: var(--primary);
+            background: #e0e7ff;
+        }
+        .strategy-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .strategy-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .strategy-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .strategy-detail {
+            display: none;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light);
+        }
+        .strategy-detail.show {
+            display: block;
+        }
+        .payoff-diagram {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            height: 200px;
+        }
+        .scenario-list {
+            margin: 1rem 0;
+        }
+        .scenario-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: var(--light);
+            border-radius: 8px;
+        }
+        .scenario-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" style="text-decoration: none;"><div class="logo">📈 300ETF期权学院</div>
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <span class="lesson-badge">第五课</span>
+            <h1>策略实验室：进阶期权策略</h1>
+            <p class="lesson-meta">学习常用期权策略，提升交易胜率</p>
+        </header>
+
+        <div class="lesson-content">
+            <!-- 策略介绍 -->
+            <div class="lesson-section">
+                <h2>🧪 选择策略进行学习</h2>
+                
+                <div class="strategy-cards">
+                    <div class="strategy-card" onclick="showStrategy('protective-put', this)">
+                        <div class="strategy-icon">🛡️</div>
+                        <div class="strategy-name">保护性看跌</div>
+                        <div class="strategy-desc">持有ETF + 买入Put，给持仓买保险</div>
+                    </div>
+                    
+                    <div class="strategy-card" onclick="showStrategy('covered-call', this)">
+                        <div class="strategy-icon">📈</div>
+                        <div class="strategy-name">备兑开仓</div>
+                        <div class="strategy-desc">持有ETF + 卖出Call，增强收益</div>
+                    </div>
+                    
+                    <div class="strategy-card" onclick="showStrategy('straddle', this)">
+                        <div class="strategy-icon">⚡</div>
+                        <div class="strategy-name">跨式策略</div>
+                        <div class="strategy-desc">同时买入Call和Put，赌大波动</div>
+                    </div>
+                    
+                    <div class="strategy-card" onclick="showStrategy('spread', this)">
+                        <div class="strategy-icon">🎯</div>
+                        <div class="strategy-name">价差策略</div>
+                        <div class="strategy-desc">买入+卖出不同行权价，降低成本</div>
+                    </div>
+                </div>
+
+                <!-- 策略详情 -->
+                <div id="strategy-content">
+                    <!-- 保护性看跌 -->
+                    <div id="protective-put" class="strategy-detail">
+                        <h3>🛡️ 保护性看跌策略（Protective Put）</h3>
+                        
+                        <div class="concept-box">
+                            <h4>策略构成</h4>
+                            <ul>
+                                <li>买入 510300 ETF（持有现货）</li>
+                                <li>同时买入 510300 看跌期权（Put）</li>
+                            </ul>
+                        </div>
+
+                        <h4>📊 适用场景</h4>
+                        <div class="scenario-list">
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>长期看好ETF，但担心短期下跌风险</div>
+                            </div>
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>持有大量ETF持仓，需要对冲保护</div>
+                            </div>
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>重要事件前（如美联储决议），提前买保险</div>
+                            </div>
+                        </div>
+
+                        <h4>💰 案例演示</h4>
+                        <div class="story-box">
+                            <p><strong>情景</strong>：持有10000份510300，成本3.900元，现价3.900元</p>
+                            <p><strong>操作</strong>：买入1手"510300沽4月3800"，权利金520元</p>
+                            
+                            <table class="compare-table">
+                                <tr>
+                                    <th>到期情况</th>
+                                    <th>无保护</th>
+                                    <th>有保护(Put)</th>
+                                </tr>
+                                <tr>
+                                    <td>510300跌至3.600</td>
+                                    <td style="color: #ef4444;">亏3000元</td>
+                                    <td style="color: #f59e0b;">亏520元(仅权利金)</td>
+                                </tr>
+                                <tr>
+                                    <td>510300涨至4.200</td>
+                                    <td style="color: #10b981;">赚3000元</td>
+                                    <td style="color: #10b981;">赚2480元(3000-520)</td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin-top: 1rem;"><strong>结论</strong>：付出520元权利金，将最大亏损从3000元降至520元，同时保留了大部分上涨收益。</p>
+                        </div>
+                    </div>
+
+                    <!-- 备兑开仓 -->
+                    <div id="covered-call" class="strategy-detail">
+                        <h3>📈 备兑开仓策略（Covered Call）</h3>
+                        
+                        <div class="concept-box">
+                            <h4>策略构成</h4>
+                            <ul>
+                                <li>买入 510300 ETF（持有现货）</li>
+                                <li>同时卖出 510300 看涨期权（Call）</li>
+                            </ul>
+                        </div>
+
+                        <h4>📊 适用场景</h4>
+                        <div class="scenario-list">
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>长期持有ETF，但认为短期上涨空间有限</div>
+                            </div>
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>震荡行情，通过卖Call获取额外收益</div>
+                            </div>
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>降低持仓成本（权利金收入）</div>
+                            </div>
+                        </div>
+
+                        <h4>⚠️ 注意事项</h4>
+                        <div class="concept-box">
+                            <p>卖出Call意味着<strong>义务</strong>：如果到期时510300价格高于行权价，你必须以行权价卖出ETF。</p>
+                            <p><strong>风险</strong>：如果ETF暴涨，你只能吃到行权价以下的收益，放弃了超额涨幅。</p>
+                        </div>
+
+                        <h4>💰 案例演示</h4>
+                        <div class="story-box">
+                            <p><strong>情景</strong>：持有10000份510300，现价3.900元</p>
+                            <p><strong>操作</strong>：卖出1手"510300购4月4000"，收取权利金400元</p>
+                            
+                            <table class="compare-table">
+                                <tr>
+                                    <th>到期情况</th>
+                                    <th>仅持有ETF</th>
+                                    <th>备兑策略</th>
+                                </tr>
+                                <tr>
+                                    <td>510300=3.800(跌)</td>
+                                    <td style="color: #ef4444;">亏1000</td>
+                                    <td style="color: #ef4444;">亏600(-1000+400)</td>
+                                </tr>
+                                <tr>
+                                    <td>510300=3.950(横盘)</td>
+                                    <td style="color: #10b981;">赚500</td>
+                                    <td style="color: #10b981;">赚900(500+400)</td>
+                                </tr>
+                                <tr>
+                                    <td>510300=4.200(大涨)</td>
+                                    <td style="color: #10b981;">赚3000</td>
+                                    <td style="color: #10b981;">赚1400(1000+400)⚠️踏空</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 跨式策略 -->
+                    <div id="straddle" class="strategy-detail">
+                        <h3>⚡ 跨式策略（Long Straddle）</h3>
+                        
+                        <div class="concept-box">
+                            <h4>策略构成</h4>
+                            <ul>
+                                <li>同时买入相同行权价、相同到期日的Call和Put</li>
+                                <li>通常选择平值期权（ATM）</li>
+                            </ul>
+                        </div>
+
+                        <h4>📊 适用场景</h4>
+                        <div class="scenario-list">
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>预期将有重大波动，但不确定方向</div>
+                            </div>
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>重大事件前（财报、政策发布、美联储决议）</div>
+                            </div>
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>市场处于盘整末期，即将选择方向</div>
+                            </div>
+                        </div>
+
+                        <h4>💰 案例演示</h4>
+                        <div class="story-box">
+                            <p><strong>情景</strong>：510300现价3.900元，预期将有重大政策发布</p>
+                            <p><strong>操作</strong>：买入1手"购4月3900"(680元) + 买入1手"沽4月3900"(620元)，共支出1300元</p>
+                            
+                            <table class="compare-table">
+                                <tr>
+                                    <th>到期情况</th>
+                                    <th>Call盈亏</th>
+                                    <th>Put盈亏</th>
+                                    <th>总盈亏</th>
+                                </tr>
+                                <tr>
+                                    <td>510300=3.600(大跌)</td>
+                                    <td>亏680</td>
+                                    <td style="color: #10b981;">赚2300</td>
+                                    <td style="color: #10b981;">+1000</td>
+                                </tr>
+                                <tr>
+                                    <td>510300=3.900(横盘)</td>
+                                    <td>亏680</td>
+                                    <td>亏620</td>
+                                    <td style="color: #ef4444;">-1300(最大亏损)</td>
+                                </tr>
+                                <tr>
+                                    <td>510300=4.200(大涨)</td>
+                                    <td style="color: #10b981;">赚2320</td>
+                                    <td>亏620</td>
+                                    <td style="color: #10b981;">+1000</td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin-top: 1rem;"><strong>盈亏平衡点</strong>：3.770元 或 4.030元（需要涨跌幅超过3.3%才能盈利）</p>
+                        </div>
+                    </div>
+
+                    <!-- 价差策略 -->
+                    <div id="spread" class="strategy-detail">
+                        <h3>🎯 牛市价差策略（Bull Call Spread）</h3>
+                        
+                        <div class="concept-box">
+                            <h4>策略构成</h4>
+                            <ul>
+                                <li>买入低行权价 Call（实值或平值）</li>
+                                <li>卖出高行权价 Call（虚值）</li>
+                                <li>两者到期日相同</li>
+                            </ul>
+                        </div>
+
+                        <h4>📊 策略特点</h4>
+                        <div class="scenario-list">
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>降低权利金成本（卖出Call收取的权利金抵消部分成本）</div>
+                            </div>
+                            <div class="scenario-item">
+                                <span class="scenario-icon">✅</span>
+                                <div>风险有限、收益有限，适合温和看涨</div>
+                            </div>
+                            <div class="scenario-item">
+                                <span class="scenario-icon">⚠️</span>
+                                <div>放弃了暴涨时的超额收益（被卖出的Call封顶）</div>
+                            </div>
+                        </div>
+
+                        <h4>💰 案例演示</h4>
+                        <div class="story-box">
+                            <p><strong>情景</strong>：510300现价3.900元，温和看涨至4.100</p>
+                            <p><strong>操作</strong>：</p>
+                            <ul>
+                                <li>买入1手"购4月3900"，支付680元</li>
+                                <li>卖出1手"购4月4100"，收取280元</li>
+                                <li>净成本：680 - 280 = 400元</li>
+                            </ul>
+                            
+                            <table class="compare-table">
+                                <tr>
+                                    <th>到期情况</th>
+                                    <th>简单买Call(3900)</th>
+                                    <th>牛市价差</th>
+                                </tr>
+                                <tr>
+                                    <td>510300≤3.900</td>
+                                    <td style="color: #ef4444;">亏680</td>
+                                    <td style="color: #ef4444;">亏400</td>
+                                </tr>
+                                <tr>
+                                    <td>510300=4.100</td>
+                                    <td style="color: #10b981;">赚1320</td>
+                                    <td style="color: #10b981;">赚1600(封顶)</td>
+                                </tr>
+                                <tr>
+                                    <td>510300=4.300</td>
+                                    <td style="color: #10b981;">赚3320</td>
+                                    <td style="color: #10b981;">赚1600(封顶)⚠️</td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin-top: 1rem;"><strong>结论</strong>：降低了成本（400 vs 680），牺牲了极端行情下的收益，适合温和看涨场景。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 策略对比总结 -->
+            <div class="lesson-section">
+                <h2>📋 策略对比总结</h2>
+                
+                <table class="compare-table">
+                    <tr>
+                        <th>策略</th>
+                        <th>适用场景</th>
+                        <th>最大收益</th>
+                        <th>最大风险</th>
+                    </tr>
+                    <tr>
+                        <td>保护性看跌</td>
+                        <td>持有ETF，防下跌</td>
+                        <td>无限（减去权利金）</td>
+                        <td>权利金</td>
+                    </tr>
+                    <tr>
+                        <td>备兑开仓</td>
+                        <td>持有ETF，震荡增收</td>
+                        <td>有限（封顶）</td>
+                        <td>ETF下跌风险-权利金</td>
+                    </tr>
+                    <tr>
+                        <td>跨式策略</td>
+                        <td>赌大波动，不确定方向</td>
+                        <td>无限</td>
+                        <td>两份权利金</td>
+                    </tr>
+                    <tr>
+                        <td>牛市价差</td>
+                        <td>温和看涨</td>
+                        <td>有限（封顶）</td>
+                        <td>净权利金</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 测验 -->
+            <div class="quiz-section">
+                <h3>📝 策略测验</h3>
+                
+                <div id="quiz-container">
+                    <p class="quiz-question">1. 持有510300，担心下跌，应该用什么策略？</p>
+                    
+                    <div class="quiz-options" id="quiz1">
+                        <div class="quiz-option" data-answer="correct">A. 保护性看跌（买入Put）</div>
+                        <div class="quiz-option" data-answer="wrong">B. 备兑开仓（卖出Call）</div>
+                        <div class="quiz-option" data-answer="wrong">C. 跨式策略</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">2. 预期即将有大波动但不确定方向，应该用什么策略？</p>
+                    
+                    <div class="quiz-options" id="quiz2">
+                        <div class="quiz-option" data-answer="wrong">A. 牛市价差</div>
+                        <div class="quiz-option" data-answer="correct">B. 跨式策略（同时买Call和Put）</div>
+                        <div class="quiz-option" data-answer="wrong">C. 备兑开仓</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">3. 备兑开仓的主要风险是？</p>
+                    
+                    <div class="quiz-options" id="quiz3">
+                        <div class="quiz-option" data-answer="wrong">A. 权利金亏光</div>
+                        <div class="quiz-option" data-answer="correct">B. 标的暴涨时踏空</div>
+                        <div class="quiz-option" data-answer="wrong">C. 需要追加保证金</div>
+                    </div>
+                </div>
+
+                <div id="quiz-result" style="display: none; margin-top: 1.5rem; text-align: center;">
+                    <p id="quiz-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-nav">
+            <a href="../games/trading-simulator.html" class="nav-btn">← 上一课</a>
+            <a href="../index.html" class="nav-btn">🏠 返回主页</a>
+            <a href="lesson6.html" class="nav-btn">下一课 →</a>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        function showStrategy(id, clickedCard) {
+            // 隐藏所有详情
+            document.querySelectorAll('.strategy-detail').forEach(el => {
+                el.classList.remove('show');
+            });
+            document.querySelectorAll('.strategy-card').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // 显示选中
+            const detail = document.getElementById(id);
+            if (detail) {
+                detail.classList.add('show');
+            }
+            if (clickedCard) {
+                clickedCard.classList.add('active');
+            }
+        }
+
+        // 测验逻辑
+        let correctCount = 0;
+        let answeredCount = 0;
+        const totalQuestions = 3;
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                if (parent.dataset.answered) return;
+                parent.dataset.answered = 'true';
+                
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    } else if (opt === this && !isCorrect) {
+                        opt.classList.add('wrong');
+                    }
+                });
+
+                if (isCorrect) correctCount++;
+                answeredCount++;
+
+                if (answeredCount === totalQuestions) {
+                    const resultDiv = document.getElementById('quiz-result');
+                    const message = document.getElementById('quiz-message');
+                    resultDiv.style.display = 'block';
+                    
+                    if (correctCount === totalQuestions) {
+                        message.innerHTML = '🎉 恭喜！你已掌握常用期权策略！<br><strong>可以去模拟交易实战演练了！</strong>';
+                        message.style.color = 'var(--success)';
+                    } else {
+                        message.innerHTML = `答对了 ${correctCount}/${totalQuestions} 题。建议再复习一下策略适用场景。`;
+                        message.style.color = 'var(--warning)';
+                    }
+                }
+            });
+        });
+    </script>
+    <div style="background: linear-gradient(135deg, #1e3a8a, #3730a3); color: white; text-align: center; padding: 1.5rem; margin-top: 2rem;">
+        <p style="font-weight: 600;">💡 让天下没有难做的期权</p>
+        <p style="font-size: 0.85rem; opacity: 0.8;">关注公众号「300ETF期权实践」获取更多实战策略</p>
+    </div>
+</body>
+</html>

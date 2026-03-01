@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>功能测试</title>
+</head>
+<body>
+    <h1>Lesson5 & Lesson6 功能测试</h1>
+    
+    <h2>Lesson5 策略卡片测试</h2>
+    <div id="test-cards">
+        <div class="card" onclick="showTest('card1', this)" style="padding: 20px; border: 1px solid #ccc; margin: 10px; cursor: pointer;">
+            策略卡片1 - 点击我
+        </div>
+        <div class="card" onclick="showTest('card2', this)" style="padding: 20px; border: 1px solid #ccc; margin: 10px; cursor: pointer;">
+            策略卡片2 - 点击我
+        </div>
+    </div>
+    
+    <div id="card1-detail" style="display: none; padding: 20px; background: #f0f0f0; margin: 10px;">
+        <h3>策略1详情</h3>
+        <p>这是策略1的详细内容</p>
+    </div>
+    
+    <div id="card2-detail" style="display: none; padding: 20px; background: #f0f0f0; margin: 10px;">
+        <h3>策略2详情</h3>
+        <p>这是策略2的详细内容</p>
+    </div>
+    
+    <h2>Lesson6 滑块测试</h2>
+    <div>
+        <label>IV: </label>
+        <input type="range" id="test-iv" min="10" max="50" value="25" oninput="updateTest()">
+        <span id="test-iv-display">25%</span>
+    </div>
+    
+    <div id="test-result" style="padding: 20px; background: #e0e7ff; margin: 10px;">
+        期权价格: ¥680
+    </div>
+    
+    <script>
+        function showTest(id, element) {
+            // 隐藏所有
+            document.querySelectorAll('[id$="-detail"]').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('.card').forEach(el => {
+                el.style.backgroundColor = '';
+            });
+            
+            // 显示选中的
+            const detail = document.getElementById(id + '-detail');
+            if (detail) {
+                detail.style.display = 'block';
+                console.log('显示: ' + id);
+            }
+            if (element) {
+                element.style.backgroundColor = '#e0e7ff';
+            }
+        }
+        
+        function updateTest() {
+            const iv = document.getElementById('test-iv').value;
+            document.getElementById('test-iv-display').textContent = iv + '%';
+            
+            const price = Math.round(400 + iv * 20);
+            document.getElementById('test-result').textContent = '期权价格: ¥' + price;
+            console.log('IV: ' + iv + ', 价格: ' + price);
+        }
+    </script>
+</body>
+</html>

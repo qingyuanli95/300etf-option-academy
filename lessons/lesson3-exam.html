@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三课：风险与盈亏 - 开户考试必过</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">📈 300ETF期权学院</div>
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <span class="lesson-badge">第三课</span>
+            <h1>风险与盈亏：损益特征与计算</h1>
+            <p class="lesson-meta">预计学习时间：25分钟 | 覆盖考试25%分值 | 含计算题</p>
+        </header>
+
+        <div class="lesson-content">
+            <!-- 考试重点提示 -->
+            <div class="concept-box" style="background: #fef3c7; border-left-color: #f59e0b;">
+                <h3>🎯 本课考试重点（必背！）</h3>
+                
+                <ol>
+                    <li>买方：<strong>损失有限（权利金）</strong>，收益<strong>无限（认购）或有限（认沽）</strong></li>
+                    <li>卖方：<strong>收益有限（权利金）</strong>，风险<strong>无限（认购）或较大（认沽）</strong></li>
+                    <li>内在价值 = Max(0, 标的价格 - 行权价) for 认购</li>
+                    <li>时间价值 = 权利金 - 内在价值</li>
+                    <li>盈亏平衡点 = 行权价 ± 权利金（每股）</li>
+                </ol>
+            </div>
+
+            <!-- 买方损益 -->
+            <div class="lesson-section">
+                <h2>📚 考点一：买方损益特征（必考！）</h2>
+                
+                <div class="concept-box" style="background: #e0e7ff;">
+                    <h3>认购期权（看涨）买方</h3>
+                    
+                    <ul>
+                        <li><strong>最大损失</strong>：支付的权利金</li>
+                        <li><strong>最大收益</strong>：<span style="color: #ef4444; font-weight: bold;">理论上无限</span>（标的价格可无限上涨）</li>
+                        <li><strong>盈亏平衡点</strong>：行权价 + 每股权利金</li>
+                    </ul>
+                </div>
+
+                <div class="concept-box" style="background: #d1fae5;">
+                    <h3>认沽期权（看跌）买方</h3>
+                    
+                    <ul>
+                        <li><strong>最大损失</strong>：支付的权利金</li>
+                        <li><strong>最大收益</strong>：<span style="color: #10b981; font-weight: bold;">有限</span>（行权价×合约单位 - 权利金，标的价格最低为0）</li>
+                        <li><strong>盈亏平衡点</strong>：行权价 - 每股权利金</li>
+                    </ul>
+                </div>
+
+                <div class="story-box">
+                    <h3>💡 记忆口诀：买方风险有限</h3>
+                    
+                    <p><strong>"最坏情况亏光权利金"</strong></p>
+                    
+                    <ul>
+                        <li>买认购：赌大涨，涨越多赚越多，理论上无限</li>
+                        <li>买认沽：赌大跌，最多跌到0，收益有限</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 卖方损益 -->
+            <div class="lesson-section">
+                <h2>📚 考点二：卖方损益特征（必考！）</h2>
+                
+                <div class="concept-box" style="background: #fee2e2;">
+                    <h3>认购期权（看涨）卖方</h3>
+                    
+                    <ul>
+                        <li><strong>最大收益</strong>：收取的权利金</li>
+                        <li><strong>最大风险</strong>：<span style="color: #ef4444; font-weight: bold;">理论上无限</span>（标的价格可无限上涨）</li>
+                    </ul>
+                </div>
+
+                <div class="concept-box" style="background: #fef3c7;">
+                    <h3>认沽期权（看跌）卖方</h3>
+                    
+                    <ul>
+                        <li><strong>最大收益</strong>：收取的权利金</li>
+                        <li><strong>最大风险</strong>：<span style="color: #f59e0b; font-weight: bold;">较大</span>（行权价×合约单位 - 权利金，标的价格最低为0）</li>
+                    </ul>
+                </div>
+
+                <div class="story-box">
+                    <h3>💡 记忆口诀：卖方收益有限、风险巨大</h3>
+                    
+                    <p><strong>"最好情况赚光权利金，最坏情况血本无归"</strong></p>
+                    
+                    <ul>
+                        <li>卖认购：赌不涨/小涨，但万一暴涨，损失无限</li>
+                        <li>卖认沽：赌不跌/小跌，但万一暴跌，损失很大</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 内在价值与时间价值 -->
+            <div class="lesson-section">
+                <h2>📚 考点三：内在价值与时间价值（必考！）</h2>
+                
+                <div class="concept-box">
+                    <h3>内在价值（Intrinsic Value）</h3>
+                    
+                    <p>期权立即行权可以获得的收益。</p>
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0; font-family: monospace;">
+                        <p><strong>认购期权内在价值</strong> = Max(0, 标的价格 - 行权价)</p>
+                        <p><strong>认沽期权内在价值</strong> = Max(0, 行权价 - 标的价格)</p>
+                    </div>
+                    
+                    <ul>
+                        <li><strong>实值期权</strong>：内在价值 > 0（标的价格 > 行权价 for 认购）</li>
+                        <li><strong>平值期权</strong>：内在价值 = 0（标的价格 ≈ 行权价）</li>
+                        <li><strong>虚值期权</strong>：内在价值 = 0（标的价格 < 行权价 for 认购）</li>
+                    </ul>
+                </div>
+
+                <div class="concept-box">
+                    <h3>时间价值（Time Value）</h3>
+                    
+                    <p>权利金中超出内在价值的部分，反映期权到期前标的价格波动带来的潜在收益。</p>
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0; font-family: monospace;">
+                        <p><strong>时间价值</strong> = 权利金 - 内在价值</p>
+                    </div>
+                    
+                    <ul>
+                        <li><strong>到期日临近</strong>：时间价值加速衰减（Theta风险）</li>
+                        <li><strong>到期日当天</strong>：时间价值 = 0</li>
+                    </ul>
+                </div>
+
+                <div class="concept-box" style="background: #e0e7ff;">
+                    <h3>计算示例</h3>
+                    
+                    <p><strong>510300购4月4000</strong>，权利金680元，510300现价4.100元：</p>
+                    
+                    <ul>
+                        <li>内在价值 = (4.100 - 4.000) × 10000 = <strong>1000元</strong></li>
+                        <li>时间价值 = 680 - 1000 = <strong>-320元？不对！</strong></li>
+                    </ul>
+                    
+                    <p>等等，这个例子有问题！如果内在价值（1000元）已经大于权利金（680元），这个期权被低估了。</p>
+                    
+                    <p><strong>正确示例</strong>：权利金1500元：</p>
+                    
+                    <ul>
+                        <li>内在价值 = 1000元</li>
+                        <li>时间价值 = 1500 - 1000 = <strong>500元</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 盈亏计算 -->
+            <div class="lesson-section">
+                <h2>📚 考点四：盈亏计算（计算题必考！）</h2>
+                
+                <div class="concept-box">
+                    <h3>认购期权买方盈亏</h3>
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0; font-family: monospace;">
+                        <p><strong>盈亏</strong> = (标的价格 - 行权价) × 合约单位 - 权利金</p>
+                        <p>（当标的价格 > 行权价时）</p>
+                    </div>
+                    
+                    <p><strong>盈亏平衡点</strong> = 行权价 + (权利金/合约单位)</p>
+                </div>
+
+                <div class="concept-box">
+                    <h3>认沽期权买方盈亏</h3>
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0; font-family: monospace;">
+                        <p><strong>盈亏</strong> = (行权价 - 标的价格) × 合约单位 - 权利金</p>
+                        <p>（当标的价格 < 行权价时）</p>
+                    </div>
+                    
+                    <p><strong>盈亏平衡点</strong> = 行权价 - (权利金/合约单位)</p>
+                </div>
+
+                <div class="story-box">
+                    <h3>📝 计算题示例</h3>
+                    
+                    <p><strong>题目</strong>：投资者买入1手510300购4月4000，支付权利金1200元。到期日510300价格为4.150元，求盈亏。</p>
+                    
+                    <p><strong>解答</strong>：</p>
+                    
+                    <ol>
+                        <li>行权收益 = (4.150 - 4.000) × 10000 = 1500元</li>
+                        <li>净盈亏 = 1500 - 1200 = <strong>+300元</strong></li>
+                        <li>盈亏平衡点 = 4.000 + (1200/10000) = <strong>4.120元</strong></li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- 考试真题 -->
+            <div class="lesson-section">
+                <h2>📝 开户考试真题练习</h2>
+                
+                <div class="quiz-section">
+                    <p class="quiz-question">1. 【单选】认购期权买方最大收益为____，最大损失为____。</p>
+                    
+                    <div class="quiz-options" id="q1">
+                        <div class="quiz-option" data-answer="correct">A. 无限；权利金</div>
+                        <div class="quiz-option" data-answer="wrong">B. 权利金；无限</div>
+                        <div class="quiz-option" data-answer="wrong">C. 无限；无限</div>
+                        <div class="quiz-option" data-answer="wrong">D. 权利金；权利金</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">2. 【单选】认沽期权卖方最大风险为____。</p>
+                    
+                    <div class="quiz-options" id="q2">
+                        <div class="quiz-option" data-answer="wrong">A. 无限</div>
+                        <div class="quiz-option" data-answer="correct">B. 较大（行权价×合约单位 - 权利金）</div>
+                        <div class="quiz-option" data-answer="wrong">C. 权利金</div>
+                        <div class="quiz-option" data-answer="wrong">D. 0</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">3. 【计算】投资者买入1手510300购4月4000，权利金800元。到期日510300价格为4.120元，盈亏为____元。</p>
+                    
+                    <div class="quiz-options" id="q3">
+                        <div class="quiz-option" data-answer="wrong">A. +800</div>
+                        <div class="quiz-option" data-answer="correct">B. +400</div>
+                        <div class="quiz-option" data-answer="wrong">C. -400</div>
+                        <div class="quiz-option" data-answer="wrong">D. -800</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">4. 【单选】期权的时间价值是指____。</p>
+                    
+                    <div class="quiz-options" id="q4">
+                        <div class="quiz-option" data-answer="wrong">A. 权利金 + 内在价值</div>
+                        <div class="quiz-option" data-answer="correct">B. 权利金 - 内在价值</div>
+                        <div class="quiz-option" data-answer="wrong">C. 内在价值 - 权利金</div>
+                        <div class="quiz-option" data-answer="wrong">D. 标的价格 - 行权价</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">5. 【判断】认购期权买方盈亏平衡点 = 行权价 - 权利金。（ ）</p>
+                    
+                    <div class="quiz-options" id="q5">
+                        <div class="quiz-option" data-answer="wrong">A. 正确</div>
+                        <div class="quiz-option" data-answer="correct">B. 错误（应为行权价 + 权利金）</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">6. 【多选】关于期权卖方，以下说法正确的是（ ）。</p>
+                    
+                    <div class="quiz-options" id="q6">
+                        <div class="quiz-option" data-answer="correct">A. 最大收益为权利金</div>
+                        <div class="quiz-option" data-answer="correct">B. 认购期权卖方风险理论上无限</div>
+                        <div class="quiz-option" data-answer="wrong">C. 最大损失为权利金</div>
+                        <div class="quiz-option" data-answer="correct">D. 认沽期权卖方风险较大（非无限）</div>
+                    </div>
+                </div>
+
+                <div id="quiz-result" style="display: none; margin-top: 1.5rem; padding: 1.5rem; background: #e0e7ff; border-radius: 12px; text-align: center;">
+                    <p id="quiz-score" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;"></p>
+                    <p id="quiz-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-nav">
+            <a href="lesson2-exam.html" class="nav-btn">← 上一课</a>
+            <a href="lesson4-exam.html" class="nav-btn">下一课：策略 →</a>
+        </div>
+    </div>
+
+    <script>
+        // 测验逻辑
+        let correctCount = 0;
+        let answeredCount = 0;
+        const totalQuestions = 6;
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                if (parent.dataset.answered) return;
+                parent.dataset.answered = 'true';
+                
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    } else if (opt === this && !isCorrect) {
+                        opt.classList.add('wrong');
+                    }
+                });
+
+                if (isCorrect) correctCount++;
+                answeredCount++;
+
+                if (answeredCount === totalQuestions) {
+                    const resultDiv = document.getElementById('quiz-result');
+                    const scoreEl = document.getElementById('quiz-score');
+                    const message = document.getElementById('quiz-message');
+                    resultDiv.style.display = 'block';
+                    
+                    const score = Math.round(correctCount / totalQuestions * 100);
+                    scoreEl.textContent = `得分：${correctCount}/${totalQuestions}（${score}分）`;
+                    
+                    if (score >= 80) {
+                        message.innerHTML = '🎉 优秀！你已掌握风险与盈亏考点！<br><strong>继续下一课学习！</strong>';
+                        message.style.color = 'var(--success)';
+                    } else if (score >= 60) {
+                        message.innerHTML = '⚠️ 及格，但计算题需要多练习。<br>建议重新做一遍计算题。';
+                        message.style.color = 'var(--warning)';
+                    } else {
+                        message.innerHTML = '❌ 需要加强！<br>请重新学习本课"损益特征"部分。';
+                        message.style.color = 'var(--danger)';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

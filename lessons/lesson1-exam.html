@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第一课：期权基础 - 开户考试必过</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">📈 300ETF期权学院</div>
+        <div class="nav-links">
+            <a href="../index.html">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <span class="lesson-badge">第一课</span>
+            <h1>期权基础：开户考试必考点</h1>
+            <p class="lesson-meta">预计学习时间：20分钟 | 覆盖考试30%分值</p>
+        </header>
+
+        <div class="lesson-content">
+            <!-- 考试重点提示 -->
+            <div class="concept-box" style="background: #fef3c7; border-left-color: #f59e0b;">
+                <h3>🎯 本课考试重点（必背！）</h3>
+                <ol>
+                    <li>期权是<strong>权利</strong>而非义务，买方有权利、卖方有义务</li>
+                    <li>认购期权=看涨，认沽期权=看跌</li>
+                    <li>510300合约单位=<strong>10000份</strong></li>
+                    <li>行权日=<strong>到期月份第四个周三</strong></li>
+                    <li>ETF期权是<strong>欧式期权</strong>（仅到期日行权）</li>
+                </ol>
+            </div>
+
+            <!-- 期权定义 -->
+            <div class="lesson-section">
+                <h2>📚 考点一：期权定义（考试必考）</h2>
+                
+                <div class="concept-box">
+                    <h3>什么是期权？</h3>
+                    <p><strong>期权</strong>是指期权合约买方<strong>有权</strong>在约定时间以约定价格买入或卖出约定标的证券的标准化合约。</p>
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <p><strong>关键：买方有"权利"，卖方有"义务"</strong></p>
+                        <ul>
+                            <li><strong>买方（权利方）</strong>：支付权利金，获得选择权（可以行权，也可以放弃）</li>
+                            <li><strong>卖方（义务方）</strong>：收取权利金，必须履行义务（买方行权时必须配合）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="story-box">
+                    <h3>💡 记忆技巧：买房定金</h3>
+                    <p>小王买期房交了2万定金（权利金），约定明年可以按100万买房（行权价）。</p>
+                    <ul>
+                        <li>小王（买方）：有权买，也可以不买（放弃）</li>
+                        <li>开发商（卖方）：必须卖，如果小王要买的话</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 期权分类 -->
+            <div class="lesson-section">
+                <h2>📚 考点二：期权分类（考试必考）</h2>
+                
+                <table class="compare-table">
+                    <tr>
+                        <th>分类维度</th>
+                        <th>类型</th>
+                        <th>含义</th>
+                        <th>510300合约</th>
+                    </tr>
+                    <tr>
+                        <td rowspan="2"><strong>按权利分类</strong></td>
+                        <td>认购期权（Call）</td>
+                        <td>买入标的的权利</td>
+                        <td>510300<strong>购</strong>4月4000</td>
+                    </tr>
+                    <tr>
+                        <td>认沽期权（Put）</td>
+                        <td>卖出标的的权利</td>
+                        <td>510300<strong>沽</strong>4月4000</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2"><strong>按行权时间</strong>（考点！）</td>
+                        <td>美式期权</td>
+                        <td>到期前<strong>任意交易日</strong>可行权</td>
+                        <td>个股期权（美股）</td>
+                    </tr>
+                    <tr style="background: #e0e7ff;">
+                        <td><strong>欧式期权</strong></td>
+                        <td><strong>仅到期日</strong>可行权</td>
+                        <td><strong>510300 ETF期权</strong></td>
+                    </tr>
+                </table>
+
+                <div class="concept-box" style="background: #fee2e2; border-left-color: #ef4444;">
+                    <h3>⚠️ 考试陷阱！</h3>
+                    <p><strong>510300 ETF期权是欧式期权！</strong>只能在到期日行权，不能提前行权！</p>
+                    <p>但<strong>可以在到期前平仓</strong>（卖出买入的合约，或买入平仓卖出的合约）。</p>
+                </div>
+            </div>
+
+            <!-- 合约要素 -->
+            <div class="lesson-section">
+                <h2>📚 考点三：510300合约要素（考试必背）</h2>
+                
+                <div class="concept-box">
+                    <h3>合约代码解读：510300购4月4000</h3>
+                    
+                    <table class="compare-table">
+                        <tr>
+                            <th>要素</th>
+                            <th>含义</th>
+                            <th>考试重点</th>
+                        </tr>
+                        <tr>
+                            <td>510300</td>
+                            <td>标的：华泰柏瑞沪深300ETF</td>
+                            <td>-</td>
+                        </tr>
+                        <tr style="background: #fef3c7;">
+                            <td><strong>购/沽</strong></td>
+                            <td>认购（看涨）/认沽（看跌）</td>
+                            <td><strong>必考</strong></td>
+                        </tr>
+                        <tr>
+                            <td>4月</td>
+                            <td>到期月份</td>
+                            <td>-</td>
+                        </tr>
+                        <tr style="background: #fef3c7;">
+                            <td><strong>4000</strong></td>
+                            <td>行权价：4.000元/份</td>
+                            <td><strong>注意单位</strong></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="concept-box" style="background: #d1fae5;">
+                    <h3>🔢 关键数字（必背！）</h3>
+                    
+                    <ul>
+                        <li><strong>合约单位</strong>：<span style="color: #ef4444; font-size: 1.3em;">10000份</span></li>
+                        <li><strong>行权日</strong>：<span style="color: #ef4444; font-size: 1.3em;">到期月份第四个周三</span></li>
+                        <li><strong>到期月份</strong>：当月、下月及随后两个季月（3/6/9/12月）</li>
+                        <li><strong>行权方式</strong>：欧式（仅到期日行权）</li>
+                        <li><strong>交割方式</strong>：实物交割（ETF份额）</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 考试真题 -->
+            <div class="lesson-section">
+                <h2>📝 开户考试真题练习</h2>
+                
+                <div class="quiz-section">
+                    <p class="quiz-question">1. 【单选】期权合约买方拥有的是____，卖方承担的是____。</p>
+                    
+                    <div class="quiz-options" id="q1">
+                        <div class="quiz-option" data-answer="correct">A. 权利；义务</div>
+                        <div class="quiz-option" data-answer="wrong">B. 义务；权利</div>
+                        <div class="quiz-option" data-answer="wrong">C. 权利；权利</div>
+                        <div class="quiz-option" data-answer="wrong">D. 义务；义务</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">2. 【单选】510300 ETF期权的合约单位是____。</p>
+                    
+                    <div class="quiz-options" id="q2">
+                        <div class="quiz-option" data-answer="wrong">A. 1000份</div>
+                        <div class="quiz-option" data-answer="correct">B. 10000份</div>
+                        <div class="quiz-option" data-answer="wrong">C. 100份</div>
+                        <div class="quiz-option" data-answer="wrong">D. 5000份</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">3. 【单选】ETF期权（如510300）的行权方式是____。</p>
+                    
+                    <div class="quiz-options" id="q3">
+                        <div class="quiz-option" data-answer="wrong">A. 美式（到期前任意时间可行权）</div>
+                        <div class="quiz-option" data-answer="correct">B. 欧式（仅到期日行权）</div>
+                        <div class="quiz-option" data-answer="wrong">C. 百慕大式</div>
+                        <div class="quiz-option" data-answer="wrong">D. 大西洋式</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">4. 【单选】510300购4月4000合约，"4000"表示____。</p>
+                    
+                    <div class="quiz-options" id="q4">
+                        <div class="quiz-option" data-answer="wrong">A. 合约代码</div>
+                        <div class="quiz-option" data-answer="wrong">B. 权利金4000元</div>
+                        <div class="quiz-option" data-answer="correct">C. 行权价4.000元/份</div>
+                        <div class="quiz-option" data-answer="wrong">D. 合约数量4000份</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">5. 【判断】认购期权买方有权在到期日买入标的，认沽期权买方有权在到期日卖出标的。（ ）</p>
+                    
+                    <div class="quiz-options" id="q5">
+                        <div class="quiz-option" data-answer="correct">A. 正确</div>
+                        <div class="quiz-option" data-answer="wrong">B. 错误</div>
+                    </div>
+
+                    <p class="quiz-question" style="margin-top: 2rem;">6. 【单选】ETF期权的行权日是____。</p>
+                    
+                    <div class="quiz-options" id="q6">
+                        <div class="quiz-option" data-answer="wrong">A. 每月第一个周五</div>
+                        <div class="quiz-option" data-answer="wrong">B. 每月15日</div>
+                        <div class="quiz-option" data-answer="correct">C. 到期月份第四个周三</div>
+                        <div class="quiz-option" data-answer="wrong">D. 每月最后一个交易日</div>
+                    </div>
+                </div>
+
+                <div id="quiz-result" style="display: none; margin-top: 1.5rem; padding: 1.5rem; background: #e0e7ff; border-radius: 12px; text-align: center;">
+                    <p id="quiz-score" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;"></p>
+                    <p id="quiz-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-nav">
+            <a href="#" class="nav-btn disabled" style="opacity: 0.5; cursor: not-allowed;">← 上一课</a>
+            <a href="../index.html" class="nav-btn">🏠 返回主页</a>
+            <a href="lesson2.html" class="nav-btn">下一课：交易规则 →</a>
+        </div>
+    </div>
+
+    <script>
+        // 测验逻辑
+        let correctCount = 0;
+        let answeredCount = 0;
+        const totalQuestions = 6;
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                if (parent.dataset.answered) return;
+                parent.dataset.answered = 'true';
+                
+                parent.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    } else if (opt === this && !isCorrect) {
+                        opt.classList.add('wrong');
+                    }
+                });
+
+                if (isCorrect) correctCount++;
+                answeredCount++;
+
+                if (answeredCount === totalQuestions) {
+                    const resultDiv = document.getElementById('quiz-result');
+                    const scoreEl = document.getElementById('quiz-score');
+                    const message = document.getElementById('quiz-message');
+                    resultDiv.style.display = 'block';
+                    
+                    const score = Math.round(correctCount / totalQuestions * 100);
+                    scoreEl.textContent = `得分：${correctCount}/${totalQuestions}（${score}分）`;
+                    
+                    if (score >= 80) {
+                        message.innerHTML = '🎉 优秀！你已掌握第一课考点！<br><strong>继续下一课学习！</strong>';
+                        message.style.color = 'var(--success)';
+                    } else if (score >= 60) {
+                        message.innerHTML = '⚠️ 及格，但还有提升空间。<br>建议复习红色标记的必背考点。';
+                        message.style.color = 'var(--warning)';
+                    } else {
+                        message.innerHTML = '❌ 需要加强！<br>请重新学习本课"考试重点"部分。';
+                        message.style.color = 'var(--danger)';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
