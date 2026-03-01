@@ -15,7 +15,6 @@
             line-height: 1.6;
         }
         
-        /* 导航栏 */
         .navbar {
             position: fixed;
             top: 0;
@@ -68,13 +67,11 @@
             50% { opacity: 0.7; }
         }
         
-        /* 主内容 */
         .container {
             padding: 72px 16px 120px;
             max-width: 100%;
         }
         
-        /* 进度条 */
         .progress-section {
             background: white;
             padding: 16px;
@@ -104,7 +101,6 @@
             transition: width 0.3s;
         }
         
-        /* 题目卡片 */
         .question-card {
             background: white;
             border-radius: 16px;
@@ -131,17 +127,6 @@
             line-height: 1.7;
         }
         
-        .question-type {
-            display: inline-block;
-            background: #f3f4f6;
-            color: #6b7280;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            margin-left: 8px;
-        }
-        
-        /* 选项 */
         .options-list {
             list-style: none;
         }
@@ -211,7 +196,6 @@
             font-size: 0.95rem;
         }
         
-        /* 解析 */
         .explanation {
             margin-top: 16px;
             padding: 16px;
@@ -237,7 +221,6 @@
             line-height: 1.7;
         }
         
-        /* 底部操作栏 */
         .action-bar {
             position: fixed;
             bottom: 0;
@@ -282,53 +265,6 @@
             color: white;
         }
         
-        /* 题号导航 */
-        .question-nav {
-            position: fixed;
-            bottom: 80px;
-            left: 16px;
-            right: 16px;
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-            max-height: 200px;
-            overflow-y: auto;
-            display: none;
-            z-index: 998;
-        }
-        
-        .question-nav.show {
-            display: block;
-        }
-        
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 8px;
-        }
-        
-        .nav-item {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f3f4f6;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-        
-        .nav-item.answered {
-            background: #6366f1;
-            color: white;
-        }
-        
-        .nav-item.current {
-            border: 2px solid #6366f1;
-        }
-        
-        /* 结果页面 */
         .result-container {
             display: none;
             padding: 72px 16px;
@@ -393,7 +329,74 @@
             border-bottom: none;
         }
         
-        /* 桌面端 */
+        .start-screen {
+            padding: 72px 16px;
+            text-align: center;
+        }
+        
+        .start-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .start-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .start-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .start-desc {
+            color: #6b7280;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+        
+        .exam-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .exam-info-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+        }
+        
+        .exam-info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6366f1;
+        }
+        
+        .exam-info-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        
+        .btn-start-exam {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
         @media (min-width: 768px) {
             .container {
                 max-width: 800px;
@@ -405,26 +408,55 @@
                 left: 50%;
                 transform: translateX(-50%);
             }
-            
-            .question-nav {
-                max-width: 600px;
-                left: 50%;
-                transform: translateX(-50%);
-            }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
     <nav class="navbar">
         <a href="exam-zone.html" class="nav-back">←</a>
         <span class="nav-title">模拟考试</span>
         <span class="timer" id="timer">30:00</span>
     </nav>
     
+    <!-- 开始页面 -->
+    <div class="start-screen" id="startScreen">
+        <div class="start-card">
+            <div class="start-icon">📝</div>
+            <h1 class="start-title">期权知识测试模拟</h1>
+            <p class="start-desc"></p>
+            <div class="exam-info-grid">
+                <div class="exam-info-item">
+                    <div class="exam-info-value">30</div>
+                    <div class="exam-info-label">题目数量</div>
+                </div>
+                <div class="exam-info-item">
+                    <div class="exam-info-value">30</div>
+                    <div class="exam-info-label">考试时长(分钟)</div>
+                </div>
+                <div class="exam-info-item">
+                    <div class="exam-info-value">80</div>
+                    <div class="exam-info-label">及格分数</div>
+                </div>
+            </div>
+            
+            <button class="btn-start-exam" onclick="startExam()">开始考试</button>
+        </div>
+        
+        <div style="background: white; border-radius: 16px; padding: 20px; text-align: left;">
+            <h3 style="margin-bottom: 16px;">📋 考试说明</h3>
+            <ul style="color: #6b7280; line-height: 2; padding-left: 20px;">
+                <li>本次考试从题库中随机抽取30道题目</li>
+                <li>题型包括单选题、多选题和判断题</li>
+                <li>满分100分，80分及格</li>
+                <li>考试时间30分钟，超时自动交卷</li>
+                <li>可随时返回修改答案</li>
+                <li>交卷后可查看答案解析</li>
+            </ul>
+        </div>
+    </div>
+    
     <!-- 考试界面 -->
-    <div class="container" id="examContainer">
-        <!-- 进度 -->
+    <div class="container" id="examContainer" style="display: none;">
         <div class="progress-section">
             <div class="progress-info">
                 <span>答题进度</span>
@@ -435,7 +467,6 @@
             </div>
         </div>
         
-        <!-- 题目区域 -->
         <div id="questionArea"></div>
     </div>
     
@@ -466,280 +497,158 @@
         <button class="btn btn-prev" onclick="location.href='exam-zone.html'" style="margin-top: 12px;">返回考试专区</button>
     </div>
     
-    <!-- 题号导航 -->
-    <div class="question-nav" id="questionNav">
-        <div class="nav-grid" id="navGrid"></div>
-    </div>
-    
     <!-- 底部操作栏 -->
-    <div class="action-bar" id="actionBar">
+    <div class="action-bar" id="actionBar" style="display: none;">
         <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()">上一题</button>
         <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">下一题</button>
         <button class="btn btn-submit" id="submitBtn" onclick="submitExam()" style="display: none;">提交试卷</button>
     </div>
     
     <script>
-        // 考试题库（30题）
-        const questions = [
-            {
-                id: 1,
-                type: '单选',
-                question: '期权是一种（），它赋予买方在约定时间以约定价格买入或卖出标的资产的权利。',
-                options: ['权利', '义务', '合约', '承诺'],
-                answer: 2,
-                explanation: '期权是一种合约，它赋予买方在约定时间以约定价格买入或卖出标的资产的权利，但买方不承担必须买入或卖出的义务。'
-            },
-            {
-                id: 2,
-                type: '单选',
-                question: '认购期权（Call Option）赋予买方（）。',
-                options: ['以约定价格卖出标的资产的权利', '以约定价格买入标的资产的权利', '必须买入标的资产的义务', '必须卖出标的资产的义务'],
-                answer: 1,
-                explanation: '认购期权（Call Option）赋予买方以约定价格买入标的资产的权利，买方有权选择是否行权。'
-            },
-            {
-                id: 3,
-                type: '单选',
-                question: '认沽期权（Put Option）赋予买方（）。',
-                options: ['以约定价格买入标的资产的权利', '以约定价格卖出标的资产的权利', '必须买入标的资产的义务', '必须卖出标的资产的义务'],
-                answer: 1,
-                explanation: '认沽期权（Put Option）赋予买方以约定价格卖出标的资产的权利。'
-            },
-            {
-                id: 4,
-                type: '单选',
-                question: '期权买方支付（）给卖方以获得期权合约赋予的权利。',
-                options: ['保证金', '权利金', '手续费', '印花税'],
-                answer: 1,
-                explanation: '期权买方支付权利金（Premium）给卖方，以获得期权合约赋予的权利。权利金是买方为获得权利而支付的对价。'
-            },
-            {
-                id: 5,
-                type: '单选',
-                question: '期权卖方收取权利金后，（）。',
-                options: ['没有任何义务', '承担履行合约的义务', '可以随时反悔', '只承担部分义务'],
-                answer: 1,
-                explanation: '期权卖方收取权利金后，承担履行合约的义务。当买方选择行权时，卖方必须履行合约。'
-            },
-            {
-                id: 6,
-                type: '单选',
-                question: '沪深300ETF期权的标的是（）。',
-                options: ['沪深300指数', '华泰柏瑞沪深300ETF（510300）', '嘉实沪深300ETF（159919）', '以上都是'],
-                answer: 3,
-                explanation: '沪深300ETF期权有两个品种：上交所的华泰柏瑞沪深300ETF期权（标的510300）和深交所的嘉实沪深300ETF期权（标的159919）。'
-            },
-            {
-                id: 7,
-                type: '单选',
-                question: '期权合约要素不包括（）。',
-                options: ['标的资产', '行权价格', '交易价格', '到期日'],
-                answer: 2,
-                explanation: '期权合约要素包括：标的资产、行权价格、到期日、合约单位、权利金等。交易价格（权利金）是市场交易形成的，不是合约固定要素。'
-            },
-            {
-                id: 8,
-                type: '单选',
-                question: '欧式期权只能在（）行权。',
-                options: ['到期日当天', '到期日前任何交易日', '到期日后10天内', '任何时间'],
-                answer: 0,
-                explanation: '欧式期权只能在到期日当天行权，而美式期权可以在到期日前任何交易日行权。沪深300ETF期权是欧式期权。'
-            },
-            {
-                id: 9,
-                type: '单选',
-                question: '当标的资产价格 > 行权价格时，认购期权处于（）。',
-                options: ['实值状态', '平值状态', '虚值状态', '无效状态'],
-                answer: 0,
-                explanation: '对于认购期权：标的价格 > 行权价为实值；标的价格 = 行权价为平值；标的价格 < 行权价为虚值。'
-            },
-            {
-                id: 10,
-                type: '单选',
-                question: '当标的资产价格 < 行权价格时，认沽期权处于（）。',
-                options: ['实值状态', '平值状态', '虚值状态', '无效状态'],
-                answer: 0,
-                explanation: '对于认沽期权：标的价格 < 行权价为实值；标的价格 = 行权价为平值；标的价格 > 行权价为虚值。'
-            },
-            {
-                id: 11,
-                type: '单选',
-                question: '期权的内在价值（）。',
-                options: ['总是大于零', '总是小于零', '可以为零', '等于权利金'],
-                answer: 2,
-                explanation: '期权的内在价值可以为正（实值期权）、为零（平值或虚值期权），但不会为负。内在价值+时间价值=权利金。'
-            },
-            {
-                id: 12,
-                type: '单选',
-                question: '期权的时间价值随着到期日临近（）。',
-                options: ['增加', '减少', '不变', '先增后减'],
-                answer: 1,
-                explanation: '期权的时间价值随着到期日临近而衰减，这种现象称为时间价值的衰减或"时间损耗"。到期日当天时间价值归零。'
-            },
-            {
-                id: 13,
-                type: '单选',
-                question: '期权交易的四种基本操作是（）。',
-                options: ['买入开仓、买入平仓、卖出开仓、卖出平仓', '买入看涨、买入看跌、卖出看涨、卖出看跌', '开仓、平仓、行权、放弃', '认购、认沽、实值、虚值'],
-                answer: 0,
-                explanation: '期权交易的四种基本操作：买入开仓（建立买方头寸）、买入平仓（了结卖方头寸）、卖出开仓（建立卖方头寸）、卖出平仓（了结买方头寸）。'
-            },
-            {
-                id: 14,
-                type: '单选',
-                question: '期权卖方需要缴纳（）。',
-                options: ['权利金', '保证金', '手续费', '以上都要'],
-                answer: 1,
-                explanation: '期权卖方需要缴纳保证金作为履约担保。买方支付权利金，不需要缴纳保证金。'
-            },
-            {
-                id: 15,
-                type: '单选',
-                question: '沪深300ETF期权合约单位是（）。',
-                options: ['100份', '1000份', '10000份', '由交易所规定'],
-                answer: 2,
-                explanation: '沪深300ETF期权合约单位是10000份，即每张期权合约对应10000份ETF基金份额。'
-            },
-            {
-                id: 16,
-                type: '单选',
-                question: '期权买方最大损失为（）。',
-                options: ['无限大', '权利金', '保证金', '标的资产价值'],
-                answer: 1,
-                explanation: '期权买方的最大损失是已支付的权利金。买方的风险有限，收益潜力（认购）无限或（认沽）较大。'
-            },
-            {
-                id: 17,
-                type: '单选',
-                question: '认购期权卖方最大损失为（）。',
-                options: ['权利金', '无限大', '行权价', '零'],
-                answer: 1,
-                explanation: '认购期权卖方最大损失理论上是无限的，因为标的资产价格上涨没有上限。卖方收取有限权利金，承担无限风险。'
-            },
-            {
-                id: 18,
-                type: '单选',
-                question: '认沽期权卖方最大损失为（）。',
-                options: ['权利金', '无限大', '行权价-标的资产价格', '行权价'],
-                answer: 3,
-                explanation: '认沽期权卖方最大损失为行权价（当标的资产价格跌至零时）。虽然有限，但可能很大。'
-            },
-            {
-                id: 19,
-                type: '单选',
-                question: '备兑开仓策略是指（）。',
-                options: ['持有标的资产并卖出认购期权', '持有标的资产并买入认沽期权', '卖出认购期权并买入认沽期权', '买入认购期权并卖出认沽期权'],
-                answer: 0,
-                explanation: '备兑开仓策略是指持有标的资产（如ETF）的同时，卖出该标的的认购期权，通过收取权利金增强收益。'
-            },
-            {
-                id: 20,
-                type: '单选',
-                question: '保险策略是指（）。',
-                options: ['持有标的资产并卖出认购期权', '持有标的资产并买入认沽期权', '卖出认购期权并买入认沽期权', '买入认购期权并卖出认沽期权'],
-                answer: 1,
-                explanation: '保险策略是指持有标的资产的同时，买入该标的的认沽期权，为标的资产价格下跌提供保护，类似购买保险。'
-            },
-            {
-                id: 21,
-                type: '单选',
-                question: '期权的杠杆效应体现在（）。',
-                options: ['用少量资金控制较大价值的标的', '没有杠杆', '杠杆比期货小', '只存在于买方'],
-                answer: 0,
-                explanation: '期权具有杠杆效应，买方只需支付少量权利金，就能控制较大价值的标的资产，放大收益和风险。'
-            },
-            {
-                id: 22,
-                type: '单选',
-                question: '波动率上升时，期权价格（）。',
-                options: ['上升', '下降', '不变', '不确定'],
-                answer: 0,
-                explanation: '波动率是影响期权价格的重要因素。波动率上升意味着标的资产价格变动幅度可能增大，期权买方获利机会增加，因此期权价格上升。'
-            },
-            {
-                id: 23,
-                type: '单选',
-                question: '认购期权的盈亏平衡点为（）。',
-                options: ['行权价', '行权价+权利金', '行权价-权利金', '权利金'],
-                answer: 1,
-                explanation: '认购期权的盈亏平衡点 = 行权价 + 权利金。当标的价格超过此价格时，买方开始盈利。'
-            },
-            {
-                id: 24,
-                type: '单选',
-                question: '认沽期权的盈亏平衡点为（）。',
-                options: ['行权价', '行权价+权利金', '行权价-权利金', '权利金'],
-                answer: 2,
-                explanation: '认沽期权的盈亏平衡点 = 行权价 - 权利金。当标的价格低于此价格时，买方开始盈利。'
-            },
-            {
-                id: 25,
-                type: '单选',
-                question: '期权合约到期日为到期月份的（）。',
-                options: ['第一个星期三', '第二个星期三', '第三个星期三', '第四个星期三'],
-                answer: 3,
-                explanation: '沪深300ETF期权合约到期日为到期月份的第四个星期三（遇法定节假日顺延）。'
-            },
-            {
-                id: 26,
-                type: '单选',
-                question: '期权买方行权后，（）。',
-                options: ['立即获得收益', '需要缴纳保证金', '获得标的资产头寸', '自动平仓'],
-                answer: 2,
-                explanation: '期权买方行权后，获得相应的标的资产头寸（认购行权获得标的资产多头，认沽行权获得标的资产空头）。'
-            },
-            {
-                id: 27,
-                type: '单选',
-                question: '深度实值期权的时间价值（）。',
-                options: ['很大', '很小或为零', '等于平值期权', '不确定'],
-                answer: 1,
-                explanation: '深度实值期权的时间价值通常很小或接近零，因为内在价值占主导，时间价值占比很小。'
-            },
-            {
-                id: 28,
-                type: '单选',
-                question: '平值期权的时间价值（）。',
-                options: ['最小', '最大', '为零', '不确定'],
-                answer: 1,
-                explanation: '平值期权的时间价值通常最大，因为标的价格接近行权价时，未来变为实值或虚值的不确定性最大。'
-            },
-            {
-                id: 29,
-                type: '单选',
-                question: '期权的Delta表示（）。',
-                options: ['期权价格对标的资产价格的敏感度', '期权价格对时间的敏感度', '期权价格对波动率的敏感度', '期权价格对利率的敏感度'],
-                answer: 0,
-                explanation: 'Delta表示期权价格对标的资产价格变动的敏感度，即标的价格变动1元时期权价格变动的金额。'
-            },
-            {
-                id: 30,
-                type: '单选',
-                question: '个人投资者参与期权交易，需要满足的条件不包括（）。',
-                options: ['开户满6个月', '具备期权基础知识', '具有相应的风险承受能力', '必须具有期货实盘交易经验'],
-                answer: 3,
-                explanation: '个人投资者参与期权交易需要满足：开户满6个月、具备期权基础知识、通过交易所认可的知识测试、具有相应的风险承受能力等。但不要求必须有期货实盘交易经验。'
-            }
+        // 大题库（100题）
+        const questionBank = [
+            // 期权基础概念 (1-25)
+            { id: 1, type: '单选', question: '期权是一种（），它赋予买方在约定时间以约定价格买入或卖出标的资产的权利。', options: ['权利', '义务', '合约', '承诺'], answer: 2, explanation: '期权是一种合约，它赋予买方在约定时间以约定价格买入或卖出标的资产的权利，但买方不承担必须买入或卖出的义务。' },
+            { id: 2, type: '单选', question: '认购期权（Call Option）赋予买方（）。', options: ['以约定价格卖出标的资产的权利', '以约定价格买入标的资产的权利', '必须买入标的资产的义务', '必须卖出标的资产的义务'], answer: 1, explanation: '认购期权（Call Option）赋予买方以约定价格买入标的资产的权利，买方有权选择是否行权。' },
+            { id: 3, type: '单选', question: '认沽期权（Put Option）赋予买方（）。', options: ['以约定价格买入标的资产的权利', '以约定价格卖出标的资产的权利', '必须买入标的资产的义务', '必须卖出标的资产的义务'], answer: 1, explanation: '认沽期权（Put Option）赋予买方以约定价格卖出标的资产的权利。' },
+            { id: 4, type: '单选', question: '期权买方支付（）给卖方以获得期权合约赋予的权利。', options: ['保证金', '权利金', '手续费', '印花税'], answer: 1, explanation: '期权买方支付权利金（Premium）给卖方，以获得期权合约赋予的权利。权利金是买方为获得权利而支付的对价。' },
+            { id: 5, type: '单选', question: '期权卖方收取权利金后，（）。', options: ['没有任何义务', '承担履行合约的义务', '可以随时反悔', '只承担部分义务'], answer: 1, explanation: '期权卖方收取权利金后，承担履行合约的义务。当买方选择行权时，卖方必须履行合约。' },
+            { id: 6, type: '单选', question: '沪深300ETF期权的标的是（）。', options: ['沪深300指数', '华泰柏瑞沪深300ETF（510300）', '嘉实沪深300ETF（159919）', '以上都是'], answer: 3, explanation: '沪深300ETF期权有两个品种：上交所的华泰柏瑞沪深300ETF期权（标的510300）和深交所的嘉实沪深300ETF期权（标的159919）。' },
+            { id: 7, type: '单选', question: '期权合约要素不包括（）。', options: ['标的资产', '行权价格', '交易价格', '到期日'], answer: 2, explanation: '期权合约要素包括：标的资产、行权价格、到期日、合约单位、权利金等。交易价格（权利金）是市场交易形成的，不是合约固定要素。' },
+            { id: 8, type: '单选', question: '欧式期权只能在（）行权。', options: ['到期日当天', '到期日前任何交易日', '到期日后10天内', '任何时间'], answer: 0, explanation: '欧式期权只能在到期日当天行权，而美式期权可以在到期日前任何交易日行权。沪深300ETF期权是欧式期权。' },
+            { id: 9, type: '单选', question: '当标的资产价格 > 行权价格时，认购期权处于（）。', options: ['实值状态', '平值状态', '虚值状态', '无效状态'], answer: 0, explanation: '对于认购期权：标的价格 > 行权价为实值；标的价格 = 行权价为平值；标的价格 < 行权价为虚值。' },
+            { id: 10, type: '单选', question: '当标的资产价格 < 行权价格时，认沽期权处于（）。', options: ['实值状态', '平值状态', '虚值状态', '无效状态'], answer: 0, explanation: '对于认沽期权：标的价格 < 行权价为实值；标的价格 = 行权价为平值；标的价格 > 行权价为虚值。' },
+            { id: 11, type: '单选', question: '期权的内在价值（）。', options: ['总是大于零', '总是小于零', '可以为零', '等于权利金'], answer: 2, explanation: '期权的内在价值可以为正（实值期权）、为零（平值或虚值期权），但不会为负。内在价值+时间价值=权利金。' },
+            { id: 12, type: '单选', question: '期权的时间价值随着到期日临近（）。', options: ['增加', '减少', '不变', '先增后减'], answer: 1, explanation: '期权的时间价值随着到期日临近而衰减，这种现象称为时间价值的衰减或"时间损耗"。到期日当天时间价值归零。' },
+            { id: 13, type: '单选', question: '期权交易的四种基本操作是（）。', options: ['买入开仓、买入平仓、卖出开仓、卖出平仓', '买入看涨、买入看跌、卖出看涨、卖出看跌', '开仓、平仓、行权、放弃', '认购、认沽、实值、虚值'], answer: 0, explanation: '期权交易的四种基本操作：买入开仓（建立买方头寸）、买入平仓（了结卖方头寸）、卖出开仓（建立卖方头寸）、卖出平仓（了结买方头寸）。' },
+            { id: 14, type: '单选', question: '期权卖方需要缴纳（）。', options: ['权利金', '保证金', '手续费', '以上都要'], answer: 1, explanation: '期权卖方需要缴纳保证金作为履约担保。买方支付权利金，不需要缴纳保证金。' },
+            { id: 15, type: '单选', question: '沪深300ETF期权合约单位是（）。', options: ['100份', '1000份', '10000份', '由交易所规定'], answer: 2, explanation: '沪深300ETF期权合约单位是10000份，即每张期权合约对应10000份ETF基金份额。' },
+            { id: 16, type: '单选', question: '期权买方最大损失为（）。', options: ['无限大', '权利金', '保证金', '标的资产价值'], answer: 1, explanation: '期权买方的最大损失是已支付的权利金。买方的风险有限，收益潜力（认购）无限或（认沽）较大。' },
+            { id: 17, type: '单选', question: '认购期权卖方最大损失为（）。', options: ['权利金', '无限大', '行权价', '零'], answer: 1, explanation: '认购期权卖方最大损失理论上是无限的，因为标的资产价格上涨没有上限。卖方收取有限权利金，承担无限风险。' },
+            { id: 18, type: '单选', question: '认沽期权卖方最大损失为（）。', options: ['权利金', '无限大', '行权价-标的资产价格', '行权价'], answer: 3, explanation: '认沽期权卖方最大损失为行权价（当标的资产价格跌至零时）。虽然有限，但可能很大。' },
+            { id: 19, type: '单选', question: '备兑开仓策略是指（）。', options: ['持有标的资产并卖出认购期权', '持有标的资产并买入认沽期权', '卖出认购期权并买入认沽期权', '买入认购期权并卖出认沽期权'], answer: 0, explanation: '备兑开仓策略是指持有标的资产（如ETF）的同时，卖出该标的的认购期权，通过收取权利金增强收益。' },
+            { id: 20, type: '单选', question: '保险策略是指（）。', options: ['持有标的资产并卖出认购期权', '持有标的资产并买入认沽期权', '卖出认购期权并买入认沽期权', '买入认购期权并卖出认沽期权'], answer: 1, explanation: '保险策略是指持有标的资产的同时，买入该标的的认沽期权，为标的资产价格下跌提供保护，类似购买保险。' },
+            { id: 21, type: '单选', question: '期权的杠杆效应体现在（）。', options: ['用少量资金控制较大价值的标的', '没有杠杆', '杠杆比期货小', '只存在于买方'], answer: 0, explanation: '期权具有杠杆效应，买方只需支付少量权利金，就能控制较大价值的标的资产，放大收益和风险。' },
+            { id: 22, type: '单选', question: '波动率上升时，期权价格（）。', options: ['上升', '下降', '不变', '不确定'], answer: 0, explanation: '波动率是影响期权价格的重要因素。波动率上升意味着标的资产价格变动幅度可能增大，期权买方获利机会增加，因此期权价格上升。' },
+            { id: 23, type: '单选', question: '认购期权的盈亏平衡点为（）。', options: ['行权价', '行权价+权利金', '行权价-权利金', '权利金'], answer: 1, explanation: '认购期权的盈亏平衡点 = 行权价 + 权利金。当标的价格超过此价格时，买方开始盈利。' },
+            { id: 24, type: '单选', question: '认沽期权的盈亏平衡点为（）。', options: ['行权价', '行权价+权利金', '行权价-权利金', '权利金'], answer: 2, explanation: '认沽期权的盈亏平衡点 = 行权价 - 权利金。当标的价格低于此价格时，买方开始盈利。' },
+            { id: 25, type: '单选', question: '期权合约到期日为到期月份的（）。', options: ['第一个星期三', '第二个星期三', '第三个星期三', '第四个星期三'], answer: 3, explanation: '沪深300ETF期权合约到期日为到期月份的第四个星期三（遇法定节假日顺延）。' },
+            
+            // 交易规则 (26-50)
+            { id: 26, type: '单选', question: '期权买方行权后，（）。', options: ['立即获得收益', '需要缴纳保证金', '获得标的资产头寸', '自动平仓'], answer: 2, explanation: '期权买方行权后，获得相应的标的资产头寸（认购行权获得标的资产多头，认沽行权获得标的资产空头）。' },
+            { id: 27, type: '单选', question: '深度实值期权的时间价值（）。', options: ['很大', '很小或为零', '等于平值期权', '不确定'], answer: 1, explanation: '深度实值期权的时间价值通常很小或接近零，因为内在价值占主导，时间价值占比很小。' },
+            { id: 28, type: '单选', question: '平值期权的时间价值（）。', options: ['最小', '最大', '为零', '不确定'], answer: 1, explanation: '平值期权的时间价值通常最大，因为标的价格接近行权价时，未来变为实值或虚值的不确定性最大。' },
+            { id: 29, type: '单选', question: '期权的Delta表示（）。', options: ['期权价格对标的资产价格的敏感度', '期权价格对时间的敏感度', '期权价格对波动率的敏感度', '期权价格对利率的敏感度'], answer: 0, explanation: 'Delta表示期权价格对标的资产价格变动的敏感度，即标的价格变动1元时期权价格变动的金额。' },
+            { id: 30, type: '单选', question: '个人投资者参与期权交易，需要满足的条件不包括（）。', options: ['开户满6个月', '具备期权基础知识', '具有相应的风险承受能力', '必须具有期货实盘交易经验'], answer: 3, explanation: '个人投资者参与期权交易需要满足：开户满6个月、具备期权基础知识、通过交易所认可的知识测试、具有相应的风险承受能力等。但不要求必须有期货实盘交易经验。' },
+            { id: 31, type: '单选', question: 'ETF期权的最小变动价位为（）。', options: ['0.0001元', '0.0005元', '0.001元', '0.01元'], answer: 0, explanation: 'ETF期权的最小变动价位为0.0001元（即0.01分）。' },
+            { id: 32, type: '单选', question: '期权合约的最后交易日为（）。', options: ['到期月份的第一个周五', '到期月份的第二个周五', '到期月份的第三个周五', '到期月份的第四个周三'], answer: 3, explanation: 'ETF期权的最后交易日为到期月份的第四个星期三（遇法定节假日顺延）。' },
+            { id: 33, type: '单选', question: '期权合约的行权日为（）。', options: ['最后交易日', '最后交易日的下一个交易日', '到期月份的最后一个交易日', '到期月份的第三个周三'], answer: 0, explanation: 'ETF期权的行权日与最后交易日相同，为到期月份的第四个星期三。' },
+            { id: 34, type: '单选', question: '期权合约的交割方式为（）。', options: ['现金交割', '实物交割', '可以选择现金或实物', '由交易所决定'], answer: 1, explanation: 'ETF期权采用实物交割方式，即认购期权买方行权时获得ETF份额，认沽期权买方行权时交付ETF份额获得现金。' },
+            { id: 35, type: '单选', question: '期权合约的涨跌停幅度为（）。', options: ['10%', '±10%', '±20%', '根据标的涨跌幅计算'], answer: 3, explanation: '期权合约的涨跌停幅度不是固定的，而是根据标的ETF的涨跌幅和期权本身的价格计算得出，公式较为复杂。' },
+            { id: 36, type: '单选', question: '期权的持仓限额是指（）。', options: ['投资者可以持有的最大合约数量', '投资者可以交易的最大金额', '投资者可以开仓的最大次数', '投资者可以行权的最大次数'], answer: 0, explanation: '持仓限额是指投资者对单个合约品种可以持有的最大合约数量，包括权利仓限额、总持仓限额和单日买入开仓限额。' },
+            { id: 37, type: '单选', question: '期权交易的手续费包括（）。', options: ['交易经手费', '交易结算费', '行权结算费', '以上都是'], answer: 3, explanation: '期权交易的手续费包括交易经手费、交易结算费，行权时还有行权结算费。' },
+            { id: 38, type: '单选', question: '期权的做市商制度是指（）。', options: ['由做市商提供双边报价', '由投资者互相报价', '由交易所定价', '由标的资产价格决定'], answer: 0, explanation: '做市商制度是指由具备一定实力和信誉的法人作为做市商，向投资者提供双边报价，接受投资者的买卖要求。' },
+            { id: 39, type: '单选', question: '期权合约的价格由（）决定。', options: ['交易所规定', '市场供需', '标的资产价格', '以上都是'], answer: 1, explanation: '期权合约的价格（权利金）由市场供需决定，通过竞价交易形成，受标的资产价格、行权价、剩余期限、波动率等多种因素影响。' },
+            { id: 40, type: '单选', question: '期权买方开仓时需要支付（）。', options: ['权利金', '保证金', '权利金和保证金', '只需支付手续费'], answer: 0, explanation: '期权买方开仓时只需支付权利金，不需要缴纳保证金。' },
+            { id: 41, type: '单选', question: '期权卖方平仓时收回（）。', options: ['权利金', '保证金', '权利金和保证金', '只需支付手续费'], answer: 1, explanation: '期权卖方平仓时收回保证金，并根据平仓价格与开仓价格的差额计算盈亏。' },
+            { id: 42, type: '单选', question: '期权合约的代码格式为（）。', options: ['标的代码+购/沽+到期月份+行权价', '标的代码+行权价+购/沽+到期月份', '到期月份+标的代码+购/沽+行权价', '行权价+标的代码+购/沽+到期月份'], answer: 0, explanation: '期权合约代码格式为：标的代码+购（C）/沽（P）+到期年份（后两位）+到期月份（两位）+行权价（整数部分5位，小数部分3位）。' },
+            { id: 43, type: '单选', question: '期权合约的月份为（）。', options: ['当月、下月及随后两个季月', '当月、下月及随后三个季月', '每个月都有合约', '当季及随后三个季月'], answer: 0, explanation: 'ETF期权合约月份为当月、下月及随后两个季月（3月、6月、9月、12月）。' },
+            { id: 44, type: '单选', question: '期权的熔断机制是指（）。', options: ['价格达到涨跌停板时暂停交易', '价格波动过大时暂停交易', '交易量过大时暂停交易', '持仓量过大时暂停交易'], answer: 1, explanation: '期权熔断机制是指当期权合约价格较前收盘价涨跌达到或超过一定比例时，该合约进入熔断状态，暂停交易一段时间。' },
+            { id: 45, type: '单选', question: '期权交易的竞价方式为（）。', options: ['集合竞价和连续竞价', '只有集合竞价', '只有连续竞价', '做市商报价'], answer: 0, explanation: '期权交易采用集合竞价和连续竞价两种方式。开盘采用集合竞价，盘中采用连续竞价。' },
+            { id: 46, type: '单选', question: '期权合约的行权价格间距为（）。', options: ['固定值', '根据标的价格分档设置', '由交易所每日公布', '由做市商决定'], answer: 1, explanation: 'ETF期权的行权价格间距根据标的价格分档设置：3元以下为0.05元，3元至5元为0.1元，5元至10元为0.25元等。' },
+            { id: 47, type: '单选', question: '期权合约的新增行权价格（）。', options: ['每日增加', '每周增加', '根据标的价格变化自动增加', '由交易所决定'], answer: 2, explanation: '当标的价格发生变化，现有行权价格不能覆盖标的价格上下浮动范围时，会自动新增行权价格。' },
+            { id: 48, type: '单选', question: '期权的强行平仓是指（）。', options: ['投资者主动平仓', '证券公司强制平仓', '交易所强制平仓', '结算公司强制平仓'], answer: 1, explanation: '强行平仓是指当投资者保证金不足且未及时补足时，证券公司对投资者的持仓进行强制平仓。' },
+            { id: 49, type: '单选', question: '期权交易的结算价是（）。', options: ['当日收盘价', '当日加权平均价', '当日成交量最大的价格', '由交易所确定'], answer: 1, explanation: '期权交易的结算价通常为当日该合约的加权平均价，用于计算当日盈亏和保证金。' },
+            { id: 50, type: '单选', question: '期权买方的权利仓限额根据（）确定。', options: ['投资者资产规模', '投资者交易经验', '投资者风险承受能力', '以上都是'], answer: 3, explanation: '期权买方的权利仓限额根据投资者的资产规模、交易经验、风险承受能力等因素综合确定。' },
+            
+            // 风险与盈亏 (51-75)
+            { id: 51, type: '单选', question: '买入认购期权的最大收益为（）。', options: ['权利金', '无限大', '行权价', '标的价格'], answer: 1, explanation: '买入认购期权的最大收益理论上是无限的，因为标的资产价格上涨没有上限。' },
+            { id: 52, type: '单选', question: '买入认沽期权的最大收益为（）。', options: ['权利金', '无限大', '行权价-权利金', '行权价'], answer: 2, explanation: '买入认沽期权的最大收益为行权价减去权利金（当标的资产价格跌至零时）。' },
+            { id: 53, type: '单选', question: '卖出认购期权的最大收益为（）。', options: ['权利金', '无限大', '行权价', '标的价格'], answer: 0, explanation: '卖出认购期权的最大收益是收取的权利金，当标的资产价格低于或等于行权价时获得。' },
+            { id: 54, type: '单选', question: '卖出认沽期权的最大收益为（）。', options: ['权利金', '无限大', '行权价', '标的价格'], answer: 0, explanation: '卖出认沽期权的最大收益是收取的权利金，当标的资产价格高于或等于行权价时获得。' },
+            { id: 55, type: '单选', question: '期权的时间价值最大的情况是（）。', options: ['深度实值', '平值', '深度虚值', '到期日'], answer: 1, explanation: '平值期权的时间价值最大，因为标的价格接近行权价时，未来变为实值或虚值的不确定性最大。' },
+            { id: 56, type: '单选', question: '期权的Gamma表示（）。', options: ['Delta对标的资产价格的敏感度', '期权价格对时间的敏感度', '期权价格对波动率的敏感度', '期权价格对利率的敏感度'], answer: 0, explanation: 'Gamma表示Delta对标的资产价格变动的敏感度，即标的价格变动1元时Delta变动的值。' },
+            { id: 57, type: '单选', question: '期权的Theta表示（）。', options: ['期权价格对时间的敏感度', 'Delta对标的资产价格的敏感度', '期权价格对波动率的敏感度', '期权价格对利率的敏感度'], answer: 0, explanation: 'Theta表示期权价格对时间变化的敏感度，即时间每流逝一天期权价格的变化。' },
+            { id: 58, type: '单选', question: '期权的Vega表示（）。', options: ['期权价格对波动率的敏感度', '期权价格对时间的敏感度', 'Delta对标的资产价格的敏感度', '期权价格对利率的敏感度'], answer: 0, explanation: 'Vega表示期权价格对波动率变化的敏感度，即波动率每变化1%时期权价格的变化。' },
+            { id: 59, type: '单选', question: '期权的Rho表示（）。', options: ['期权价格对利率的敏感度', '期权价格对时间的敏感度', '期权价格对波动率的敏感度', 'Delta对标的资产价格的敏感度'], answer: 0, explanation: 'Rho表示期权价格对无风险利率变化的敏感度，即利率每变化1%时期权价格的变化。' },
+            { id: 60, type: '单选', question: '买入跨式组合是指（）。', options: ['同时买入认购和认沽', '同时卖出认购和认沽', '买入认购卖出认沽', '卖出认购买入认沽'], answer: 0, explanation: '买入跨式组合（Long Straddle）是指同时买入相同行权价、相同到期日的认购期权和认沽期权，预期标的价格大幅波动。' },
+            { id: 61, type: '单选', question: '卖出跨式组合是指（）。', options: ['同时卖出认购和认沽', '同时买入认购和认沽', '卖出认购买入认沽', '买入认购卖出认沽'], answer: 0, explanation: '卖出跨式组合（Short Straddle）是指同时卖出相同行权价、相同到期日的认购期权和认沽期权，预期标的价格稳定。' },
+            { id: 62, type: '单选', question: '买入宽跨式组合与买入跨式组合的区别是（）。', options: ['行权价不同', '到期日不同', '标的不同', '权利金不同'], answer: 0, explanation: '买入宽跨式组合（Long Strangle）与买入跨式组合的区别是行权价不同，宽跨式认购和认沽的行权价不同。' },
+            { id: 63, type: '单选', question: '牛市价差组合是指（）。', options: ['买入低行权价认购，卖出高行权价认购', '卖出低行权价认购，买入高行权价认购', '买入认购和认沽', '卖出认购和认沽'], answer: 0, explanation: '牛市价差组合（Bull Call Spread）是指买入较低行权价的认购期权，同时卖出较高行权价的认购期权，预期标的小幅上涨。' },
+            { id: 64, type: '单选', question: '熊市价差组合是指（）。', options: ['买入高行权价认沽，卖出低行权价认沽', '卖出高行权价认沽，买入低行权价认沽', '买入认购和认沽', '卖出认购和认沽'], answer: 0, explanation: '熊市价差组合（Bear Put Spread）是指买入较高行权价的认沽期权，同时卖出较低行权价的认沽期权，预期标的小幅下跌。' },
+            { id: 65, type: '单选', question: '蝶式价差组合的预期是（）。', options: ['标的价格在特定区间波动', '标的价格大幅上涨', '标的价格大幅下跌', '标的价格大幅波动'], answer: 0, explanation: '蝶式价差组合（Butterfly Spread）预期标的价格在特定区间波动，适用于预期标的价格变动不大的情况。' },
+            { id: 66, type: '单选', question: '铁鹰式价差组合的最大收益是（）。', options: ['收取的净权利金', '无限大', '行权价差', '标的价格'], answer: 0, explanation: '铁鹰式价差组合（Iron Condor）的最大收益是收取的净权利金，当标的价格在两个卖出期权行权价之间时获得最大收益。' },
+            { id: 67, type: '单选', question: '领口策略是指（）。', options: ['买入标的，买入认沽，卖出认购', '买入标的，卖出认沽，买入认购', '卖出标的，买入认沽，卖出认购', '买入认购，卖出认沽'], answer: 0, explanation: '领口策略（Collar）是指持有标的资产，买入认沽期权作为保险，同时卖出认购期权收取权利金降低成本。' },
+            { id: 68, type: '单选', question: '日历价差组合是指（）。', options: ['卖出近月期权，买入远月期权', '买入近月期权，卖出远月期权', '买入相同到期日的期权', '卖出相同到期日的期权'], answer: 0, explanation: '日历价差组合（Calendar Spread）是指卖出近月到期的期权，同时买入相同行权价但远月到期的期权，利用时间价值衰减差异获利。' },
+            { id: 69, type: '单选', question: '对角价差组合是指（）。', options: ['不同行权价和不同到期日的期权组合', '相同行权价不同到期日的期权组合', '相同到期日不同行权价的期权组合', '相同行权价相同到期日的期权组合'], answer: 0, explanation: '对角价差组合（Diagonal Spread）是指买入和卖出的期权既有不同的行权价，又有不同的到期日。' },
+            { id: 70, type: '单选', question: '比率价差组合是指（）。', options: ['买入和卖出的期权数量不同', '买入和卖出的期权行权价不同', '买入和卖出的期权到期日不同', '买入和卖出的期权类型不同'], answer: 0, explanation: '比率价差组合（Ratio Spread）是指买入和卖出的期权数量不同，通常卖出数量多于买入数量。' },
+            { id: 71, type: '单选', question: '反向比率价差组合的风险是（）。', options: ['一边风险无限', '两边风险都有限', '没有风险', '只有时间风险'], answer: 0, explanation: '反向比率价差组合（Backspread）通常买入数量多于卖出数量，导致一边的风险是无限的（通常是认购期权方向）。' },
+            { id: 72, type: '单选', question: '盒式价差组合的特点是（）。', options: ['无风险套利组合', '高风险高收益', '只适用于牛市', '只适用于熊市'], answer: 0, explanation: '盒式价差组合（Box Spread）是一种无风险套利组合，利用看涨看跌平价关系进行套利。' },
+            { id: 73, type: '单选', question: '期权的隐含波动率是根据（）计算的。', options: ['期权市场价格反推', '历史价格统计', '标的资产波动', '无风险利率'], answer: 0, explanation: '隐含波动率是根据期权的市场价格，利用期权定价模型（如BS模型）反推出来的波动率。' },
+            { id: 74, type: '单选', question: '波动率微笑是指（）。', options: ['不同行权价的期权隐含波动率呈微笑形状', '期权价格随时间变化', '标的资产价格波动', '期权交易量变化'], answer: 0, explanation: '波动率微笑是指不同行权价的期权隐含波动率呈现中间低、两边高的形状，类似微笑曲线。' },
+            { id: 75, type: '单选', question: '波动率偏斜是指（）。', options: ['虚值认沽期权隐含波动率高于虚值认购', '虚值认购期权隐含波动率高于虚值认沽', '平值期权隐含波动率最高', '实值期权隐含波动率最高'], answer: 0, explanation: '波动率偏斜是指虚值认沽期权的隐含波动率通常高于虚值认购期权，反映了市场对下跌风险的担忧。' },
+            
+            // 投资者适当性管理 (76-100)
+            { id: 76, type: '单选', question: '个人投资者开通期权交易权限，需要满足的资产条件是（）。', options: ['申请开户前20个交易日日均资产不低于50万元', '申请开户前10个交易日日均资产不低于50万元', '申请开户前20个交易日日均资产不低于100万元', '申请开户前30个交易日日均资产不低于50万元'], answer: 0, explanation: '个人投资者开通期权交易权限，需要满足申请开户前20个交易日日均证券市值与资金账户可用余额合计不低于人民币50万元。' },
+            { id: 77, type: '单选', question: '个人投资者开通期权交易权限，需要具备的条件不包括（）。', options: ['在证券公司开户满6个月', '具备融资融券业务参与资格或金融期货交易经历', '通过交易所认可的知识测试', '必须有3年以上股票投资经验'], answer: 3, explanation: '个人投资者开通期权交易权限需要：在证券公司开户满6个月、具备融资融券业务参与资格或金融期货交易经历、通过交易所认可的知识测试等，但不要求必须有3年以上股票投资经验。' },
+            { id: 78, type: '单选', question: '期权知识测试的成绩有效期为（）。', options: ['长期有效', '1个月', '3个月', '6个月'], answer: 0, explanation: '期权知识测试的成绩长期有效，投资者通过测试后，成绩不会过期。' },
+            { id: 79, type: '单选', question: '期权投资者适当性管理中的"三有一无"是指（）。', options: ['有资产、有经验、有知识，无不良记录', '有资金、有账户、有权限，无风险', '有股票、有基金、有债券，无负债', '有收益、有策略、有经验，无亏损'], answer: 0, explanation: '期权投资者适当性管理的"三有一无"是指：有资产（50万元）、有经验（6个月）、有知识（通过测试），无不良诚信记录。' },
+            { id: 80, type: '单选', question: '普通机构投资者开通期权交易权限，需要满足的资产条件是（）。', options: ['申请开户前20个交易日日均资产不低于100万元', '申请开户前20个交易日日均资产不低于50万元', '申请开户前10个交易日日均资产不低于100万元', '无资产要求'], answer: 0, explanation: '普通机构投资者开通期权交易权限，需要满足申请开户前20个交易日日均证券市值与资金账户可用余额合计不低于人民币100万元。' },
+            { id: 81, type: '单选', question: '专业机构投资者开通期权交易权限（）。', options: ['无需进行适当性评估', '需要进行适当性评估', '只需通过知识测试', '只需满足资产要求'], answer: 0, explanation: '专业机构投资者（如商业银行、保险公司、证券公司等）开通期权交易权限无需进行适当性评估。' },
+            { id: 82, type: '单选', question: '期权投资者的持仓限额根据（）分级设置。', options: ['投资者的交易权限级别', '投资者的资产规模', '投资者的交易经验', '以上都是'], answer: 3, explanation: '期权投资者的持仓限额根据投资者的交易权限级别、资产规模、交易经验等因素分级设置。' },
+            { id: 83, type: '单选', question: '期权交易的一级权限包括（）。', options: ['备兑开仓、买入开仓', '备兑开仓、卖出开仓', '所有期权交易', '只能买入开仓'], answer: 0, explanation: '期权交易一级权限包括备兑开仓（持有标的卖出认购）和买入开仓（买入认购或认沽）。' },
+            { id: 84, type: '单选', question: '期权交易的二级权限在一级基础上增加了（）。', options: ['卖出开仓', '买入开仓', '备兑开仓', '行权'], answer: 0, explanation: '期权交易二级权限在一级权限基础上增加了卖出开仓（作为卖方卖出认购或认沽），但需要缴纳保证金。' },
+            { id: 85, type: '单选', question: '期权交易的三级权限包括（）。', options: ['所有期权交易', '只能买入开仓', '只能备兑开仓', '只能卖出开仓'], answer: 0, explanation: '期权交易三级权限包括所有期权交易，如买入开仓、卖出开仓、备兑开仓、组合策略等。' },
+            { id: 86, type: '单选', question: '投资者申请提高交易权限级别需要（）。', options: ['满足相应条件并通过评估', '只需满足资产要求', '只需通过知识测试', '自动升级'], answer: 0, explanation: '投资者申请提高交易权限级别需要满足相应的资产、经验、知识等条件，并通过证券公司的评估。' },
+            { id: 87, type: '单选', question: '期权投资者的风险承受能力评估（）进行一次。', options: ['每年', '每半年', '每季度', '每月'], answer: 0, explanation: '期权投资者的风险承受能力评估应当每年进行一次，以了解投资者风险承受能力的变化情况。' },
+            { id: 88, type: '单选', question: '投资者风险承受能力发生变化时，应当（）。', options: ['及时告知证券公司重新评估', '继续按原级别交易', '自行调整交易策略', '暂停交易'], answer: 0, explanation: '投资者风险承受能力发生变化时，应当及时告知证券公司，重新进行风险承受能力评估。' },
+            { id: 89, type: '单选', question: '证券公司对投资者进行适当性管理时，应当遵循（）原则。', options: ['将适当的产品销售给适当的投资者', '向所有投资者销售所有产品', '只向专业投资者销售', '只向个人投资者销售'], answer: 0, explanation: '证券公司对投资者进行适当性管理时，应当遵循"将适当的产品销售给适当的投资者"的原则。' },
+            { id: 90, type: '单选', question: '投资者参与期权交易前应当签署（）。', options: ['风险揭示书', '盈利保证书', '交易委托书', '资金存管协议'], answer: 0, explanation: '投资者参与期权交易前应当签署《股票期权风险揭示书》，充分了解期权交易的风险。' },
+            { id: 91, type: '单选', question: '期权交易的主要风险不包括（）。', options: ['本金保证收益', '杠杆风险', '时间损耗风险', '流动性风险'], answer: 0, explanation: '期权交易的主要风险包括杠杆风险、时间损耗风险、流动性风险等，但不包括本金保证收益，期权交易不保证收益。' },
+            { id: 92, type: '单选', question: '期权买方的风险主要是（）。', options: ['损失权利金', '无限损失', '保证金不足', '强行平仓'], answer: 0, explanation: '期权买方的风险主要是损失支付的权利金，因为买方的最大损失就是权利金。' },
+            { id: 93, type: '单选', question: '期权卖方的风险主要是（）。', options: ['可能承担较大损失', '损失权利金', '只能获得固定收益', '没有风险'], answer: 0, explanation: '期权卖方的风险主要是可能承担较大损失（认购卖方理论上无限损失），以换取有限的权利金收入。' },
+            { id: 94, type: '单选', question: '投资者进行期权交易时，应当（）。', options: ['根据自身情况理性决策', '跟风交易', '满仓操作', '频繁交易'], answer: 0, explanation: '投资者进行期权交易时，应当根据自身资产状况、风险承受能力、投资经验等情况理性决策。' },
+            { id: 95, type: '单选', question: '期权的强行平仓可能发生在（）情况。', options: ['保证金不足', '盈利过多', '持仓过少', '交易频繁'], answer: 0, explanation: '期权的强行平仓通常发生在投资者作为卖方时保证金不足，且未及时补足的情况下。' },
+            { id: 96, type: '单选', question: '投资者应当如何管理期权交易风险？', options: ['合理控制仓位、设置止损、了解 Greeks', '满仓操作、不设止损', '只买不卖', '只卖不买'], answer: 0, explanation: '投资者应当合理控制仓位、设置止损点、了解 Greeks（Delta、Gamma、Theta、Vega）等风险管理工具来管理期权交易风险。' },
+            { id: 97, type: '单选', question: '期权的流动性风险是指（）。', options: ['可能无法及时以合理价格买卖', '价格波动风险', '时间价值损耗', '行权风险'], answer: 0, explanation: '流动性风险是指某些期权合约可能交易不活跃，投资者可能无法及时以合理价格买入或卖出。' },
+            { id: 98, type: '单选', question: '期权交易的操作风险是指（）。', options: ['因操作失误导致的损失', '市场波动导致的损失', '时间价值损耗', '波动率变化导致的损失'], answer: 0, explanation: '操作风险是指因投资者操作失误（如下错单、误操作等）导致的损失。' },
+            { id: 99, type: '单选', question: '投资者参与期权交易应当具备的基本知识包括（）。', options: ['期权基本概念、交易规则、风险管理', '只需要知道如何买卖', '只需要知道如何盈利', '不需要任何知识'], answer: 0, explanation: '投资者参与期权交易应当具备期权基本概念、交易规则、风险管理等基本知识。' },
+            { id: 100, type: '单选', question: '期权交易的结算风险是指（）。', options: ['交易对手方无法履约的风险', '市场波动风险', '时间价值损耗', '操作失误风险'], answer: 0, explanation: '结算风险是指交易对手方在结算时无法履约的风险，在集中清算制度下由结算机构承担。' }
         ];
         
+        let currentQuestions = [];
         let currentQuestion = 0;
-        let answers = new Array(30).fill(-1);
-        let timeLeft = 1800; // 30分钟
+        let answers = [];
+        let timeLeft = 1800;
         let timerInterval;
         let examSubmitted = false;
         
-        // 初始化
-        function init() {
+        // 从题库随机抽取30题
+        function selectQuestions() {
+            const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 30);
+        }
+        
+        // 开始考试
+        function startExam() {
+            currentQuestions = selectQuestions();
+            answers = new Array(30).fill(-1);
+            currentQuestion = 0;
+            examSubmitted = false;
+            timeLeft = 1800;
+            
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('examContainer').style.display = 'block';
+            document.getElementById('actionBar').style.display = 'flex';
+            
             renderQuestion();
-            renderNavGrid();
             startTimer();
             updateButtons();
         }
         
         // 渲染题目
         function renderQuestion() {
-            const q = questions[currentQuestion];
+            const q = currentQuestions[currentQuestion];
             const area = document.getElementById('questionArea');
             
             let optionsHtml = '';
@@ -754,13 +663,14 @@
                 `;
             });
             
+            const showExplanation = examSubmitted ? 'show' : '';
+            
             area.innerHTML = `
                 <div class="question-card">
                     <span class="question-number">第${currentQuestion + 1}题</span>
-                    <span class="question-type">${q.type}</span>
                     <div class="question-text">${q.question}</div>
                     <ul class="options-list">${optionsHtml}</ul>
-                    <div class="explanation ${examSubmitted ? 'show' : ''}" id="explanation">
+                    <div class="explanation ${showExplanation}">
                         <div class="explanation-title">✓ 正确答案：${String.fromCharCode(65 + q.answer)}</div>
                         <div class="explanation-text">${q.explanation}</div>
                     </div>
@@ -769,8 +679,6 @@
             
             document.getElementById('progressText').textContent = `${currentQuestion + 1}/30`;
             document.getElementById('progressBar').style.width = `${((currentQuestion + 1) / 30) * 100}%`;
-            
-            updateNavGrid();
         }
         
         // 选择选项
@@ -778,7 +686,6 @@
             if (examSubmitted) return;
             answers[currentQuestion] = idx;
             renderQuestion();
-            updateNavGrid();
         }
         
         // 上一题
@@ -799,7 +706,7 @@
             }
         }
         
-        // 更新按钮状态
+        // 更新按钮
         function updateButtons() {
             document.getElementById('prevBtn').disabled = currentQuestion === 0;
             
@@ -812,33 +719,6 @@
             }
         }
         
-        // 渲染导航网格
-        function renderNavGrid() {
-            let html = '';
-            for (let i = 0; i < 30; i++) {
-                const answered = answers[i] !== -1 ? 'answered' : '';
-                html += `<div class="nav-item ${answered}" onclick="goToQuestion(${i})">${i + 1}</div>`;
-            }
-            document.getElementById('navGrid').innerHTML = html;
-        }
-        
-        // 更新导航网格
-        function updateNavGrid() {
-            const items = document.querySelectorAll('.nav-item');
-            items.forEach((item, idx) => {
-                item.classList.toggle('answered', answers[idx] !== -1);
-                item.classList.toggle('current', idx === currentQuestion);
-            });
-        }
-        
-        // 跳转到指定题目
-        function goToQuestion(idx) {
-            currentQuestion = idx;
-            renderQuestion();
-            updateButtons();
-            document.getElementById('questionNav').classList.remove('show');
-        }
-        
         // 计时器
         function startTimer() {
             timerInterval = setInterval(() => {
@@ -848,7 +728,7 @@
                 document.getElementById('timer').textContent = 
                     `${minutes}:${seconds.toString().padStart(2, '0')}`;
                 
-                if (timeLeft <= 300) { // 最后5分钟
+                if (timeLeft <= 300) {
                     document.getElementById('timer').classList.add('warning');
                 }
                 
@@ -873,28 +753,21 @@
             clearInterval(timerInterval);
             examSubmitted = true;
             
-            // 计算得分
             let correctCount = 0;
             answers.forEach((ans, idx) => {
-                if (ans === questions[idx].answer) correctCount++;
+                if (ans === currentQuestions[idx].answer) correctCount++;
             });
             
             const score = Math.round((correctCount / 30) * 100);
             const timeUsed = 1800 - timeLeft;
             
-            // 保存结果
             localStorage.setItem('lastExamScore', score);
             localStorage.setItem('lastExamTime', new Date().toISOString());
-            localStorage.setItem('correctRate', score + '%');
             
-            let examCount = parseInt(localStorage.getItem('examCount') || '0');
-            localStorage.setItem('examCount', examCount + 1);
-            
-            // 保存错题
             let mistakes = JSON.parse(localStorage.getItem('mistakes') || '[]');
             answers.forEach((ans, idx) => {
-                if (ans !== questions[idx].answer) {
-                    const q = questions[idx];
+                if (ans !== currentQuestions[idx].answer) {
+                    const q = currentQuestions[idx];
                     if (!mistakes.find(m => m.id === q.id)) {
                         mistakes.push({
                             id: q.id,
@@ -909,7 +782,6 @@
             });
             localStorage.setItem('mistakes', JSON.stringify(mistakes));
             
-            // 显示结果
             showResult(score, correctCount, timeUsed);
         }
         
@@ -934,7 +806,8 @@
             }
             
             const minutes = Math.floor(timeUsed / 60);
-            document.getElementById('timeUsed').textContent = `${minutes}分${timeUsed % 60}秒`;
+            const seconds = timeUsed % 60;
+            document.getElementById('timeUsed').textContent = `${minutes}分${seconds}秒`;
             document.getElementById('correctCount').textContent = `${correctCount}/30`;
             document.getElementById('accuracy').textContent = `${Math.round((correctCount/30)*100)}%`;
         }
@@ -946,25 +819,9 @@
             document.getElementById('examContainer').style.display = 'block';
             document.getElementById('actionBar').style.display = 'flex';
             document.getElementById('resultContainer').classList.remove('show');
-            document.querySelector('.navbar').style.display = 'flex';
             document.getElementById('timer').textContent = '解析模式';
             renderQuestion();
         }
-        
-        // 长按显示导航
-        let pressTimer;
-        document.addEventListener('touchstart', (e) => {
-            pressTimer = setTimeout(() => {
-                document.getElementById('questionNav').classList.toggle('show');
-            }, 800);
-        });
-        
-        document.addEventListener('touchend', () => {
-            clearTimeout(pressTimer);
-        });
-        
-        // 启动
-        init();
     </script>
 </body>
 </html>

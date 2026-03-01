@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#6366f1">
     <title>开户考试专区 - 300ETF期权学院</title>
-    <link rel="stylesheet" href="../css/mobile.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -17,7 +16,6 @@
             padding-bottom: 80px;
         }
         
-        /* 导航栏 */
         .navbar {
             position: fixed;
             top: 0;
@@ -53,13 +51,11 @@
         
         .nav-placeholder { width: 40px; }
         
-        /* 主内容区 */
         .container {
             padding: 72px 16px 24px;
             max-width: 100%;
         }
         
-        /* 考试要求卡片 */
         .requirement-card {
             background: linear-gradient(135deg, #fef3c7, #fde68a);
             border-radius: 16px;
@@ -96,7 +92,6 @@
             font-weight: bold;
         }
         
-        /* 统计卡片 */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -124,7 +119,6 @@
             margin-top: 4px;
         }
         
-        /* 主要按钮 */
         .btn-primary {
             display: block;
             width: 100%;
@@ -157,7 +151,6 @@
             text-decoration: none;
         }
         
-        /* 模块卡片 */
         .module-section {
             margin-bottom: 20px;
         }
@@ -227,7 +220,6 @@
             margin-bottom: 12px;
         }
         
-        /* 题目列表 */
         .topic-list {
             list-style: none;
         }
@@ -276,7 +268,6 @@
             font-size: 1.2rem;
         }
         
-        /* 底部导航 */
         .tabbar {
             position: fixed;
             bottom: 0;
@@ -289,6 +280,7 @@
             justify-content: space-around;
             align-items: center;
             z-index: 999;
+            padding-bottom: env(safe-area-inset-bottom);
         }
         
         .tabbar-item {
@@ -312,16 +304,10 @@
             font-size: 1.4rem;
         }
         
-        /* 桌面端适配 */
         @media (min-width: 768px) {
             .container {
                 max-width: 800px;
                 margin: 0 auto;
-                padding: 80px 24px 24px;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(4, 1fr);
             }
             
             .tabbar {
@@ -335,16 +321,13 @@
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
     <nav class="navbar">
         <a href="../index.html" class="nav-back">←</a>
         <span class="nav-title">开户考试专区</span>
         <span class="nav-placeholder"></span>
     </nav>
     
-    <!-- 主内容 -->
     <div class="container">
-        <!-- 考试要求 -->
         <div class="requirement-card">
             <h3>⚠️ 考试通过要求</h3>
             <ul class="requirement-list">
@@ -355,7 +338,6 @@
             </ul>
         </div>
         
-        <!-- 统计 -->
         <div class="stats-grid">
             <div class="stat-item">
                 <div class="stat-value" id="completedCount">0</div>
@@ -371,11 +353,9 @@
             </div>
         </div>
         
-        <!-- 快速开始 -->
         <a href="mock-exam.html" class="btn-primary">🎯 开始模拟考试 (30题)</a>
         <a href="mistake-book.html" class="btn-secondary">📚 查看错题本</a>
         
-        <!-- 模块一 -->
         <div class="module-section">
             <h3 class="module-title">📚 期权基础知识</h3>
             
@@ -408,21 +388,10 @@
                         <span class="topic-name">认购与认沽期权</span>
                         <span class="topic-arrow">›</span>
                     </li>
-                    <li class="topic-item" onclick="startQuiz('basic', 4)">
-                        <span class="topic-status pending" id="s1-4">○</span>
-                        <span class="topic-name">实值、平值、虚值</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
-                    <li class="topic-item" onclick="startQuiz('basic', 5)">
-                        <span class="topic-status pending" id="s1-5">○</span>
-                        <span class="topic-name">欧式与美式期权</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
                 </ul>
             </div>
         </div>
         
-        <!-- 模块二 -->
         <div class="module-section">
             <h3 class="module-title">⚖️ 交易规则制度</h3>
             
@@ -455,107 +424,17 @@
                         <span class="topic-name">行权与到期日</span>
                         <span class="topic-arrow">›</span>
                     </li>
-                    <li class="topic-item" onclick="startQuiz('rules', 4)">
-                        <span class="topic-status pending" id="s2-4">○</span>
-                        <span class="topic-name">涨跌幅与熔断</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
-                    <li class="topic-item" onclick="startQuiz('rules', 5)">
-                        <span class="topic-status pending" id="s2-5">○</span>
-                        <span class="topic-name">合约要素与代码</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- 模块三 -->
-        <div class="module-section">
-            <h3 class="module-title">📊 风险与盈亏</h3>
-            
-            <div class="module-card">
-                <div class="module-header">
-                    <div class="module-icon" style="background: #d1fae5;">💰</div>
-                    <div class="module-info">
-                        <h4>损益计算</h4>
-                        <p>盈亏分析，约占25%分值</p>
-                    </div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress3" style="width: 0%"></div>
-                </div>
-                <p class="progress-text" id="progressText3">0/4 完成</p>
-                
-                <ul class="topic-list">
-                    <li class="topic-item" onclick="startQuiz('risk', 1)">
-                        <span class="topic-status pending" id="s3-1">○</span>
-                        <span class="topic-name">买方损益特征</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
-                    <li class="topic-item" onclick="startQuiz('risk', 2)">
-                        <span class="topic-status pending" id="s3-2">○</span>
-                        <span class="topic-name">卖方损益特征</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
-                    <li class="topic-item" onclick="startQuiz('risk', 3)">
-                        <span class="topic-status pending" id="s3-3">○</span>
-                        <span class="topic-name">内在价值与时间价值</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
-                    <li class="topic-item" onclick="startQuiz('risk', 4)">
-                        <span class="topic-status pending" id="s3-4">○</span>
-                        <span class="topic-name">盈亏平衡点计算</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- 模块四 -->
-        <div class="module-section">
-            <h3 class="module-title">🎯 策略应用</h3>
-            
-            <div class="module-card">
-                <div class="module-header">
-                    <div class="module-icon" style="background: #fee2e2;">🛡️</div>
-                    <div class="module-info">
-                        <h4>组合策略</h4>
-                        <p>策略应用，约占15%分值</p>
-                    </div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress4" style="width: 0%"></div>
-                </div>
-                <p class="progress-text" id="progressText4">0/3 完成</p>
-                
-                <ul class="topic-list">
-                    <li class="topic-item" onclick="startQuiz('strategy', 1)">
-                        <span class="topic-status pending" id="s4-1">○</span>
-                        <span class="topic-name">保险策略</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
-                    <li class="topic-item" onclick="startQuiz('strategy', 2)">
-                        <span class="topic-status pending" id="s4-2">○</span>
-                        <span class="topic-name">备兑开仓</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
-                    <li class="topic-item" onclick="startQuiz('strategy', 3)">
-                        <span class="topic-status pending" id="s4-3">○</span>
-                        <span class="topic-name">策略对比与选择</span>
-                        <span class="topic-arrow">›</span>
-                    </li>
                 </ul>
             </div>
         </div>
     </div>
     
-    <!-- 底部导航 -->
     <div class="tabbar">
         <a href="../index.html" class="tabbar-item">
             <span class="tabbar-icon">🏠</span>
             <span>首页</span>
         </a>
-        <a href="lesson1.html" class="tabbar-item">
+        <a href="lessons.html" class="tabbar-item">
             <span class="tabbar-icon">📖</span>
             <span>课程</span>
         </a>
@@ -563,59 +442,28 @@
             <span class="tabbar-icon">📝</span>
             <span>考试</span>
         </a>
-        <a href="profile.html" class="tabbar-item">
-            <span class="tabbar-icon">👤</span>
-            <span>我的</span>
+        <a href="../games/trading-simulator.html" class="tabbar-item">
+            <span class="tabbar-icon">⚔️</span>
+            <span>交易</span>
         </a>
     </div>
     
     <script>
-        // 模块配置
-        const modules = {
-            basic: { total: 5, name: '期权基础' },
-            rules: { total: 5, name: '交易规则' },
-            risk: { total: 4, name: '风险盈亏' },
-            strategy: { total: 3, name: '策略应用' }
-        };
-        
-        // 加载进度
         function loadProgress() {
-            let totalCompleted = 0;
-            let totalQuestions = 0;
+            const mistakes = JSON.parse(localStorage.getItem('mistakes') || '[]');
+            document.getElementById('completedCount').textContent = mistakes.length;
             
-            Object.keys(modules).forEach((moduleKey, index) => {
-                const module = modules[moduleKey];
-                let completed = 0;
-                
-                for (let i = 1; i <= module.total; i++) {
-                    const key = `quiz_${moduleKey}_${i}`;
-                    if (localStorage.getItem(key) === 'completed') {
-                        completed++;
-                        totalCompleted++;
-                        document.getElementById(`s${index+1}-${i}`).textContent = '✓';
-                        document.getElementById(`s${index+1}-${i}`).classList.remove('pending');
-                        document.getElementById(`s${index+1}-${i}`).classList.add('done');
-                    }
-                    totalQuestions++;
-                }
-                
-                const progress = (completed / module.total) * 100;
-                document.getElementById(`progress${index+1}`).style.width = progress + '%';
-                document.getElementById(`progressText${index+1}`).textContent = `${completed}/${module.total} 完成`;
-            });
+            const examCount = parseInt(localStorage.getItem('examCount') || '0');
+            document.getElementById('examCount').textContent = examCount;
             
-            // 更新统计
-            document.getElementById('completedCount').textContent = totalCompleted;
-            document.getElementById('correctRate').textContent = localStorage.getItem('correctRate') || '0%';
-            document.getElementById('examCount').textContent = localStorage.getItem('examCount') || '0';
+            const correctRate = localStorage.getItem('correctRate') || '0%';
+            document.getElementById('correctRate').textContent = correctRate;
         }
         
-        // 开始练习
         function startQuiz(module, topic) {
-            window.location.href = `exam-practice.html?module=${module}&topic=${topic}`;
+            alert('练习功能开发中，请先使用模拟考试功能');
         }
         
-        // 页面加载
         loadProgress();
     </script>
 </body>
